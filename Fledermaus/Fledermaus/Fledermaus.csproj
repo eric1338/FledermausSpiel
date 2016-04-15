@@ -46,8 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameGraphics.cs" />
+    <Compile Include="GameLogic.cs" />
+    <Compile Include="GameObjects\Exit.cs" />
+    <Compile Include="GameObjects\LightRay.cs" />
+    <Compile Include="GameObjects\Mirror.cs" />
+    <Compile Include="GameObjects\Obstacle.cs" />
+    <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="GameObjects\Room.cs" />
+    <Compile Include="GameObjects\SolarPanel.cs" />
+    <Compile Include="Inputs.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="Levels.cs" />
+    <Compile Include="MyGameWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserAction.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
