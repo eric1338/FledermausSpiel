@@ -18,7 +18,7 @@ namespace Fledermaus
 		private GameGraphics gameGraphics = new GameGraphics();
 		private Inputs inputs = new Inputs();
 		
-		public MyGameWindow() : base()
+		public MyGameWindow() : base(700, 600)
 		{
 			RenderFrame += MyGameWindow_RenderFrame;
 			UpdateFrame += MyGameWindow_UpdateFrame;
@@ -29,12 +29,12 @@ namespace Fledermaus
 
 		private void MyGameWindow_KeyPress(object sender, KeyPressEventArgs e)
 		{
-
 		}
 
 		private void MyGameWindow_KeyDown(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			inputs.SetKeyPressing(e.Key);
+			inputs.SetKeyPressed(e.Key);
 		}
 
 		private void MyGameWindow_KeyUp(object sender, OpenTK.Input.KeyboardKeyEventArgs e)

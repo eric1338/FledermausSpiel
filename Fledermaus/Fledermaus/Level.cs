@@ -39,5 +39,11 @@ namespace Fledermaus
 			Obstacles.Add(obstacle);
 		}
 
+		public void Reset()
+		{
+			Player.Reset();
+			foreach (Mirror m in Mirrors) m.Reset();
+		}
+
 	}
 }

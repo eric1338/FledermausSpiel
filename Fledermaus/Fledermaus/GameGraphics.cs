@@ -65,15 +65,14 @@ namespace Fledermaus
 
 		private void DrawMirror(Mirror Mirror)
 		{
-			GL.Color3(0.7f, 0.7f, 0.7f);
+			if (Mirror.IsAccessible) GL.Color3(0.6f, 0.6f, 0.6f);
+			else GL.Color3(0.5f, 0.5f, 0.5f);
 			DrawLine(Mirror.RailPosition1, Mirror.RailPosition2, 0.005f);
 			
-			GL.Color3(0.5f, 0.5f, 0.8f);
-			Vector2 direction = new Vector2(0.1f, 0.2f);
+			if (Mirror.IsAccessible) GL.Color3(0.4f, 0.5f, 0.94f);
+			else GL.Color3(0.4f, 0.45f, 0.5f);
 
-			Vector2 pos = Mirror.GetMirrorPosition();
-
-			DrawLine(pos, pos + direction, 0.006f);
+			DrawLine(Mirror.GetMirrorPosition1(), Mirror.GetMirrorPosition2(), 0.006f);
 		}
 
 		private void DrawObstacles(List<Obstacle> obstacles)

@@ -13,6 +13,8 @@ namespace Fledermaus
 		/*
 		* Relative oder absolute Koordinaten?
 		*
+		* Bei Spiegelbewegung: evtl W & S + A & D 
+		* MoveUp() bzw MoveLeft() dynamisch (GetLeftPoint() { p1.x < p2.x ... } (bzw. .y)
 		*
 		*/
 

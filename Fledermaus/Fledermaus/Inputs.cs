@@ -11,8 +11,11 @@ namespace Fledermaus
 	{
 
 		private Dictionary<Key, UserAction> _keyMap = new Dictionary<Key, UserAction>();
+		private Dictionary<Key, UserAction> _keyMap2 = new Dictionary<Key, UserAction>();
 
 		public Dictionary<UserAction, bool> UserActionStatus { get; set; }
+
+		public Queue<UserAction> SingleUserActions = new Queue<UserAction>();
 
 		public Inputs()
 		{
@@ -20,9 +23,11 @@ namespace Fledermaus
 			_keyMap.Add(Key.A, UserAction.MoveLeft);
 			_keyMap.Add(Key.S, UserAction.MoveDown);
 			_keyMap.Add(Key.D, UserAction.MoveRight);
-			_keyMap.Add(Key.F, UserAction.ToggleMirrorLock);
 			_keyMap.Add(Key.E, UserAction.RotateMirrorCW);
 			_keyMap.Add(Key.Q, UserAction.RotateMirrorCCW);
+
+			_keyMap2.Add(Key.F, UserAction.ToggleMirrorLock);
+			_keyMap2.Add(Key.N, UserAction.ResetLevel);
 
 			UserActionStatus = new Dictionary<UserAction, bool>();
 
@@ -31,7 +36,6 @@ namespace Fledermaus
 			UserActionStatus.Add(UserAction.MoveLeft, false);
 			UserActionStatus.Add(UserAction.MoveDown, false);
 			UserActionStatus.Add(UserAction.MoveRight, false);
-			UserActionStatus.Add(UserAction.ToggleMirrorLock, false);
 			UserActionStatus.Add(UserAction.RotateMirrorCW, false);
 			UserActionStatus.Add(UserAction.RotateMirrorCCW, false);
 		}
@@ -50,6 +54,14 @@ namespace Fledermaus
 
 			UserAction action = _keyMap[key];
 			UserActionStatus[action] = false;
+		}
+
+		public void SetKeyPressed(Key key)
+		{
+			if (!_keyMap2.ContainsKey(key)) return;
+
+			UserAction action = _keyMap2[key];
+			SingleUserActions.Enqueue(action);
 		}
 
 	}

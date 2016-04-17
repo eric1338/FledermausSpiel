@@ -31,8 +31,12 @@ namespace Fledermaus
 			Mirror m = new Mirror();
 			m.RailPosition1 = new Vector2(-0.32f, -0.46f);
 			m.RailPosition2 = new Vector2(-0.61f, -0.63f);
-
 			level.AddMirror(m);
+
+			Mirror m2 = new Mirror();
+			m2.RailPosition1 = new Vector2(-0.40f, 0.32f);
+			m2.RailPosition2 = new Vector2(-0.53f, 0.64f);
+			level.AddMirror(m2);
 
 			return level;
 		}

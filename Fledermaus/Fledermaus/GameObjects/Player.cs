@@ -12,12 +12,17 @@ namespace Fledermaus.GameObjects
 
 		// TODO: PlayerSize / Hitboxen
 
+		private Vector2 _initialPosition;
 		public Vector2 Position { get; set; }
-		public bool LockedToMirror { get; set; }
+
+		public Mirror CurrentMirror { get; set; }
+
+		//public bool LockedToMirror { get; set; }
 
 		public Player(float x, float y)
 		{
-			Position = new Vector2(x, y);
+			_initialPosition = new Vector2(x, y);
+			Position = _initialPosition;
 		}
 
 		public void MoveX(float dx)
@@ -33,6 +38,11 @@ namespace Fledermaus.GameObjects
 		public void Move(float dx, float dy)
 		{
 			Position += new Vector2(dx, dy);
+		}
+
+		public void Reset()
+		{
+			Position = _initialPosition;
 		}
 
 	}
