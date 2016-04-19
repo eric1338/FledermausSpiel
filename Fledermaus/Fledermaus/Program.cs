@@ -22,6 +22,7 @@ namespace Fledermaus
 		public static void Main()
 		{
 			MyGameWindow win = new MyGameWindow();
+
 			win.Run(60.0);
 		}
 

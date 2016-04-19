@@ -49,7 +49,8 @@ namespace Fledermaus
 			GL.Color3(1.0f, 0.6f, 0.0f);
 			Vector2 p2 = lightRay.Origin + lightRay.LightVector * 5.0f;
 
-			DrawLine(lightRay.Origin, p2, 0.005f);
+			DrawLine(lightRay.Origin, lightRay.EndVector, 0.005f);
+
 		}
 
 		private void DrawPlayer(Player player)
