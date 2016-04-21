@@ -7,41 +7,26 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Room : GameObject
+	class Room : StaticGameObject
 	{
 
-
-        public float LeftX { get; set; }
-		public float RightX { get; set; }
-		public float TopY { get; set; }
-		public float BottomY { get; set; }
+		// Derzeit nicht gebraucht, evtl von RectangularGameObject erben
 
         public Vector2 LeftBottom { get; set; }
         public Vector2 RightBottom { get; set; }
         public Vector2 LeftTop { get; set; }
         public Vector2 RightTop { get; set; }
-
-
-
-        public Room(float leftX, float rightX, float topY, float bottomY)
-		{
-			LeftX = leftX;
-			RightX = rightX;
-			TopY = topY;
-			BottomY = bottomY;
-
-
-		}
+		
         public Room(Vector2 leftBottom, Vector2 rightBottom, Vector2 leftTop, Vector2 rightTop) {
             LeftBottom = leftBottom;
             RightBottom = rightBottom;
             LeftTop = leftTop;
             RightTop = rightTop;
 
-            AddVertex(leftBottom, rightBottom);
-            AddVertex(rightBottom, rightTop);
-            AddVertex(rightTop, leftTop);
-            AddVertex(leftTop, leftBottom);
+            AddLine(leftBottom, rightBottom);
+            AddLine(rightBottom, rightTop);
+            AddLine(rightTop, leftTop);
+            AddLine(leftTop, leftBottom);
         }
 
 	}

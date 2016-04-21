@@ -15,20 +15,13 @@ namespace Fledermaus
 		{
 			Level level = new Level();
 
-			float lX = -0.64f;
-			float rX = 0.64f;
-			float tY = 0.64f;
-			float bY = -0.669f;
-
-            //level.Room = new Room(lX, rX, tY, bY);
-
-            level.Room = new Room(new Vector2(-0.9f, -0.9f), new Vector2(0.9f, -0.9f), new Vector2(0.9f, 0.9f), new Vector2(-0.9f, 0.9f));
+            level.Room = new RectangularGameObject(-0.9f, 0.9f, 0.9f, -0.9f);
 
 			level.Player = new Player(0.8f, -0.7f);
 
-			level.SolarPanel = new SolarPanel(lX, 0.0f);
-			level.Exit = new Exit(lX, -0.6f);
-			level.LightRay = new LightRay(new Vector2(0.49f, 0.49f), new Vector2(-0.1f, -0.28f));
+			level.SolarPanel = new SolarPanel(-0.94f, 0.2f, -0.89f, 0.0f);
+			level.Exit = new Exit(-0.94f, -0.6f, -0.89f, -0.8f);
+			level.LightRay = new LightRay(new Vector2(0.89f, 0.89f), new Vector2(-0.16f, -0.28f));
 
 			Mirror m = new Mirror();
 			m.RailPosition1 = new Vector2(-0.32f, -0.46f);

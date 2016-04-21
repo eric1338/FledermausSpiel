@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Player
+	class Player : GameObject
 	{
 
 		// TODO: PlayerSize / Hitboxen
@@ -16,8 +16,6 @@ namespace Fledermaus.GameObjects
 		public Vector2 Position { get; set; }
 
 		public Mirror CurrentMirror { get; set; }
-
-		//public bool LockedToMirror { get; set; }
 
 		public Player(float x, float y)
 		{
@@ -45,5 +43,25 @@ namespace Fledermaus.GameObjects
 			Position = _initialPosition;
 		}
 
+		public override List<Line> GetLines()
+		{
+			Vector2 v1 = GetTempVector(1, 1);
+			Vector2 v2 = GetTempVector(1, -1);
+			Vector2 v3 = GetTempVector(-1, -1);
+			Vector2 v4 = GetTempVector(-1, 1);
+
+			List<Line> lines = new List<Line>();
+			lines.Add(new Line(v1, v2));
+			lines.Add(new Line(v2, v3));
+			lines.Add(new Line(v3, v4));
+			lines.Add(new Line(v1, v4));
+
+			return lines;
+		}
+
+		private Vector2 GetTempVector(float xF, float yF)
+		{
+			return Position + new Vector2(0.05f * xF, 0.05f * yF);
+		}
 	}
 }

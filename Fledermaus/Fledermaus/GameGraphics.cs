@@ -22,7 +22,6 @@ namespace Fledermaus
 
 		public void DrawLevel(Level level)
 		{
-
 			//DrawBG / DrawScreen
 
 			// evtl nur bewegte Objekte neu zeichnen
@@ -36,12 +35,10 @@ namespace Fledermaus
 			DrawExit(level.Exit);
 		}
 
-		private void DrawRoom(Room room)
+		private void DrawRoom(RectangularGameObject room)
 		{
 			GL.Color3(0.2f, 0.2f, 0.2f);
-			float w = (room.RightX + 1) - (room.LeftX + 1);
-			float h = (room.TopY + 1) - (room.BottomY + 1);
-			DrawAABR(new AABR(room.LeftX, room.BottomY, w, h));
+			DrawRectangularGameObject(room);
 		}
 
 		private void DrawLightRay(LightRay lightRay)
@@ -50,7 +47,6 @@ namespace Fledermaus
 			Vector2 p2 = lightRay.Origin + lightRay.LightVector * 5.0f;
 
 			DrawLine(lightRay.Origin, lightRay.EndVector, 0.005f);
-
 		}
 
 		private void DrawPlayer(Player player)
@@ -84,17 +80,43 @@ namespace Fledermaus
 		private void DrawObstacle(Obstacle obstacle)
 		{
 			GL.Color3(1.0f, 0.2f, 0.2f);
+			DrawGameObjectLines(obstacle, 0.003f);
 		}
 
 		private void DrawSolarPanel(SolarPanel solarPanel)
 		{
 			GL.Color3(0.3f, 0.3f, 1.0f);
+			DrawRectangularGameObject(solarPanel);
 		}
 
 		private void DrawExit(Exit exit)
 		{
-			if (exit.IsOpen) GL.Color3(0.7f, 1.0f, 0.6f);
-			else GL.Color3(1.0f, 0.5f, 0.5f);
+			if (exit.IsOpen) GL.Color3(0.4f, 1.0f, 0.3f);
+			else GL.Color3(1.0f, 0.4f, 0.6f);
+
+			DrawRectangularGameObject(exit);
+		}
+
+		// --- //
+
+		private void DrawRectangularGameObject(RectangularGameObject rectangularGameObject)
+		{
+			DrawAABR(rectangularGameObject.aabr);
+		}
+
+		private void DrawGameObjectLines(GameObject gameObject, float thickness)
+		{
+			DrawLines(gameObject.GetLines(), thickness);
+		}
+
+		private void DrawLines(List<Line> lines, float thickness)
+		{
+			foreach (Line v in lines) DrawLine(v, thickness);
+		}
+
+		private void DrawLine(Line line, float thickness)
+		{
+			DrawLine(line.Point1, line.Point2, thickness);
 		}
 
 		private void DrawLine(Vector2 p1, Vector2 p2, float thickness)
@@ -123,13 +145,6 @@ namespace Fledermaus
 			GL.Vertex2(p21);
 			GL.Vertex2(p22);
 			GL.End();
-
-			//GL.Begin(PrimitiveType.Quads);
-			//GL.Vertex2(p11);
-			//GL.Vertex2(p12);
-			//GL.Vertex2(p21);
-			//GL.Vertex2(p22);
-			//GL.End();
 		}
 
 		private void DrawTest(Vector2 center)

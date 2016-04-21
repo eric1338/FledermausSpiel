@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Exit
+	class Exit : RectangularGameObject
 	{
 
 		public bool IsOpen { get; set; }
 
-		public Exit(float x, float y)
+		public Exit(float leftX, float topY, float rightX, float bottomY) :
+			base(leftX, topY, rightX, bottomY)
 		{
 			IsOpen = false;
 		}

@@ -53,7 +53,8 @@ namespace Fledermaus
 				if (inputs.UserActionStatus[UserAction.MoveLeft]) dx = -0.01f;
 				if (inputs.UserActionStatus[UserAction.MoveRight]) dx = 0.01f;
 
-				TryToMovePlayer(level, dx, dy);
+				TryToMovePlayer(level, dx, 0.0f);
+				TryToMovePlayer(level, 0.0f, dy);
 			}
 
 			int n = inputs.SingleUserActions.Count;
@@ -97,22 +98,18 @@ namespace Fledermaus
 
 		private void TryToMovePlayer(Level level, float dx, float dy)
 		{
-			//Vector2 newPosition = level.Player.Position + new Vector2(dx, dy);
+			Vector2 newPosition = level.Player.Position + new Vector2(dx, dy);
 
-			//Room room = level.Room;
+			RectangularGameObject room = level.Room;
 
-			//bool movePlayer = true;
+			bool movePlayer = true;
+			
+			if (room.Point1.X > newPosition.X || room.Point2.X < newPosition.X ||
+				room.Point4.Y > newPosition.Y || room.Point2.Y < newPosition.Y) movePlayer = false;
 
-			//// anders (am linken Rand blockiert W+A)
-			//if (room.LeftX > newPosition.X || room.RightX < newPosition.X ||
-			//	room.BottomY > newPosition.Y || room.TopY < newPosition.Y) movePlayer = false;
+			// CheckBounds
 
-			//// CheckBounds
-
-			//if (movePlayer) level.Player.Position = newPosition;
-
-			// evtl Move
-			// CheckRay
+			if (movePlayer) level.Player.Position = newPosition;
 		}
 
 		public void DoLogic(Level level)
@@ -132,42 +129,61 @@ namespace Fledermaus
 
 		private void CalculateLightRay(Level level)
 		{
-            List<Vertex> vertices = level.Room.Vertices;
+            List<Line> lines = level.Room.GetLines();
 
             LightRay ray = level.LightRay;
 
-            foreach (Vertex v in vertices)
-            {
-                Vector2? i = VectorIntersection(v.OriginVector, v.DirectionVector, ray.Origin, ray.Origin + ray.LightVector * 100);
+			List<Vector2> intersections = GetIntersections(ray.GetLastRay(), level.Room);
 
-                if (i != null)
-                {
-                    Console.WriteLine("i: " + i);
-                    ray.EndVector = (Vector2) i;
-                }
-            }
-
-            //Vector2 v1 = new Vector2(0.0f, 1.0f);
-            //Vector2 v2 = new Vector2(0.8f, -0.9f);
-
-            //Vector2 i2 = VectorIntersection(v1, v2 - v1, ray.Origin, ray.LightVector);
-            //if (i2 != new Vector2(0.13f, 0.13f))
-            //{
-            //    Console.WriteLine("i2: " + i2);
-            //    ray.EndVector = (Vector2)i2;
-            //}
-
-            //Vector2 i3 = VectorIntersection(v1, v2, ray.Origin, new Vector2(-0.9f, -0.9f));
-            //if (i3 != new Vector2(0.13f, 0.13f))
-            //{
-            //    Console.WriteLine("i3: " + i3);
-            //    ray.EndVector = (Vector2)i3;
-            //}
+			if (intersections.Count == 1)
+			{
+				ray.EndVector = intersections[0];
+			}
         }
 
-        public static Vector2? VectorIntersection(Vector2 p1o, Vector2 p1d, Vector2 p2o, Vector2 p2d)
+		private bool HasIntersection(Line line, List<Line> lines)
+		{
+			List<Vector2> intersections = new List<Vector2>();
+
+			foreach (Line otherLine in lines)
+			{
+				Vector2? intersection = GetIntersection(line, otherLine);
+
+				if (intersection != null) return true;
+			}
+
+			return false;
+		}
+
+		public List<Vector2> GetIntersections(Line line, GameObject gameObject)
+		{
+			return GetIntersections(line, gameObject.GetLines());
+		}
+
+		public List<Vector2> GetIntersections(Line line, List<Line> lines)
+		{
+			List<Vector2> intersections = new List<Vector2>();
+
+			foreach (Line otherLine in lines)
+			{
+				Vector2? intersection = GetIntersection(line, otherLine);
+
+				if (intersection != null) intersections.Add((Vector2) intersection);
+			}
+
+			return intersections;
+		}
+
+        private Vector2? GetIntersection(Line v1, Line v2)
         {
-            float x1 = p1o.X;
+			Vector2 p1o = v1.GetOriginVector();
+			Vector2 p1d = v1.GetDirectionVector();
+			Vector2 p2o = v2.GetOriginVector();
+			Vector2 p2d = v2.GetDirectionVector();
+
+			// TODO: Parallelität
+
+			float x1 = p1o.X;
             float y1 = p1o.Y;
             float x2 = p1d.X;
             float y2 = p1d.Y;
@@ -175,54 +191,16 @@ namespace Fledermaus
             float y3 = p2o.Y;
             float x4 = p2d.X;
             float y4 = p2d.Y;
-
-
-            //float t = (x1 * y4 - x3 * y4 - x4 * y1 + x4 * y3) / (x4 * y2 - x2 * y4);
+			
             float t = (-x1 * y4 + x3 * y4 + x4 * y1 - x4 * y3) / (x2 * y4 - x4 * y2);
-            float u = (y1 + t * y2 - y3) / y4;
-            float v = (x1 + t * x2 - x3) / x4;
-
-            //Console.WriteLine(t + " | " + u + " | " + v);
-
-            //Console.WriteLine(t + " / " + u);
-
-            Vector2 sol = p1o + p1d * t;
-            Vector2 sol2 = p1o + p1d * u;
+            float u = (x1 + t * x2 - x3) / x4;
 
             if (t >= 0 && t <= 1 && u >= 0 && u <= 1)
             {
-                return p1o + (p1d - p1o) * u;
+                return p1o + p1d * t;
             }
-            else
-                return null;
 
-            //Console.WriteLine(sol + " , " + sol2);
-
-            //Matrix2x3 matrix = new Matrix2x3();
-            //matrix.M11 = x2 - x1;
-            //matrix.M12 = -(x4 - x3);
-            //matrix.M13 = x3 - x1;
-
-            //matrix.M21 = y2 - y1;
-            //matrix.M22 = -(y4-y3);
-            //matrix.M23 = y3 - y1;
-
-
-
-
-            //Matrix2 a1 = new Matrix2(matrix.M13, matrix.M12, matrix.M23, matrix.M22);
-            //Matrix2 a = new Matrix2(matrix.M11, matrix.M12, matrix.M21, matrix.M22);
-            //Matrix2 a2 = new Matrix2(matrix.M11, matrix.M13, matrix.M21, matrix.M23);
-
-            //float xx1 = a1.Determinant / a.Determinant;
-            //float xx2 = a2.Determinant / a.Determinant;
-
-            //Console.WriteLine("M: " + matrix);
-
-            //Console.WriteLine(matrix.M11 + " | " + matrix.M12 + " | " + matrix.M13);
-            //Console.WriteLine(matrix.M21 + " | " + matrix.M22 + " | " + matrix.M23);
-
-            //Matrix2x3.
+			return null;
         }
 
 		private void CheckExit()

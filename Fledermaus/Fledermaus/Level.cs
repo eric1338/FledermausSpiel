@@ -10,9 +10,7 @@ namespace Fledermaus
 	class Level
 	{
 
-		// Iwie Reset Level
-
-		public Room Room { get; set; }
+		public RectangularGameObject Room { get; set; }
 
 		public Player Player { get; set; }
 		public LightRay LightRay { get; set; }

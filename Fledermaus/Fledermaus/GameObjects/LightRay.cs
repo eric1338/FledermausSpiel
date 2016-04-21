@@ -23,5 +23,12 @@ namespace Fledermaus.GameObjects
             EndVector = new Vector2(0.0f, 0.0f);
 		}
 
+		// TODO: aendern
+		public Line GetLastRay()
+		{
+			//LightVector.Normalize();
+			return new Line(Origin, Origin + LightVector * 20.0f);
+		}
+
 	}
 }

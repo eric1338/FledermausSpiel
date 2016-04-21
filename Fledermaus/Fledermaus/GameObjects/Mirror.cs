@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Mirror
+	class Mirror : GameObject
 	{
 
 		// TODO: bool FaceUpwards?
@@ -123,5 +123,9 @@ namespace Fledermaus.GameObjects
 			RelativePosition = 0.5f;
 		}
 
+		public override List<Line> GetLines()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
