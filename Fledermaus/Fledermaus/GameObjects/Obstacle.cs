@@ -10,18 +10,31 @@ namespace Fledermaus.GameObjects
 	class Obstacle : StaticGameObject
 	{
 
-		public List<Vector2> Points { get; set; }
+		private Vector2 _firstPoint;
+		private Vector2 _lastPoint;
 
 		public Obstacle()
 		{
 
 		}
 
-		public void AddPoint(Vector2 point)
+		public void AddFirstPoint(Vector2 point)
 		{
-			Points.Add(point);
+			_firstPoint = point;
+			_lastPoint = point;
 		}
 
+		public void AddFollowingPoint(Vector2 point)
+		{
+			AddLine(_lastPoint, point);
+			_lastPoint = point;
+		}
+
+		public void AddLastPoint(Vector2 point)
+		{
+			AddLine(_lastPoint, point);
+			AddLine(point, _firstPoint);
+		}
 
 	}
 }

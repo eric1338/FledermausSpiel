@@ -13,6 +13,8 @@ namespace Fledermaus
 
 		private static GameLogic instance = new GameLogic();
 
+		private bool _godMode = false;
+
 		public static GameLogic GetInstance()
 		{
 			return instance;
@@ -72,6 +74,10 @@ namespace Fledermaus
 				{
 					level.Reset();
 				}
+				else if (nextUserAction == UserAction.ToggleGodMode)
+				{
+					_godMode = !_godMode;
+				}
 			}
 		}
 
@@ -114,9 +120,14 @@ namespace Fledermaus
 
 		public void DoLogic(Level level)
 		{
-			DetermineMirrorAccessibility(level);
+			test = 0;
+			level.LightRay.ResetRays();
 			CalculateLightRay(level);
-			CheckExit();
+
+			CheckPlayerLightRayCollision(level);
+            CheckSolarPanel(level);
+			CheckExit(level);
+			DetermineMirrorAccessibility(level);
 		}
 
 		private void DetermineMirrorAccessibility(Level level)
@@ -127,86 +138,92 @@ namespace Fledermaus
 			}
 		}
 
+		private int test = 0;
+
 		private void CalculateLightRay(Level level)
 		{
-            List<Line> lines = level.Room.GetLines();
 
             LightRay ray = level.LightRay;
+			Console.WriteLine(ray.GetLines().Count);
 
-			List<Vector2> intersections = GetIntersections(ray.GetLastRay(), level.Room);
+			Line currentRay = ray.GetLastRay();
 
-			if (intersections.Count == 1)
+			List<Vector2> nonReflectingIntersections = Util.GetIntersections(currentRay, level.GetNonReflectingGameObjects());
+			List<Vector2> reflectingIntersections = Util.GetIntersections(currentRay, level.GetReflectingLines());
+
+			Vector2 closestNonReflectingIntersection = GetClosestPoint(currentRay.GetOriginVector(), nonReflectingIntersections);
+			Vector2 closestReflectingIntersection = GetClosestPoint(currentRay.GetOriginVector(), reflectingIntersections);
+
+			float d1 = (closestNonReflectingIntersection - currentRay.GetOriginVector()).Length;
+			float d2 = (closestReflectingIntersection - currentRay.GetOriginVector()).Length;
+
+			if (reflectingIntersections.Count < 1) d2 = 20.0f;
+
+			//Console.WriteLine(d1 + " - " + d2);
+
+			if (test++ > 10) return;
+
+			if (d1 < d2)
 			{
-				ray.EndVector = intersections[0];
+				ray.FinishRays(closestNonReflectingIntersection);
 			}
-        }
-
-		private bool HasIntersection(Line line, List<Line> lines)
-		{
-			List<Vector2> intersections = new List<Vector2>();
-
-			foreach (Line otherLine in lines)
+			else
 			{
-				Vector2? intersection = GetIntersection(line, otherLine);
+				//Console.WriteLine("ADD NEW");
+				Vector2 direction = ray.GetLines().Count < 1 ? new Vector2(-20.5f, 20.5f) : new Vector2(20.5f, 20.5f);
 
-				if (intersection != null) return true;
+				Vector2 point = new Vector2(closestReflectingIntersection.X - 0.005f, closestReflectingIntersection.Y + 0.005f);
+
+				ray.AddNewRay(point, direction);
+
+				CalculateLightRay(level);
 			}
-
-			return false;
 		}
 
-		public List<Vector2> GetIntersections(Line line, GameObject gameObject)
+		// TODO: Liste points leer
+		private Vector2 GetClosestPoint(Vector2 origin, List<Vector2> points)
 		{
-			return GetIntersections(line, gameObject.GetLines());
-		}
+			float distance;
+			float minDistance = 5.0f;
+			Vector2 closestPoint = new Vector2(10.0f, 10.0f);
 
-		public List<Vector2> GetIntersections(Line line, List<Line> lines)
-		{
-			List<Vector2> intersections = new List<Vector2>();
-
-			foreach (Line otherLine in lines)
+			foreach (Vector2 point in points)
 			{
-				Vector2? intersection = GetIntersection(line, otherLine);
+				distance = (point - origin).Length;
 
-				if (intersection != null) intersections.Add((Vector2) intersection);
+				if (distance < minDistance)
+				{
+					minDistance = distance;
+					closestPoint = point;
+				}
 			}
 
-			return intersections;
+			return closestPoint;
 		}
 
-        private Vector2? GetIntersection(Line v1, Line v2)
+		private void CheckPlayerLightRayCollision(Level level)
+		{
+			if (Util.HasIntersection(level.Player, level.LightRay) && !_godMode)
+			{
+				Console.WriteLine("verloren :(");
+				level.Reset();
+			}
+		}
+
+        private void CheckSolarPanel(Level level)
         {
-			Vector2 p1o = v1.GetOriginVector();
-			Vector2 p1d = v1.GetDirectionVector();
-			Vector2 p2o = v2.GetOriginVector();
-			Vector2 p2d = v2.GetDirectionVector();
-
-			// TODO: Parallelität
-
-			float x1 = p1o.X;
-            float y1 = p1o.Y;
-            float x2 = p1d.X;
-            float y2 = p1d.Y;
-            float x3 = p2o.X;
-            float y3 = p2o.Y;
-            float x4 = p2d.X;
-            float y4 = p2d.Y;
-			
-            float t = (-x1 * y4 + x3 * y4 + x4 * y1 - x4 * y3) / (x2 * y4 - x4 * y2);
-            float u = (x1 + t * x2 - x3) / x4;
-
-            if (t >= 0 && t <= 1 && u >= 0 && u <= 1)
-            {
-                return p1o + p1d * t;
-            }
-
-			return null;
+			// evtl level.LightRay durch level.LightRay.GetLastRay() ersetzen 
+			level.Exit.IsOpen = Util.HasIntersection(level.SolarPanel, level.LightRay);
         }
 
-		private void CheckExit()
-		{
-			// Exit.IsOpen = SolarPanel.HitByRay()
-		}
+        private void CheckExit(Level level)
+        {
+			if (level.Exit.IsOpen && Util.HasIntersection(level.Exit, level.Player))
+			{
+				Console.WriteLine("gewonnen :)");
+				level.Reset();
+			}
+        }
 
 	}
 }

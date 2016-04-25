@@ -15,6 +15,7 @@ namespace Fledermaus
 		ToggleMirrorLock,
 		RotateMirrorCW,
 		RotateMirrorCCW,
-		ResetLevel
+		ResetLevel,
+		ToggleGodMode
 	}
 }

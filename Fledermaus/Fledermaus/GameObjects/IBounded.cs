@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	abstract class GameObject
+	interface IBounded
 	{
 
-		public abstract List<Line> GetLines();
+		List<Line> GetLines();
 
 	}
 }

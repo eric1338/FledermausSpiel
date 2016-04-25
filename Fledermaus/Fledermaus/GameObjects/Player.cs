@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Player : GameObject
+	class Player : IBounded
 	{
 
 		// TODO: PlayerSize / Hitboxen
@@ -43,7 +43,7 @@ namespace Fledermaus.GameObjects
 			Position = _initialPosition;
 		}
 
-		public override List<Line> GetLines()
+		public List<Line> GetLines()
 		{
 			Vector2 v1 = GetTempVector(1, 1);
 			Vector2 v2 = GetTempVector(1, -1);

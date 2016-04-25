@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Mirror : GameObject
+	class Mirror : IBounded
 	{
 
 		// TODO: bool FaceUpwards?
@@ -71,7 +71,7 @@ namespace Fledermaus.GameObjects
 			return GetRelativeRailPosition(RelativePosition);
 		}
 
-		public Vector2 GetMirrorPosition1()
+		private Vector2 GetMirrorPosition1()
 		{
 			// TODO: FacedUp/Down?
 			Vector2 rotation = Util.GetRotatedVector(GetNormalizedRailVector(), Rotation) * MirrorLength;
@@ -79,12 +79,19 @@ namespace Fledermaus.GameObjects
 			return GetMirrorCenterPosition() + rotation;
 		}
 
-		public Vector2 GetMirrorPosition2()
+		private Vector2 GetMirrorPosition2()
 		{
 			Vector2 rotation = Util.GetRotatedVector(GetNormalizedRailVector(), Rotation) * MirrorLength;
 
 			return GetMirrorCenterPosition() - rotation;
 		}
+
+		public Line GetMirrorLine()
+		{
+			return new Line(GetMirrorPosition1(), GetMirrorPosition2());
+		}
+
+
 
 		private Vector2 GetRelativeRailPosition(float factor)
 		{
@@ -123,7 +130,7 @@ namespace Fledermaus.GameObjects
 			RelativePosition = 0.5f;
 		}
 
-		public override List<Line> GetLines()
+		public List<Line> GetLines()
 		{
 			throw new NotImplementedException();
 		}

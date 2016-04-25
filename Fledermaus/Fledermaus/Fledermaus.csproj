@@ -49,7 +49,7 @@
     <Compile Include="GameGraphics.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameObjects\Exit.cs" />
-    <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="GameObjects\IBounded.cs" />
     <Compile Include="GameObjects\LightRay.cs" />
     <Compile Include="GameObjects\Mirror.cs" />
     <Compile Include="GameObjects\Obstacle.cs" />

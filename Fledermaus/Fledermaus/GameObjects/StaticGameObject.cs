@@ -1,13 +1,9 @@
 ﻿using OpenTK;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class StaticGameObject : GameObject
+	class StaticGameObject : IBounded
 	{
 
 		private List<Line> _lines = new List<Line>();
@@ -22,7 +18,7 @@ namespace Fledermaus.GameObjects
 			AddLine(new Line(point1, point2));
 		}
 
-		public override List<Line> GetLines()
+		public List<Line> GetLines()
 		{
 			return _lines;
 		}

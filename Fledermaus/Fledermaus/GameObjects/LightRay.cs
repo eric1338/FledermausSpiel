@@ -7,28 +7,60 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class LightRay
+	class LightRay : IBounded
 	{
 
 		public Vector2 Origin { get; set; }
-		public Vector2 LightVector { get; set; }
+		public Vector2 FirstDirection { get; set; }
 
-        public Vector2 EndVector { get; set; }
 
-		public LightRay(Vector2 origin, Vector2 lightVector)
+
+
+		private Line _lastRay;
+		private List<Line> _rays = new List<Line>();
+
+		public LightRay(Vector2 origin, Vector2 firstDirection)
 		{
 			Origin = origin;
-			LightVector = lightVector;
+			FirstDirection = firstDirection;
 
-            EndVector = new Vector2(0.0f, 0.0f);
+			ResetRays();
+			CreateLastRay(Origin, FirstDirection);
 		}
 
-		// TODO: aendern
+		public void ResetRays()
+		{
+			_lastRay = CreateLastRay(Origin, FirstDirection);
+			_rays.Clear();
+		}
+		
 		public Line GetLastRay()
 		{
-			//LightVector.Normalize();
-			return new Line(Origin, Origin + LightVector * 20.0f);
+			return _lastRay;
 		}
 
+		private Line CreateLastRay(Vector2 origin, Vector2 direction)
+		{
+			Vector2 newDirection = direction;
+			newDirection.Normalize();
+
+			return Line.CreateParameterized(origin, newDirection, 50); // TODO: evtl anderer Faktor
+		}
+
+		public void FinishRays(Vector2 lastPoint)
+		{
+			_rays.Add(new Line(_lastRay.Point1, lastPoint));
+		}
+
+		public void AddNewRay(Vector2 origin, Vector2 direction)
+		{
+			_rays.Add(new Line(_lastRay.Point1, origin));
+			_lastRay = CreateLastRay(origin, direction);
+		}
+
+		public List<Line> GetLines()
+		{
+			return _rays;
+		}
 	}
 }

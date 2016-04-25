@@ -19,6 +19,11 @@ namespace Fledermaus
 			Point2 = point2;
 		}
 
+		public static Line CreateParameterized(Vector2 origin, Vector2 direction, float factor)
+		{
+			return new Line(origin, origin + direction * factor);
+		}
+
 		public Vector2 GetOriginVector()
 		{
 			return Point1;

@@ -27,6 +27,7 @@ namespace Fledermaus
 			_keyMap.Add(Key.Q, UserAction.RotateMirrorCCW);
 
 			_keyMap2.Add(Key.F, UserAction.ToggleMirrorLock);
+			_keyMap2.Add(Key.G, UserAction.ToggleGodMode);
 			_keyMap2.Add(Key.N, UserAction.ResetLevel);
 
 			UserActionStatus = new Dictionary<UserAction, bool>();

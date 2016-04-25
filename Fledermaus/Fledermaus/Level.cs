@@ -40,7 +40,29 @@ namespace Fledermaus
 		public void Reset()
 		{
 			Player.Reset();
-			foreach (Mirror m in Mirrors) m.Reset();
+			foreach (Mirror mirror in Mirrors) mirror.Reset();
+		}
+
+		public List<Line> GetReflectingLines()
+		{
+			List<Line> reflectingLines = new List<Line>();
+
+			foreach (Mirror mirror in Mirrors)
+			{
+				reflectingLines.Add(mirror.GetMirrorLine());
+			}
+
+			return reflectingLines;
+		}
+
+		public List<IBounded> GetNonReflectingGameObjects()
+		{
+			List<IBounded> nonReflectingGameObjects = new List<IBounded>();
+
+			nonReflectingGameObjects.Add(Room);
+			nonReflectingGameObjects.AddRange(Obstacles);
+
+			return nonReflectingGameObjects;
 		}
 
 	}

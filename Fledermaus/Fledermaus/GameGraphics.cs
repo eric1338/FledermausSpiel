@@ -44,9 +44,12 @@ namespace Fledermaus
 		private void DrawLightRay(LightRay lightRay)
 		{
 			GL.Color3(1.0f, 0.6f, 0.0f);
-			Vector2 p2 = lightRay.Origin + lightRay.LightVector * 5.0f;
 
-			DrawLine(lightRay.Origin, lightRay.EndVector, 0.005f);
+			DrawGameObjectLines(lightRay, 0.005f);
+
+			//Vector2 p2 = lightRay.Origin + lightRay.FirstDirection * 5.0f;
+
+			//DrawLine(lightRay.Origin, lightRay.EndVector, 0.005f);
 		}
 
 		private void DrawPlayer(Player player)
@@ -69,7 +72,7 @@ namespace Fledermaus
 			if (Mirror.IsAccessible) GL.Color3(0.4f, 0.5f, 0.94f);
 			else GL.Color3(0.4f, 0.45f, 0.5f);
 
-			DrawLine(Mirror.GetMirrorPosition1(), Mirror.GetMirrorPosition2(), 0.006f);
+			DrawLine(Mirror.GetMirrorLine(), 0.006f);
 		}
 
 		private void DrawObstacles(List<Obstacle> obstacles)
@@ -104,7 +107,7 @@ namespace Fledermaus
 			DrawAABR(rectangularGameObject.aabr);
 		}
 
-		private void DrawGameObjectLines(GameObject gameObject, float thickness)
+		private void DrawGameObjectLines(IBounded gameObject, float thickness)
 		{
 			DrawLines(gameObject.GetLines(), thickness);
 		}
