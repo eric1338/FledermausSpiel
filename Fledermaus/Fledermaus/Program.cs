@@ -10,6 +10,8 @@ namespace Fledermaus
 	class MyApplication
 	{
 
+		// TODO: RAD zu Degree
+
 		/*
 		* Relative oder absolute Koordinaten?
 		*

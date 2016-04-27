@@ -17,9 +17,13 @@ namespace Fledermaus.GameObjects
 
 		public Mirror CurrentMirror { get; set; }
 
-		public Player(float x, float y)
+		public Player(float x, float y) : this(new Vector2(x, y))
 		{
-			_initialPosition = new Vector2(x, y);
+		}
+
+		public Player(Vector2 initialPosition)
+		{
+			_initialPosition = initialPosition;
 			Position = _initialPosition;
 		}
 
@@ -35,7 +39,12 @@ namespace Fledermaus.GameObjects
 
 		public void Move(float dx, float dy)
 		{
-			Position += new Vector2(dx, dy);
+			Move(new Vector2(dx, dy));
+		}
+
+		public void Move(Vector2 deltaVector)
+		{
+			Position += deltaVector;
 		}
 
 		public void Reset()
@@ -62,6 +71,14 @@ namespace Fledermaus.GameObjects
 		private Vector2 GetTempVector(float xF, float yF)
 		{
 			return Position + new Vector2(0.05f * xF, 0.05f * yF);
+		}
+
+		public Player CreateClone()
+		{
+			Player player = new Player(_initialPosition);
+			player.Position = Position;
+
+			return player;
 		}
 	}
 }

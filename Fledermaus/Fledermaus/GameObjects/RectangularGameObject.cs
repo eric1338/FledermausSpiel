@@ -18,6 +18,11 @@ namespace Fledermaus.GameObjects
 
 		public AABR aabr { get; set; }
 
+		public RectangularGameObject(Vector2 topLeft, Vector2 bottomRight) : this(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y)
+		{
+
+		}
+
 		public RectangularGameObject(float leftX, float topY, float rightX, float bottomY) :
 			this (new Vector2(leftX, topY), new Vector2(rightX, topY), new Vector2(rightX, bottomY), new Vector2(leftX, bottomY))
 		{

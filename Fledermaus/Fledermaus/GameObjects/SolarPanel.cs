@@ -12,8 +12,7 @@ namespace Fledermaus.GameObjects
 
 		// evtl bool für beleuchtet
 
-		public SolarPanel(float leftX, float topY, float rightX, float bottomY) : 
-			base(leftX, topY, rightX, bottomY)
+		public SolarPanel(Vector2 topLeft, Vector2 bottomRight) : base(topLeft, bottomRight)
 		{
 
 		}

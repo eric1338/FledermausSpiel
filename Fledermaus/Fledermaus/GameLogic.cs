@@ -104,18 +104,22 @@ namespace Fledermaus
 
 		private void TryToMovePlayer(Level level, float dx, float dy)
 		{
-			Vector2 newPosition = level.Player.Position + new Vector2(dx, dy);
+			Vector2 deltaVector = new Vector2(dx, dy);
 
-			RectangularGameObject room = level.Room;
+			Player tempPlayer = level.Player.CreateClone();
 
 			bool movePlayer = true;
-			
-			if (room.Point1.X > newPosition.X || room.Point2.X < newPosition.X ||
-				room.Point4.Y > newPosition.Y || room.Point2.Y < newPosition.Y) movePlayer = false;
+
+			tempPlayer.Move(deltaVector);
+
+			if (Util.HasIntersection(tempPlayer, level.GetNonReflectingGameObjects())) movePlayer = false;
+
+			//if (room.Point1.X > newPosition.X || room.Point2.X < newPosition.X ||
+			//	room.Point4.Y > newPosition.Y || room.Point2.Y < newPosition.Y) movePlayer = false;
 
 			// CheckBounds
 
-			if (movePlayer) level.Player.Position = newPosition;
+			if (movePlayer) level.Player.Move(deltaVector);
 		}
 
 		public void DoLogic(Level level)
@@ -144,7 +148,6 @@ namespace Fledermaus
 		{
 
             LightRay ray = level.LightRay;
-			Console.WriteLine(ray.GetLines().Count);
 
 			Line currentRay = ray.GetLastRay();
 
@@ -170,7 +173,12 @@ namespace Fledermaus
 			else
 			{
 				//Console.WriteLine("ADD NEW");
-				Vector2 direction = ray.GetLines().Count < 1 ? new Vector2(-20.5f, 20.5f) : new Vector2(20.5f, 20.5f);
+				Vector2 direction = ray.GetLines().Count < 1 ? new Vector2(20.5f, 20.5f) : new Vector2(20.5f, 20.5f);
+
+				//float angle = Vector3.CalculateAngle(new Vector3(currentRay.GetDirectionVector(), 0.0f), )
+
+				//Vector2 direction = new Vector2();
+
 
 				Vector2 point = new Vector2(closestReflectingIntersection.X - 0.005f, closestReflectingIntersection.Y + 0.005f);
 

@@ -15,12 +15,12 @@ namespace Fledermaus
 		{
 			Level level = new Level();
 
-            level.Room = new RectangularGameObject(-0.9f, 0.9f, 0.9f, -0.9f);
+            level.Room = new RectangularGameObject(new Vector2(-0.9f, 0.9f), new Vector2(0.9f, -0.9f));
 
 			level.Player = new Player(0.8f, -0.7f);
 
-			level.SolarPanel = new SolarPanel(-0.94f, 0.2f, -0.89f, 0.0f);
-			level.Exit = new Exit(-0.94f, -0.6f, -0.89f, -0.8f);
+			level.SolarPanel = new SolarPanel(new Vector2(-0.94f, 0.2f), new Vector2(-0.89f, 0.0f));
+			level.Exit = new Exit(new Vector2(-0.94f, -0.6f), new Vector2(-0.89f, -0.8f));
 			level.LightRay = new LightRay(new Vector2(0.89f, 0.89f), new Vector2(-0.16f, -0.28f));
 
 			Mirror m = new Mirror();
@@ -41,6 +41,14 @@ namespace Fledermaus
 			o.AddLastPoint(new Vector2(-0.28f, 0.12f));
 
 			level.AddObstacle(o);
+
+			Obstacle o2 = new Obstacle();
+			o2.AddFirstPoint(new Vector2(0.8f, 0.8f));
+			o2.AddFollowingPoint(new Vector2(0.6f, 0.8f));
+			o2.AddFollowingPoint(new Vector2(0.6f, 0.6f));
+			o2.AddLastPoint(new Vector2(0.8f, 0.6f));
+
+			//level.AddObstacle(o2);
 
 			return level;
 		}

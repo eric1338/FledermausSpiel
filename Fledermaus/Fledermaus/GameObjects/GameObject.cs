@@ -1,78 +1,44 @@
-﻿using Fledermaus.GameObjects;
-using OpenTK;
+﻿using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fledermaus
+namespace Fledermaus.GameObjects
 {
-	class Util
+	abstract class GameObject : IBounded
 	{
 
-		public static Vector2 GetRotatedVector(Vector2 vector, float degree)
+		public abstract List<Line> GetLines();
+
+
+		public bool HasIntersection(List<IBounded> gameObjects)
 		{
-			return GetRotatedVector(vector, degree, false);
-		}
-
-		public static Vector2 GetRotatedVector(Vector2 vector, float degree, bool clockwise)
-		{
-			float dg = clockwise ? (360 - degree) : degree;
-			float angle = dg * (float) (Math.PI / 180);
-
-			Matrix2 rM = Matrix2.CreateRotation(angle);
-
-			float f1 = rM.M11 * vector.X + rM.M12 * vector.Y;
-			float f2 = rM.M21 * vector.X + rM.M22 * vector.Y;
-
-			return new Vector2(f1, f2);
-		}
-
-		public static Vector2 GetOrthogonalVectorCW(Vector2 vector)
-		{
-			return GetOrthogonalVector(vector, true);
-		}
-
-		public static Vector2 GetOrthogonalVectorCCW(Vector2 vector)
-		{
-			return GetOrthogonalVector(vector, false);
-		}
-
-		public static Vector2 GetOrthogonalVector(Vector2 vector, bool clockwise)
-		{
-			float xFactor = clockwise ? 1 : -1;
-			float yFactor = xFactor * -1;
-
-			return new Vector2(xFactor * vector.Y, yFactor * vector.X);
-		}
-
-		public static bool HasIntersection(IBounded gameObject1, List<IBounded> gameObjects)
-		{
-			foreach (IBounded gameObject2 in gameObjects)
+			foreach (IBounded gameObject in gameObjects)
 			{
-				if (HasIntersection(gameObject1, gameObject2)) return true;
+				if (HasIntersection(gameObject)) return true;
 			}
 
 			return false;
 		}
 
-		public static bool HasIntersection(IBounded gameObject1, IBounded gameObject2)
+		public bool HasIntersection(IBounded gameObject)
 		{
-			foreach (Line line in gameObject1.GetLines())
+			foreach (Line line in GetLines())
 			{
-				if (HasIntersection(line, gameObject2)) return true;
+				if (HasIntersection(line, gameObject)) return true;
 			}
 
 			return false;
 		}
 
-		public static bool HasIntersection(Line line, IBounded gameObject)
+		public bool HasIntersection(Line line, IBounded gameObject)
 		{
 			return HasIntersection(line, gameObject.GetLines());
 		}
 
-		public static bool HasIntersection(Line line, List<Line> lines)
+		public bool HasIntersection(Line line, List<Line> lines)
 		{
 			List<Vector2> intersections = new List<Vector2>();
 
@@ -140,7 +106,7 @@ namespace Fledermaus
 			float y4 = p2d.Y;
 
 			// temporär, um Teilung durch 0 bei x4=0 zu verhindern
-			x4 += 0.0000001f;
+			x4 += 0.00001f;
 
 			float t = (-x1 * y4 + x3 * y4 + x4 * y1 - x4 * y3) / (x2 * y4 - x4 * y2);
 			float u = (x1 + t * x2 - x3) / x4;
