@@ -4,19 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Fledermaus.Utils;
 
 namespace Fledermaus.GameObjects
 {
-	class Mirror : IBounded
+	class Mirror : GameObject
 	{
 
 		// TODO: bool FaceUpwards?
 
 		// TODO: evtl auslagern
 		public const float MirrorMovementSpeed = 0.02f;
-		public const float RotationSpeed = 0.4f;
-		public const float PlayerMirrorDistance = 0.05f;
-		public const float MinAccessibilityDistance = 0.20f;
+		public const float RotationSpeed = 0.006f;
+		public const float PlayerMirrorDistance = 0.1f;
+		public const float MinAccessibilityDistance = 0.25f;
+		public float StartingAngle = 20.0f;
 
 		public float MirrorLength = 0.2f;
 
@@ -28,25 +30,38 @@ namespace Fledermaus.GameObjects
 		public Vector2 RailPosition1 { get; set; }
 		public Vector2 RailPosition2 { get; set; }
 
+		public bool IsPlayerBelow { get; set; }
+
 		public bool IsAccessible { get; set; }
 
-		public Mirror()
+		public Mirror(Vector2 railPosition1, Vector2 railPosition2)
 		{
-			RelativePosition = 0.5f;
-			Rotation = 20.0f;
-			MaximumRotation = 40.0f;
-		}
+			if (railPosition1.X < railPosition2.X)
+			{
+				RailPosition1 = railPosition1;
+				RailPosition2 = railPosition2;
+			}
+			else
+			{
+				RailPosition1 = railPosition2;
+				RailPosition2 = railPosition1;
+			}
 
-		// evtl Pos1 und Pos2 selbst bestimmen (Pos1.x immer < Pos2.x)
+			RelativePosition = 0.5f;
+			Rotation = Util.ConvertDegreeToRadian(StartingAngle);
+			MaximumRotation = Util.ConvertDegreeToRadian(40.0f);
+
+			IsPlayerBelow = (RailPosition1.Y + RailPosition2.Y) < 0;
+		}
 
 		public Vector2 GetRelativePlayerPosition()
 		{
-			Vector2 v = GetNormalizedRailVector() * PlayerMirrorDistance;
+			Vector2 distanceVector = GetNormalizedRailVector() * PlayerMirrorDistance;
+			
+			Vector2 orthogonal = IsPlayerBelow ?
+				Util.GetOrthogonalVectorCW(distanceVector) : Util.GetOrthogonalVectorCCW(distanceVector);
 
-			// je nach FaceUpwards CW oder CCW
-			Vector2 orth = Util.GetOrthogonalVectorCW(v);
-
-			return GetMirrorCenterPosition() + orth;
+			return GetMirrorCenterPosition() + orthogonal;
 		}
 
 		private Vector2 GetRailVector()
@@ -61,7 +76,7 @@ namespace Fledermaus.GameObjects
 			return railVector;
 		}
 
-		public Vector2 GetCenterPosition()
+		private Vector2 GetCenterPosition()
 		{
 			return GetRelativeRailPosition(0.5f);
 		}
@@ -71,27 +86,26 @@ namespace Fledermaus.GameObjects
 			return GetRelativeRailPosition(RelativePosition);
 		}
 
+		private Vector2 GetMirrorHalf()
+		{
+			return Util.GetRotatedVector(GetNormalizedRailVector(), Rotation) * MirrorLength;
+		}
+
 		private Vector2 GetMirrorPosition1()
 		{
 			// TODO: FacedUp/Down?
-			Vector2 rotation = Util.GetRotatedVector(GetNormalizedRailVector(), Rotation) * MirrorLength;
-
-			return GetMirrorCenterPosition() + rotation;
+			return GetMirrorCenterPosition() + GetMirrorHalf();
 		}
 
 		private Vector2 GetMirrorPosition2()
 		{
-			Vector2 rotation = Util.GetRotatedVector(GetNormalizedRailVector(), Rotation) * MirrorLength;
-
-			return GetMirrorCenterPosition() - rotation;
+			return GetMirrorCenterPosition() - GetMirrorHalf();
 		}
 
 		public Line GetMirrorLine()
 		{
 			return new Line(GetMirrorPosition1(), GetMirrorPosition2());
 		}
-
-
 
 		private Vector2 GetRelativeRailPosition(float factor)
 		{
@@ -101,12 +115,12 @@ namespace Fledermaus.GameObjects
 		// TODO: Up/Down oder Left/Right? (evtl abhängig vom RailVector (x > y bzw. y > x)
 		public void MoveMirrorUp()
 		{
-			RelativePosition = Math.Min(0.94f, RelativePosition + MirrorMovementSpeed);
+			RelativePosition = Math.Max(0.06f, RelativePosition - MirrorMovementSpeed);
 		}
 
 		public void MoveMirrorDown()
 		{
-			RelativePosition = Math.Max(0.06f, RelativePosition - MirrorMovementSpeed);
+			RelativePosition = Math.Min(0.94f, RelativePosition + MirrorMovementSpeed);
 		}
 
 		public void RotateMirrorCW()
@@ -128,11 +142,12 @@ namespace Fledermaus.GameObjects
 		public void Reset()
 		{
 			RelativePosition = 0.5f;
+			Rotation = Util.ConvertDegreeToRadian(StartingAngle);
 		}
 
-		public List<Line> GetLines()
+		public override List<Line> GetLines()
 		{
-			throw new NotImplementedException();
+			return new List<Line> { GetMirrorLine() };
 		}
 	}
 }

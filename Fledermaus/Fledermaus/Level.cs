@@ -55,9 +55,21 @@ namespace Fledermaus
 			return reflectingLines;
 		}
 
-		public List<IBounded> GetNonReflectingGameObjects()
+		public List<GameObject> GetReflectingGameObejcts()
 		{
-			List<IBounded> nonReflectingGameObjects = new List<IBounded>();
+			List<GameObject> reflectingGameObejcts = new List<GameObject>();
+
+			foreach (Mirror mirror in Mirrors)
+			{
+				reflectingGameObejcts.Add(mirror);
+			}
+
+			return reflectingGameObejcts;
+		}
+
+		public List<GameObject> GetNonReflectingGameObjects()
+		{
+			List<GameObject> nonReflectingGameObjects = new List<GameObject>();
 
 			nonReflectingGameObjects.Add(Room);
 			nonReflectingGameObjects.AddRange(Obstacles);

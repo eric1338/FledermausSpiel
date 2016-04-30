@@ -17,28 +17,24 @@ namespace Fledermaus
 
             level.Room = new RectangularGameObject(new Vector2(-0.9f, 0.9f), new Vector2(0.9f, -0.9f));
 
-			level.Player = new Player(0.8f, -0.7f);
+			level.Player = new Player(new Vector2(0.8f, -0.7f));
 
-			level.SolarPanel = new SolarPanel(new Vector2(-0.94f, 0.2f), new Vector2(-0.89f, 0.0f));
-			level.Exit = new Exit(new Vector2(-0.94f, -0.6f), new Vector2(-0.89f, -0.8f));
+			level.SolarPanel = new SolarPanel(new Vector2(-0.94f, 0.2f), new Vector2(-0.875f, 0.0f));
+			level.Exit = new Exit(new Vector2(-0.94f, -0.6f), new Vector2(-0.875f, -0.8f));
 			level.LightRay = new LightRay(new Vector2(0.89f, 0.89f), new Vector2(-0.16f, -0.28f));
 
-			Mirror m = new Mirror();
-			m.RailPosition1 = new Vector2(0.12f, -0.46f);
-			m.RailPosition2 = new Vector2(0.81f, -0.63f);
+			Mirror m = new Mirror(new Vector2(0.12f, -0.46f), new Vector2(0.81f, -0.63f));
 			level.AddMirror(m);
 
-			Mirror m2 = new Mirror();
-			m2.RailPosition1 = new Vector2(-0.40f, 0.32f);
-			m2.RailPosition2 = new Vector2(-0.53f, 0.64f);
+			Mirror m2 = new Mirror(new Vector2(-0.40f, 0.32f), new Vector2(-0.53f, 0.64f));
 			level.AddMirror(m2);
 
 			Obstacle o = new Obstacle();
-			o.AddFirstPoint(new Vector2(-0.4f, 0.2f));
-			o.AddFollowingPoint(new Vector2(-0.1f, 0.28f));
-			o.AddFollowingPoint(new Vector2(0.0f, 0.16f));
-			o.AddFollowingPoint(new Vector2(-0.2f, -0.08f));
-			o.AddLastPoint(new Vector2(-0.28f, 0.12f));
+			o.AddFirstPoint(new Vector2(-0.2f, 0.4f));
+			o.AddFollowingPoint(new Vector2(0.1f, 0.48f));
+			o.AddFollowingPoint(new Vector2(0.2f, 0.36f));
+			o.AddFollowingPoint(new Vector2(0.0f, 0.18f));
+			o.AddLastPoint(new Vector2(-0.16f, 0.22f));
 
 			level.AddObstacle(o);
 

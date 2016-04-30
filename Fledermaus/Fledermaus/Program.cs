@@ -10,13 +10,8 @@ namespace Fledermaus
 	class MyApplication
 	{
 
-		// TODO: RAD zu Degree
-
 		/*
 		* Relative oder absolute Koordinaten?
-		*
-		* Bei Spiegelbewegung: evtl W & S + A & D 
-		* MoveUp() bzw MoveLeft() dynamisch (GetLeftPoint() { p1.x < p2.x ... } (bzw. .y)
 		*
 		*/
 
@@ -24,6 +19,8 @@ namespace Fledermaus
 		public static void Main()
 		{
 			MyGameWindow win = new MyGameWindow();
+
+			win.CurrentScreen = new GameScreen();
 
 			win.Run(60.0);
 		}

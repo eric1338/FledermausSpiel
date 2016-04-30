@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Player : IBounded
+	class Player : GameObject
 	{
 
 		// TODO: PlayerSize / Hitboxen
@@ -17,24 +17,10 @@ namespace Fledermaus.GameObjects
 
 		public Mirror CurrentMirror { get; set; }
 
-		public Player(float x, float y) : this(new Vector2(x, y))
-		{
-		}
-
 		public Player(Vector2 initialPosition)
 		{
 			_initialPosition = initialPosition;
 			Position = _initialPosition;
-		}
-
-		public void MoveX(float dx)
-		{
-			Move(dx, 0.0f);
-		}
-
-		public void MoveY(float dy)
-		{
-			Move(0.0f, dy);
 		}
 
 		public void Move(float dx, float dy)
@@ -49,10 +35,26 @@ namespace Fledermaus.GameObjects
 
 		public void Reset()
 		{
+			UnfocusCurrentMirror();
 			Position = _initialPosition;
 		}
 
-		public List<Line> GetLines()
+		public void FocusMirror(Mirror mirror)
+		{
+			CurrentMirror = mirror;
+		}
+
+		public void UnfocusCurrentMirror()
+		{
+			CurrentMirror = null;
+		}
+
+		public bool IsFocusedToMirror()
+		{
+			return CurrentMirror != null;
+		}
+
+		public override List<Line> GetLines()
 		{
 			Vector2 v1 = GetTempVector(1, 1);
 			Vector2 v2 = GetTempVector(1, -1);

@@ -1,4 +1,5 @@
 ﻿using Fledermaus.GameObjects;
+using Fledermaus.Utils;
 using Framework;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -13,26 +14,21 @@ namespace Fledermaus
 	class GameGraphics
 	{
 
-		private static GameGraphics instance = new GameGraphics();
+		public Level Level { get; set; }
 
-		public static GameGraphics GetInstance()
-		{
-			return instance;
-		}
-
-		public void DrawLevel(Level level)
+		public void DrawLevel()
 		{
 			//DrawBG / DrawScreen
 
 			// evtl nur bewegte Objekte neu zeichnen
 
-			DrawRoom(level.Room);
-			DrawLightRay(level.LightRay);
-			DrawPlayer(level.Player);
-			DrawMirrors(level.Mirrors);
-			DrawObstacles(level.Obstacles);
-			DrawSolarPanel(level.SolarPanel);
-			DrawExit(level.Exit);
+			DrawRoom(Level.Room);
+			DrawLightRay(Level.LightRay);
+			DrawPlayer(Level.Player);
+			DrawMirrors(Level.Mirrors);
+			DrawObstacles(Level.Obstacles);
+			DrawSolarPanel(Level.SolarPanel);
+			DrawExit(Level.Exit);
 		}
 
 		private void DrawRoom(RectangularGameObject room)
@@ -44,12 +40,7 @@ namespace Fledermaus
 		private void DrawLightRay(LightRay lightRay)
 		{
 			GL.Color3(1.0f, 0.6f, 0.0f);
-
 			DrawGameObjectLines(lightRay, 0.005f);
-
-			//Vector2 p2 = lightRay.Origin + lightRay.FirstDirection * 5.0f;
-
-			//DrawLine(lightRay.Origin, lightRay.EndVector, 0.005f);
 		}
 
 		private void DrawPlayer(Player player)
@@ -107,7 +98,7 @@ namespace Fledermaus
 			DrawAABR(rectangularGameObject.aabr);
 		}
 
-		private void DrawGameObjectLines(IBounded gameObject, float thickness)
+		private void DrawGameObjectLines(GameObject gameObject, float thickness)
 		{
 			DrawLines(gameObject.GetLines(), thickness);
 		}

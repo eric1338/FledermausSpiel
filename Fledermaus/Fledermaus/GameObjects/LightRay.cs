@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class LightRay : IBounded
+	class LightRay : GameObject
 	{
 
 		public Vector2 Origin { get; set; }
 		public Vector2 FirstDirection { get; set; }
-
-
-
 
 		private Line _lastRay;
 		private List<Line> _rays = new List<Line>();
@@ -58,7 +55,7 @@ namespace Fledermaus.GameObjects
 			_lastRay = CreateLastRay(origin, direction);
 		}
 
-		public List<Line> GetLines()
+		public override List<Line> GetLines()
 		{
 			return _rays;
 		}

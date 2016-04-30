@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Fledermaus.GameObjects
 {
-	class StaticGameObject : IBounded
+	class StaticGameObject : GameObject
 	{
 
 		private List<Line> _lines = new List<Line>();
@@ -18,7 +18,7 @@ namespace Fledermaus.GameObjects
 			AddLine(new Line(point1, point2));
 		}
 
-		public List<Line> GetLines()
+		public override List<Line> GetLines()
 		{
 			return _lines;
 		}
