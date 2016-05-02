@@ -4,9 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LevelEditor"
+        xmlns:uc="clr-namespace:LevelEditor.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="FledermausSpiel - LevelEditor" Height="350" Width="525">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <uc:Toolbar Grid.ColumnSpan="2"/>
+        <uc:Toolbox Grid.Row="1"/>
+        <WindowsFormsHost Grid.Row="1" Grid.Column="1" Name="host"/>
+        <!--<uc:GameHost Grid.Row="1" Grid.Column="1" />-->
     </Grid>
 </Window>

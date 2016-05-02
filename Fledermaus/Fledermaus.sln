@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fledermaus", "Fledermaus\Fl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{C660F6AF-C100-4169-A9FB-61E1EBE87F34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelEditor", "LevelEditor\LevelEditor.csproj", "{D2F476D0-9619-477F-A361-CC732D7ED854}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C660F6AF-C100-4169-A9FB-61E1EBE87F34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C660F6AF-C100-4169-A9FB-61E1EBE87F34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C660F6AF-C100-4169-A9FB-61E1EBE87F34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2F476D0-9619-477F-A361-CC732D7ED854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F476D0-9619-477F-A361-CC732D7ED854}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F476D0-9619-477F-A361-CC732D7ED854}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F476D0-9619-477F-A361-CC732D7ED854}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
