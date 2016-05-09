@@ -18,30 +18,39 @@ namespace Fledermaus.GameObjects
 
 		public AABR aabr { get; set; }
 
-		public RectangularGameObject(Vector2 topLeft, Vector2 bottomRight) : this(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y)
+		public RectangularGameObject(Vector2 topLeft, Vector2 bottomRight)
 		{
+			Position = topLeft + 0.5f * (bottomRight - topLeft);
 
+			Point1 = topLeft;
+			Point2 = new Vector2(bottomRight.X, topLeft.Y);
+			Point3 = bottomRight;
+			Point4 = new Vector2(topLeft.X, bottomRight.Y);
+
+			CreateLinesAndAABR();
 		}
 
-		public RectangularGameObject(float leftX, float topY, float rightX, float bottomY) :
-			this (new Vector2(leftX, topY), new Vector2(rightX, topY), new Vector2(rightX, bottomY), new Vector2(leftX, bottomY))
+		public RectangularGameObject(Vector2 position, float width, float height) : base(position)
 		{
+			float halfWidth = width / 2.0f;
+			float halfHeight = height / 2.0f;
 
+			Point1 = new Vector2(position.X - halfWidth, position.Y + halfHeight);
+			Point2 = new Vector2(position.X + halfWidth, position.Y + halfHeight);
+			Point3 = new Vector2(position.X + halfWidth, position.Y - halfHeight);
+			Point4 = new Vector2(position.X - halfWidth, position.Y - halfHeight);
+
+			CreateLinesAndAABR();
 		}
 
-		public RectangularGameObject(Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4)
+		private void CreateLinesAndAABR()
 		{
-			Point1 = point1;
-			Point2 = point2;
-			Point3 = point3;
-			Point4 = point4;
+			AddLine(Point1, Point2);
+			AddLine(Point2, Point3);
+			AddLine(Point3, Point4);
+			AddLine(Point1, Point4);
 
-			AddLine(point1, point2);
-			AddLine(point2, point3);
-			AddLine(point3, point4);
-			AddLine(point1, point4);
-
-			aabr = new AABR(Point4.X, Point4.Y, GetWidth(), GetHeight());
+			aabr = new AABR(Point1.X, Point1.Y, Point3.X - Point1.X, Point3.Y - Point1.Y);
 		}
 
 		public float GetWidth()

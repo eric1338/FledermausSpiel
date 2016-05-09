@@ -72,7 +72,6 @@ namespace Fledermaus
 				if (userAction == UserAction.ToggleMirrorLock)
 				{
 					ToggleMirrorLock();
-
 				}
 				else if (userAction == UserAction.ResetLevel)
 				{
@@ -136,7 +135,7 @@ namespace Fledermaus
 
 			Line Line;
 
-			public TGO(Line line)
+			public TGO(Line line) : base(new Vector2(0.0f, 0.0f))
 			{
 				Line = line;
 			}
@@ -170,13 +169,19 @@ namespace Fledermaus
 				if (mirror == null) return;
 
 				Vector3 lightDirection3D = new Vector3(currentRay.GetDirectionVector().X, currentRay.GetDirectionVector().Y, 0.0f);
+
 				Vector2 mirrorDirection2D = mirror.GetLines()[0].GetDirectionVector();
 				Vector3 mirrorDirection3D = new Vector3(mirrorDirection2D.X, mirrorDirection2D.Y, 0.0f);
+
+				//lightDirection3D.Normalize();
+				//mirrorDirection3D.Normalize();
 
 				float angle = Vector3.CalculateAngle(lightDirection3D, mirrorDirection3D);
 				angle = (angle - 1.6f) * 2;
 
-				Vector2 direction = Util.GetRotatedVector(currentRay.GetDirectionVector() * -1, angle);
+				int f = (mirrorDirection2D.X < 0.0f) ? -1 : 1;
+
+				Vector2 direction = Util.GetRotatedVector(currentRay.GetDirectionVector() * f, angle);
 
 				Vector2 point = new Vector2(closestReflectingIntersection.Point.X, closestReflectingIntersection.Point.Y) + direction * 0.0001f;
 

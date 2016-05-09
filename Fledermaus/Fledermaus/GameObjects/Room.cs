@@ -17,7 +17,7 @@ namespace Fledermaus.GameObjects
         public Vector2 LeftTop { get; set; }
         public Vector2 RightTop { get; set; }
 		
-        public Room(Vector2 leftBottom, Vector2 rightBottom, Vector2 leftTop, Vector2 rightTop) {
+        public Room(Vector2 position, Vector2 leftBottom, Vector2 rightBottom, Vector2 leftTop, Vector2 rightTop) : base(position) {
             LeftBottom = leftBottom;
             RightBottom = rightBottom;
             LeftTop = leftTop;

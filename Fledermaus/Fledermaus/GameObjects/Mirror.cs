@@ -34,7 +34,7 @@ namespace Fledermaus.GameObjects
 
 		public bool IsAccessible { get; set; }
 
-		public Mirror(Vector2 railPosition1, Vector2 railPosition2)
+		public Mirror(Vector2 railPosition1, Vector2 railPosition2) : base(new Vector2(0.0f, 0.0f))
 		{
 			if (railPosition1.X < railPosition2.X)
 			{
@@ -52,6 +52,8 @@ namespace Fledermaus.GameObjects
 			MaximumRotation = Util.ConvertDegreeToRadian(40.0f);
 
 			IsPlayerBelow = (RailPosition1.Y + RailPosition2.Y) < 0;
+
+			Position = GetCenterPosition();
 		}
 
 		public Vector2 GetRelativePlayerPosition()

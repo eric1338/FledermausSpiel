@@ -13,7 +13,7 @@ namespace Fledermaus.GameObjects
 		private Vector2 _firstPoint;
 		private Vector2 _lastPoint;
 
-		public Obstacle()
+		public Obstacle(Vector2 position) : base(position)
 		{
 
 		}

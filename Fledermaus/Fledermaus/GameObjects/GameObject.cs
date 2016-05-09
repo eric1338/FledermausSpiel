@@ -11,7 +11,19 @@ namespace Fledermaus.GameObjects
 	abstract class GameObject
 	{
 
+		public Vector2 Position;
+
 		public abstract List<Line> GetLines();
+
+		public GameObject()
+		{
+
+		}
+
+		public GameObject(Vector2 position)
+		{
+			Position = position;
+		}
 
 
 		public Intersection GetClosestIntersection(List<GameObject> gameObjects)
@@ -39,21 +51,7 @@ namespace Fledermaus.GameObjects
 		{
 			foreach (Line line in GetLines())
 			{
-				if (HasIntersection(line, gameObject)) return true;
-			}
-
-			return false;
-		}
-
-		private static bool HasIntersection(Line line, GameObject gameObject)
-		{
-			List<Vector2> intersections = new List<Vector2>();
-
-			foreach (Line otherLine in gameObject.GetLines())
-			{
-				Intersection intersection = Util.GetIntersection(line, otherLine);
-
-				if (intersection != null) return true;
+				if (Util.HasIntersection(line, gameObject)) return true;
 			}
 
 			return false;
@@ -65,41 +63,13 @@ namespace Fledermaus.GameObjects
 
 			foreach (Line line in GetLines())
 			{
-				intersections.AddRange(GetIntersections(line, gameObjects));
+				intersections.AddRange(Util.GetIntersections(line, gameObjects));
 			}
 
 			return intersections;
 		}
 
-		private static List<Intersection> GetIntersections(Line line, List<GameObject> gameObjects)
-		{
-			List<Intersection> intersections = new List<Intersection>();
 
-			foreach (GameObject gameObject in gameObjects)
-			{
-				intersections.AddRange(GetIntersections(line, gameObject));
-			}
-
-			return intersections;
-		}
-
-		private static List<Intersection> GetIntersections(Line line, GameObject gameObject)
-		{
-			List<Intersection> intersections = new List<Intersection>();
-
-			foreach (Line otherLine in gameObject.GetLines())
-			{
-				Intersection intersection = Util.GetIntersection(line, otherLine);
-
-				if (intersection != null)
-				{
-					intersection.GameObject = gameObject;
-					intersections.Add(intersection);
-				}
-			}
-
-			return intersections;
-		}
 
 	}
 }

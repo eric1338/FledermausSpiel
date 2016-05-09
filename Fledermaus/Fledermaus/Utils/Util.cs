@@ -45,7 +45,57 @@ namespace Fledermaus.Utils
 
 			return new Vector2(xFactor * vector.Y, yFactor * vector.X);
 		}
-		
+
+		public static float ConvertDegreeToRadian(float degree)
+		{
+			return degree * 0.0175f;
+		}
+
+		// INTERSECTION
+
+		public static bool HasIntersection(Line line, GameObject gameObject)
+		{
+			List<Vector2> intersections = new List<Vector2>();
+
+			foreach (Line otherLine in gameObject.GetLines())
+			{
+				Intersection intersection = GetIntersection(line, otherLine);
+
+				if (intersection != null) return true;
+			}
+
+			return false;
+		}
+
+		public static List<Intersection> GetIntersections(Line line, List<GameObject> gameObjects)
+		{
+			List<Intersection> intersections = new List<Intersection>();
+
+			foreach (GameObject gameObject in gameObjects)
+			{
+				intersections.AddRange(GetIntersections(line, gameObject));
+			}
+
+			return intersections;
+		}
+
+		public static List<Intersection> GetIntersections(Line line, GameObject gameObject)
+		{
+			List<Intersection> intersections = new List<Intersection>();
+
+			foreach (Line otherLine in gameObject.GetLines())
+			{
+				Intersection intersection = GetIntersection(line, otherLine);
+
+				if (intersection != null)
+				{
+					intersection.GameObject = gameObject;
+					intersections.Add(intersection);
+				}
+			}
+
+			return intersections;
+		}
 
 		public static Intersection GetIntersection(Line v1, Line v2)
 		{
@@ -81,11 +131,6 @@ namespace Fledermaus.Utils
 			return null;
 		}
 
-
-		public static float ConvertDegreeToRadian(float degree)
-		{
-			return degree * 0.0175f;
-		}
 
 	}
 }

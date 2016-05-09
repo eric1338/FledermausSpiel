@@ -16,7 +16,7 @@ namespace Fledermaus.GameObjects
 		private Line _lastRay;
 		private List<Line> _rays = new List<Line>();
 
-		public LightRay(Vector2 origin, Vector2 firstDirection)
+		public LightRay(Vector2 origin, Vector2 firstDirection) : base(origin)
 		{
 			Origin = origin;
 			FirstDirection = firstDirection;

@@ -13,11 +13,10 @@ namespace Fledermaus.GameObjects
 		// TODO: PlayerSize / Hitboxen
 
 		private Vector2 _initialPosition;
-		public Vector2 Position { get; set; }
 
 		public Mirror CurrentMirror { get; set; }
 
-		public Player(Vector2 initialPosition)
+		public Player(Vector2 initialPosition) : base(initialPosition)
 		{
 			_initialPosition = initialPosition;
 			Position = _initialPosition;

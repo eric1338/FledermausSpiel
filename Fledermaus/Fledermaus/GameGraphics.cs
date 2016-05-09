@@ -35,6 +35,9 @@ namespace Fledermaus
 		{
 			GL.Color3(0.2f, 0.2f, 0.2f);
 			DrawRectangularGameObject(room);
+
+			GL.Color3(0.1f, 0.1f, 0.1f);
+			DrawGameObjectLines(room, 0.003f);
 		}
 
 		private void DrawLightRay(LightRay lightRay)

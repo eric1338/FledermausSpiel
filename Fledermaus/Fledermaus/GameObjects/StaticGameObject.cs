@@ -6,6 +6,16 @@ namespace Fledermaus.GameObjects
 	class StaticGameObject : GameObject
 	{
 
+		public StaticGameObject()
+		{
+
+		}
+
+		public StaticGameObject(Vector2 position) : base(position)
+		{
+
+		}
+
 		private List<Line> _lines = new List<Line>();
 
 		protected void AddLine(Line line)

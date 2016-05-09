@@ -17,5 +17,10 @@ namespace Fledermaus.GameObjects
 			IsOpen = false;
 		}
 
+		public Exit(Vector2 position, float width, float height) : base(position, width, height)
+		{
+			IsOpen = false;
+		}
+
 	}
 }
