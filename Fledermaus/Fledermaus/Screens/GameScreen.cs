@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fledermaus
+namespace Fledermaus.Screens
 {
 	class GameScreen : Screen
 	{
@@ -15,7 +15,7 @@ namespace Fledermaus
 
 		private Level _level;
 
-		public GameScreen()
+		public GameScreen(MyGameWindow win) :base(win)
 		{
 			_level = Levels.CreateTestLevel();
 

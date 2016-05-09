@@ -5,12 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fledermaus
+namespace Fledermaus.Screens
 {
 	abstract class Screen
 	{
 
 		protected InputManager _inputManager = new InputManager();
+        protected MyGameWindow _myGameWindow;
+
+        public Screen(MyGameWindow win) {
+            _myGameWindow = win;
+        }
 
 		public abstract void DoLogic();
 		public abstract void Draw();

@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using Fledermaus.Screens;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Fledermaus
 			UpdateFrame += MyGameWindow_UpdateFrame;
 			KeyUp += MyGameWindow_KeyUp;
 			KeyDown += MyGameWindow_KeyDown;
+
 		}
 
 		private void MyGameWindow_KeyDown(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
