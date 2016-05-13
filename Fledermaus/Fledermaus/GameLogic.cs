@@ -12,17 +12,40 @@ namespace Fledermaus
 	class GameLogic
 	{
 
-		public Level Level { get; set; }
-		public InputManager InputManager { get; set; }
+		public bool MovementInputBlocked { get; set; }
+		public bool GamePaused { get; set; }
 
 		private bool _godMode = false;
 
-		private Level GetLevel() { return Level; }
-		private Player GetPlayer() { return Level.Player; }
-		private LightRay GetLightRay() { return Level.LightRay; }
-		private List<Mirror> GetMirrors() { return Level.Mirrors; }
-		private Exit GetExit() { return Level.Exit; }
-		private SolarPanel GetSolarPanel() { return Level.SolarPanel; }
+		public ILogicalLevel Level;
+
+		private ILogicalRoom CurrentRoom
+		{
+			get { return Level.GetCurrentRoom(); }
+		}
+
+		private ILogicalPlayer Player
+		{
+			get { return CurrentRoom.GetLogicalPlayer(); }
+		}
+
+		private ILogicalLightRay LightRay
+		{
+			get { return CurrentRoom.GetLogicalLightRay(); }
+		}
+
+		private IEnumerable<ILogicalMirror> Mirrors
+		{
+			get { return CurrentRoom.GetLogicalMirrors(); }
+		}
+
+
+		private const float _playerMovementSpeed = 0.01f;
+		private const float _mirrorMovementSpeed = 0.02f;
+		private const float _rotationSpeed = 0.006f;
+		private const float _minMirrorAccessibilityDistance = 0.14f;
+
+		public InputManager InputManager { get; set; }
 
 		public void ProcessInput()
 		{
@@ -32,23 +55,25 @@ namespace Fledermaus
 
 		private void ProcessProlongedUserActions()
 		{
-			if (GetPlayer().IsFocusedToMirror())
+			if (MovementInputBlocked) return;
+
+			if (Player.IsFocusedToMirror())
 			{
-				Mirror currentMirror = GetPlayer().CurrentMirror;
+				ILogicalMirror currentMirror = Player.CurrentMirror;
 
-				if (InputManager.IsUserActionActive(UserAction.MoveLeft))
+				bool moveLeft = InputManager.IsUserActionActive(UserAction.MoveLeft);
+				bool moveRight = InputManager.IsUserActionActive(UserAction.MoveRight);
+
+				if (moveLeft) currentMirror.MoveMirrorUp(_mirrorMovementSpeed);
+				if (moveRight) currentMirror.MoveMirrorDown(_mirrorMovementSpeed);
+
+				if (moveLeft || moveRight)
 				{
-					currentMirror.MoveMirrorUp();
-					GetPlayer().Position = currentMirror.GetRelativePlayerPosition();
-				}
-				if (InputManager.IsUserActionActive(UserAction.MoveRight))
-				{
-					currentMirror.MoveMirrorDown();
-					GetPlayer().Position = currentMirror.GetRelativePlayerPosition();
+					Player.Position = currentMirror.GetMirrorPosition() + Player.VectorToMirror;
 				}
 
-				if (InputManager.IsUserActionActive(UserAction.RotateMirrorCW)) currentMirror.RotateMirrorCW();
-				if (InputManager.IsUserActionActive(UserAction.RotateMirrorCCW)) currentMirror.RotateMirrorCCW();
+				if (InputManager.IsUserActionActive(UserAction.RotateMirrorCW)) currentMirror.RotateCW(_rotationSpeed);
+				if (InputManager.IsUserActionActive(UserAction.RotateMirrorCCW)) currentMirror.RotateCCW(_rotationSpeed);
 			}
 			else
 			{
@@ -65,166 +90,207 @@ namespace Fledermaus
 			}
 		}
 
+		private void TryToMovePlayer(float dx, float dy)
+		{
+			Vector2 deltaVector = new Vector2(dx, dy);
+			ILogicalPlayer tempPlayer = Player.CreateClone();
+			bool movePlayer = true;
+
+			tempPlayer.Position += deltaVector;
+
+			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetNonReflectingLines())) movePlayer = false;
+
+			if (movePlayer) Player.Position += deltaVector;
+		}
+
+		// TODO: UserAction und Function evtl mappen
+
 		private void ProcessSingleUserActions()
 		{
 			foreach (UserAction userAction in InputManager.GetSingleUserActionsAsList())
 			{
-				if (userAction == UserAction.ToggleMirrorLock)
+				if (userAction == UserAction.ToggleMirrorLock && !MovementInputBlocked)
 				{
 					ToggleMirrorLock();
 				}
 				else if (userAction == UserAction.ResetLevel)
 				{
-					GetLevel().Reset();
+					CurrentRoom.Reset();
 				}
 				else if (userAction == UserAction.ToggleGodMode)
 				{
 					_godMode = !_godMode;
 				}
+				else if (userAction == UserAction.TogglePauseGame)
+				{
+					TogglePauseGame();
+				}
 			}
-		}
-
-		private void TryToMovePlayer(float dx, float dy)
-		{
-			Vector2 deltaVector = new Vector2(dx, dy);
-			Player tempPlayer = GetPlayer().CreateClone();
-			bool movePlayer = true;
-
-			tempPlayer.Move(deltaVector);
-
-			if (tempPlayer.HasIntersection(GetLevel().GetNonReflectingGameObjects())) movePlayer = false;
-
-			if (movePlayer) GetPlayer().Move(deltaVector);
 		}
 
 		private void ToggleMirrorLock()
 		{
-			if (GetPlayer().IsFocusedToMirror())
+			if (Player.IsFocusedToMirror())
 			{
-				GetPlayer().UnfocusCurrentMirror();
+				Player.UnfocusCurrentMirror();
 			}
 			else
 			{
-				foreach (Mirror mirror in GetMirrors())
+				foreach (ILogicalMirror mirror in Mirrors)
 				{
 					if (mirror.IsAccessible)
 					{
-						GetPlayer().FocusMirror(mirror);
-						GetPlayer().Position = mirror.GetRelativePlayerPosition();
+						Player.CurrentMirror = mirror;
+						Player.VectorToMirror = Player.Position - mirror.GetMirrorPosition();
 					}
 				}
 			}
 		}
 
+		private void TogglePauseGame()
+		{
+			if (GamePaused) UnpauseGame();
+			else PauseGame();
+		}
+
+		// TODO: GameGraphics iwie über Änderung informieren, damit alpha auf 0.15 gesetzt werden kann
+		// bzw. das Menüoverlay gezeigt werden kann
+
+		private void PauseGame()
+		{
+			GamePaused = true;
+			MovementInputBlocked = true;
+		}
+
+		private void UnpauseGame()
+		{
+			GamePaused = false;
+			MovementInputBlocked = false;
+		}
 
 		public void DoLogic()
 		{
-			GetLightRay().ResetRays();
+			if (GamePaused) return;
+
+			LightRay.ResetRays();
 			CalculateLightRay();
 
-			CheckPlayerLightRayCollision();
+			MoveNPCs();
+
+			CheckPlayerLightCollision();
             CheckSolarPanel();
 			CheckExit();
 			DetermineMirrorAccessibility();
 		}
 
-		// Temp
-
-		private class TGO : GameObject
-		{
-
-			Line Line;
-
-			public TGO(Line line) : base(new Vector2(0.0f, 0.0f))
-			{
-				Line = line;
-			}
-
-			public override List<Line> GetLines()
-			{
-				return new List<Line> { Line };
-			}
-		}
-
 		private void CalculateLightRay()
 		{
-			Line currentRay = GetLightRay().GetLastRay();
+			Line currentRay = LightRay.GetLastRay();
 
-			GameObject tgo = new TGO(currentRay);
+			Intersection closestNonReflectingIntersection = Util.GetClosestIntersection(currentRay, CurrentRoom.GetNonReflectingLines());
 
-			Intersection closestNonReflectingIntersection = tgo.GetClosestIntersection(GetLevel().GetNonReflectingGameObjects());
-			Intersection closestReflectingIntersection = tgo.GetClosestIntersection(GetLevel().GetReflectingGameObejcts());
+			var mirrorIntersections = new List<Tuple<Intersection, ILogicalMirror>>();
+
+			foreach (ILogicalMirror mirror in Mirrors)
+			{
+				Intersection mirrorIntersection = Util.GetIntersection(currentRay, mirror.GetMirrorLine());
+
+				if (mirrorIntersection != null)
+				{
+					mirrorIntersections.Add(new Tuple<Intersection, ILogicalMirror>(mirrorIntersection, mirror));
+				}
+			}
 
 			bool reflect = false;
 
-			if (closestReflectingIntersection != null)
+			Tuple<Intersection, ILogicalMirror> closestReflectingIntersection = null;
+
+			if (mirrorIntersections.Count > 0)
 			{
-				reflect = closestReflectingIntersection.RelativeDistance < closestNonReflectingIntersection.RelativeDistance;
+				closestReflectingIntersection = mirrorIntersections[0];
+
+				foreach (var mirrorIntersection in mirrorIntersections)
+				{
+
+					if (mirrorIntersection.Item1.RelativeDistance < closestReflectingIntersection.Item1.RelativeDistance)
+					{
+						closestReflectingIntersection = mirrorIntersection;
+					}
+
+				}
+
+				reflect = closestReflectingIntersection.Item1.RelativeDistance < closestNonReflectingIntersection.RelativeDistance;
 			}
 
 			if (reflect)
 			{
-				Mirror mirror = closestReflectingIntersection.GameObject as Mirror;
+				Vector2 intersectionPoint = closestReflectingIntersection.Item1.Point;
+				ILogicalMirror mirror = closestReflectingIntersection.Item2;
 
-				if (mirror == null) return;
+				Vector2 lightDirection = currentRay.GetDirectionVector();
+				lightDirection.Normalize();
 
-				Vector3 lightDirection3D = new Vector3(currentRay.GetDirectionVector().X, currentRay.GetDirectionVector().Y, 0.0f);
+				Vector2 normal = mirror.GetMirrorNormal1();
 
-				Vector2 mirrorDirection2D = mirror.GetLines()[0].GetDirectionVector();
-				Vector3 mirrorDirection3D = new Vector3(mirrorDirection2D.X, mirrorDirection2D.Y, 0.0f);
+				//Vector2 normal2 = mirror.GetMirrorNormal2();
+				//float angle1 = Util.CalculateAngle(normal1, lightDirection);
+				//float angle2 = Util.CalculateAngle(normal2, lightDirection);
+				//Vector2 normal = angle1 < angle2 ? normal1 : normal2;
 
-				//lightDirection3D.Normalize();
-				//mirrorDirection3D.Normalize();
+				Vector2 newDirection = lightDirection - 2 * (Vector2.Dot(normal, lightDirection)) * normal;
+				Vector2 point = new Vector2(intersectionPoint.X, intersectionPoint.Y) + newDirection * 0.0001f;
 
-				float angle = Vector3.CalculateAngle(lightDirection3D, mirrorDirection3D);
-				angle = (angle - 1.6f) * 2;
-
-				int f = (mirrorDirection2D.X < 0.0f) ? -1 : 1;
-
-				Vector2 direction = Util.GetRotatedVector(currentRay.GetDirectionVector() * f, angle);
-
-				Vector2 point = new Vector2(closestReflectingIntersection.Point.X, closestReflectingIntersection.Point.Y) + direction * 0.0001f;
-
-				GetLightRay().AddNewRay(point, direction);
+				LightRay.AddNewRay(point, newDirection);
 
 				CalculateLightRay();
 			}
 			else
 			{
-				GetLightRay().FinishRays(closestNonReflectingIntersection.Point);
+				LightRay.FinishRays(closestNonReflectingIntersection.Point);
 			}
 		}
 
-		private void CheckPlayerLightRayCollision()
+		private void MoveNPCs()
 		{
-			if (GetPlayer().HasIntersection(GetLightRay()) && !_godMode)
+			foreach (ILogicalNPC npc in CurrentRoom.GetLogicalNPCs())
+			{
+				npc.PointOfInterest = Player.Position;
+				npc.TickAndMove();
+			}
+		}
+
+		private void CheckPlayerLightCollision()
+		{
+			if (_godMode) return;
+
+			if (Util.HasIntersection(Player, CurrentRoom.GetLightLines()))
 			{
 				Console.WriteLine("verloren :(");
-				GetLevel().Reset();
+				CurrentRoom.Reset();
 			}
 		}
 
         private void CheckSolarPanel()
         {
-			GetExit().IsOpen = GetSolarPanel().HasIntersection(GetLightRay());
+			CurrentRoom.IsExitOpen = Util.HasIntersection(CurrentRoom.GetSolarPanelLines(), LightRay);
         }
 
         private void CheckExit()
         {
-			if (GetExit().IsOpen && GetPlayer().HasIntersection(GetExit()))
+			if (CurrentRoom.IsExitOpen && Util.HasIntersection(Player, CurrentRoom.GetExitLines()))
 			{
 				Console.WriteLine("gewonnen :)");
-				GetLevel().Reset();
+				CurrentRoom.Reset();
 			}
 		}
 
 		private void DetermineMirrorAccessibility()
 		{
-			foreach (Mirror mirror in GetMirrors())
+			foreach (ILogicalMirror mirror in Mirrors)
 			{
-				mirror.DetermineAccessiblity(GetPlayer().Position);
+				float distance = (mirror.GetMirrorPosition() - Player.Position).Length;
+				mirror.IsAccessible = distance < _minMirrorAccessibilityDistance;
 			}
 		}
-
 	}
 }

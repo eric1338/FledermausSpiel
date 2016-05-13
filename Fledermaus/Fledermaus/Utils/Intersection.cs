@@ -13,7 +13,6 @@ namespace Fledermaus.Utils
 	{
 		public Vector2 Point { get; set; }
 		public float RelativeDistance { get; set; }
-		public GameObject GameObject { get; set; }
 
 		public Intersection(Vector2 point, float relativeDistance)
 		{
