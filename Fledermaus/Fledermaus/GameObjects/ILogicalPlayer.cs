@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	interface ILogicalPlayer : IBounded
+    public interface ILogicalPlayer : IBounded
 	{
 
 		Vector2 Position { get; set; }

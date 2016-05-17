@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	interface IBounded
+    public interface IBounded
 	{
 
 		IEnumerable<Line> GetLines();

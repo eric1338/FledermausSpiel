@@ -8,7 +8,7 @@ using Fledermaus.Utils;
 
 namespace Fledermaus.GameObjects
 {
-	class Mirror : ILogicalMirror
+    public class Mirror : ILogicalMirror
 	{
 		
 		public float StartingAngle = 20.0f;

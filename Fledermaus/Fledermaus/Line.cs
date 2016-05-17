@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	class Line
+	public class Line
 	{
 
 		public Vector2 Point1 { get; set; }

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Fledermaus.Screens;
 
-namespace Fledermaus.Menu
+namespace Fledermaus.Screens
 {
     class MenuButton
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Level : ILogicalLevel
+    public class Level : ILogicalLevel
 	{
 
 		public Room TestRoom;

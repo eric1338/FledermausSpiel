@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class NPC : ILogicalNPC
+    public class NPC : ILogicalNPC
 	{
 
 		private Vector2 _initialPosition;

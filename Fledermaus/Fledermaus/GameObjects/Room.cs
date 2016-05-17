@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	class Room : ILogicalRoom
+	public class Room : ILogicalRoom
 	{
 
 		public Vector2 LevelCenter { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class LightRay : ILogicalLightRay
+    public class LightRay : ILogicalLightRay
 	{
 
 		public Vector2 Origin { get; set; }

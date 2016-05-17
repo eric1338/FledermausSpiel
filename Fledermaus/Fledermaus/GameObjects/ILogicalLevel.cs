@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	interface ILogicalLevel
+    public interface ILogicalLevel
 	{
 
 		ILogicalRoom GetCurrentRoom();

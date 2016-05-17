@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Obstacle : StaticGameObject
+	public class Obstacle : StaticGameObject
 	{
 
 		private Vector2 _firstPoint;

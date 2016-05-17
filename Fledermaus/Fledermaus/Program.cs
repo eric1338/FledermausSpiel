@@ -17,7 +17,8 @@ namespace Fledermaus
 		{
 			MyGameWindow win = new MyGameWindow();
 
-			win.CurrentScreen = new GameScreen(win);
+            //win.CurrentScreen = new GameScreen(win);
+            win.CurrentScreen = new MainMenuScreen(win);
 
 			win.Run(60.0);
 		}

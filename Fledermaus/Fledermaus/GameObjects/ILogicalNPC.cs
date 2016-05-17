@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	interface ILogicalNPC : IBounded
+    public interface ILogicalNPC : IBounded
 	{
 
 		Vector2 PointOfInterest { get; set; }

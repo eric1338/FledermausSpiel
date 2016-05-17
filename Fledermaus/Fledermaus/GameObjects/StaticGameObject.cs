@@ -4,7 +4,7 @@ using System;
 
 namespace Fledermaus.GameObjects
 {
-	class StaticGameObject : IBounded
+	public class StaticGameObject : IBounded
 	{
 
 		private List<Line> _lines = new List<Line>();

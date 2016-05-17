@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	interface ILogicalMirror : IBounded
+    public interface ILogicalMirror : IBounded
 	{
 
 		bool IsAccessible { get; set; }

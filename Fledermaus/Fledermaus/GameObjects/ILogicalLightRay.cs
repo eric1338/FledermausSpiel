@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	interface ILogicalLightRay : IBounded
+    public interface ILogicalLightRay : IBounded
 	{
 
 		Line GetLastRay();

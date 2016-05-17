@@ -1,4 +1,4 @@
-﻿using Fledermaus.Menu;
+﻿using Fledermaus.Screens;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;

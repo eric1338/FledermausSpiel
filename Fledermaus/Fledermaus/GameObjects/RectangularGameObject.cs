@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class RectangularGameObject : StaticGameObject
+	public class RectangularGameObject : StaticGameObject
 	{
 		
 		public Vector2 Point1 { get; set; }
