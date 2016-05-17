@@ -1,7 +1,17 @@
 ﻿namespace Framework
 {
+	/// <summary>
+	/// Represents an 2D axis aligned bounding box - naming it rectangle would have been too simple ;)
+	/// </summary>
 	public class AABR
 	{
+		/// <summary>
+		/// creates an AABR
+		/// </summary>
+		/// <param name="x">left side x coordinate</param>
+		/// <param name="y">bottom side y coordinate</param>
+		/// <param name="sizeX">width</param>
+		/// <param name="sizeY">height</param>
 		public AABR(float x, float y, float sizeX, float sizeY)
 		{
 			this.X = x;
@@ -10,41 +20,50 @@
 			this.SizeY = sizeY;
 		}
 
-		public AABR(AABR aabr)
+		public AABR(AABR rectangle)
 		{
-			this.X = aabr.X;
-			this.Y = aabr.Y;
-			this.SizeX = aabr.SizeX;
-			this.SizeY = aabr.SizeY;
+			this.X = rectangle.X;
+			this.Y = rectangle.Y;
+			this.SizeX = rectangle.SizeX;
+			this.SizeY = rectangle.SizeY;
 		}
 
 		public float SizeX { get; set; }
-	
+
 		public float SizeY { get; set; }
-		
+
 		public float X { get; set; }
-		
+
 		public float Y { get; set; }
 
-		public float CenterX { get { return X + 0.5f * SizeX; } }
+		public float CenterX { get { return X + 0.5f * SizeX; } set { X = value - 0.5f * SizeX; } }
 
-		public float CenterY { get { return Y + 0.5f * SizeY; } }
+		public float CenterY { get { return Y + 0.5f * SizeY; } set { Y = value - 0.5f * SizeY; } }
 
-		public bool Intersects(AABR frame)
+		public bool Intersects(AABR rectangle)
 		{
-			if (null == frame) return false;
-			bool noXintersect = (MaxX < frame.X) || (X > frame.MaxX);
-			bool noYintersect = (MaxY < frame.Y) || (Y > frame.MaxY);
+			if (null == rectangle) return false;
+			bool noXintersect = (MaxX < rectangle.X) || (X > rectangle.MaxX);
+			bool noYintersect = (MaxY < rectangle.Y) || (Y > rectangle.MaxY);
 			return !(noXintersect || noYintersect);
 		}
 
-		public float MaxX { get { return X + SizeX; } }
+		public bool Inside(AABR rectangle)
+		{
+			if (X < rectangle.X) return false;
+			if (MaxX > rectangle.MaxX) return false;
+			if (Y < rectangle.Y) return false;
+			if (MaxY > rectangle.MaxY) return false;
+			return true;
+		}
 
-		public float MaxY { get { return Y + SizeY; } }
+		public float MaxX { get { return X + SizeX; } set { X = value - SizeX; } }
+
+		public float MaxY { get { return Y + SizeY; } set { Y = value - SizeY; } }
 
 		public override string ToString()
 		{
-			return '(' + X.ToString() + ';' + Y.ToString() + ';' + SizeX.ToString() + ';' + SizeY .ToString() + ')';
+			return '(' + X.ToString() + ';' + Y.ToString() + ';' + SizeX.ToString() + ';' + SizeY.ToString() + ')';
 		}
 
 	}

@@ -26,8 +26,8 @@ namespace Fledermaus
 		{
 			MyGameWindow win = new MyGameWindow();
            // win.WindowState = WindowState.Fullscreen;
-            //win.CurrentScreen = new MainScreen(win);
-			win.CurrentScreen = new GameScreen(win);
+            win.CurrentScreen = new MainMenuScreen(win);
+			//win.CurrentScreen = new GameScreen(win);
 
 			win.Run(60.0);
 		}

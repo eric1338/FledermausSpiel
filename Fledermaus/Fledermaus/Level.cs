@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	class Level
+	public class Level
 	{
 
 		public RectangularGameObject Room { get; set; }
