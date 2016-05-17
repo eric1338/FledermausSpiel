@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class LightRay : GameObject
+	class LightRay : ILogicalLightRay
 	{
 
 		public Vector2 Origin { get; set; }
@@ -16,7 +16,7 @@ namespace Fledermaus.GameObjects
 		private Line _lastRay;
 		private List<Line> _rays = new List<Line>();
 
-		public LightRay(Vector2 origin, Vector2 firstDirection) : base(origin)
+		public LightRay(Vector2 origin, Vector2 firstDirection)
 		{
 			Origin = origin;
 			FirstDirection = firstDirection;
@@ -55,7 +55,7 @@ namespace Fledermaus.GameObjects
 			_lastRay = CreateLastRay(origin, direction);
 		}
 
-		public override List<Line> GetLines()
+		public IEnumerable<Line> GetLines()
 		{
 			return _rays;
 		}

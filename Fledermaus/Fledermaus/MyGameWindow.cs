@@ -20,7 +20,6 @@ namespace Fledermaus
 			UpdateFrame += MyGameWindow_UpdateFrame;
 			KeyUp += MyGameWindow_KeyUp;
 			KeyDown += MyGameWindow_KeyDown;
-
 		}
 
 		private void MyGameWindow_KeyDown(object sender, OpenTK.Input.KeyboardKeyEventArgs e)

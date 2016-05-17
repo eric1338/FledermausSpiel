@@ -7,38 +7,26 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	class Player : GameObject
+	class Player : ILogicalPlayer
 	{
+
+		public Vector2 Position { get; set; }
 
 		// TODO: PlayerSize / Hitboxen
 
 		private Vector2 _initialPosition;
 
-		public Mirror CurrentMirror { get; set; }
+		public Vector2 VectorToMirror { get; set; }
 
-		public Player(Vector2 initialPosition) : base(initialPosition)
+		public ILogicalMirror CurrentMirror { get; set; }
+
+		public Player(Vector2 initialPosition)
 		{
 			_initialPosition = initialPosition;
 			Position = _initialPosition;
 		}
 
-		public void Move(float dx, float dy)
-		{
-			Move(new Vector2(dx, dy));
-		}
-
-		public void Move(Vector2 deltaVector)
-		{
-			Position += deltaVector;
-		}
-
-		public void Reset()
-		{
-			UnfocusCurrentMirror();
-			Position = _initialPosition;
-		}
-
-		public void FocusMirror(Mirror mirror)
+		public void FocusMirror(ILogicalMirror mirror)
 		{
 			CurrentMirror = mirror;
 		}
@@ -53,7 +41,7 @@ namespace Fledermaus.GameObjects
 			return CurrentMirror != null;
 		}
 
-		public override List<Line> GetLines()
+		public IEnumerable<Line> GetLines()
 		{
 			Vector2 v1 = GetTempVector(1, 1);
 			Vector2 v2 = GetTempVector(1, -1);
@@ -74,7 +62,13 @@ namespace Fledermaus.GameObjects
 			return Position + new Vector2(0.05f * xF, 0.05f * yF);
 		}
 
-		public Player CreateClone()
+		public void Reset()
+		{
+			UnfocusCurrentMirror();
+			Position = _initialPosition;
+		}
+
+		public ILogicalPlayer CreateClone()
 		{
 			Player player = new Player(_initialPosition);
 			player.Position = Position;

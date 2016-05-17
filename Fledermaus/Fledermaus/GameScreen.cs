@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fledermaus.Screens
+namespace Fledermaus
 {
 	class GameScreen : Screen
 	{
@@ -16,7 +16,7 @@ namespace Fledermaus.Screens
 
 		private Level _level;
 
-		public GameScreen(MyGameWindow win) :base(win)
+		public GameScreen()
 		{
 			_level = Levels.CreateTestLevel();
 
@@ -33,6 +33,7 @@ namespace Fledermaus.Screens
 			_inputManager.AddSingleUserActionMapping(Key.F, UserAction.ToggleMirrorLock);
 			_inputManager.AddSingleUserActionMapping(Key.G, UserAction.ToggleGodMode);
 			_inputManager.AddSingleUserActionMapping(Key.N, UserAction.ResetLevel);
+			_inputManager.AddSingleUserActionMapping(Key.P, UserAction.TogglePauseGame);
 
 			_gameLogic.InputManager = _inputManager;
 		}

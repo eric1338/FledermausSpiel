@@ -16,21 +16,17 @@ namespace Fledermaus.GameObjects
 		public Vector2 Point3 { get; set; }
 		public Vector2 Point4 { get; set; }
 
-		public AABR aabr { get; set; }
-
 		public RectangularGameObject(Vector2 topLeft, Vector2 bottomRight)
 		{
-			Position = topLeft + 0.5f * (bottomRight - topLeft);
-
 			Point1 = topLeft;
 			Point2 = new Vector2(bottomRight.X, topLeft.Y);
 			Point3 = bottomRight;
 			Point4 = new Vector2(topLeft.X, bottomRight.Y);
 
-			CreateLinesAndAABR();
+			CreateLines();
 		}
 
-		public RectangularGameObject(Vector2 position, float width, float height) : base(position)
+		public RectangularGameObject(Vector2 position, float width, float height)
 		{
 			float halfWidth = width / 2.0f;
 			float halfHeight = height / 2.0f;
@@ -40,17 +36,15 @@ namespace Fledermaus.GameObjects
 			Point3 = new Vector2(position.X + halfWidth, position.Y - halfHeight);
 			Point4 = new Vector2(position.X - halfWidth, position.Y - halfHeight);
 
-			CreateLinesAndAABR();
+			CreateLines();
 		}
 
-		private void CreateLinesAndAABR()
+		private void CreateLines()
 		{
 			AddLine(Point1, Point2);
 			AddLine(Point2, Point3);
 			AddLine(Point3, Point4);
 			AddLine(Point1, Point4);
-
-			aabr = new AABR(Point1.X, Point1.Y, Point3.X - Point1.X, Point3.Y - Point1.Y);
 		}
 
 		public float GetWidth()
