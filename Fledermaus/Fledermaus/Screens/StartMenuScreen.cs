@@ -14,14 +14,14 @@ namespace Fledermaus.Screens
     {
 
 
-        public StartMenuScreen(MyGameWindow win) : base(win)
+        public StartMenuScreen() : base()
         {
-            menuButtons.Add(new MenuButton( "Level 1", delegate (MyGameWindow _myGameWindow) { _myGameWindow.CurrentScreen = new GameScreen(_myGameWindow); },true));
-            menuButtons.Add(new MenuButton( "Level 2", delegate (MyGameWindow _myGameWindow) { }));
-            menuButtons.Add(new MenuButton( "Level 3", delegate (MyGameWindow _myGameWindow) { }));
-            menuButtons.Add(new MenuButton( "Level 4", delegate (MyGameWindow _myGameWindow) { }));
-            menuButtons.Add(new MenuButton( "Level 5", delegate (MyGameWindow _myGameWindow) { }));
-            menuButtons.Add(new MenuButton( "Back", delegate (MyGameWindow _myGameWindow) { _myGameWindow.CurrentScreen = new MainMenuScreen(_myGameWindow); }));
+            menuButtons.Add(new ButtonText( "Test Level", delegate () { MyApplication.GameWindow.CurrentScreen = new GameScreen(); GameLogic.Level = Levels.CreateTestLevel();  },true));
+            menuButtons.Add(new ButtonText( "Level 2", delegate () { }));
+            menuButtons.Add(new ButtonText( "Level 3", delegate () { }));
+            menuButtons.Add(new ButtonText( "Level 4", delegate () { }));
+            menuButtons.Add(new ButtonText( "Level 5", delegate () { }));
+            menuButtons.Add(new ButtonText( "Back", delegate () { MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(); }));
         }
     }
 }

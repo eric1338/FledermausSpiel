@@ -10,11 +10,7 @@ namespace Fledermaus.Screens
 	abstract class Screen
 	{
 
-		protected InputManager _inputManager = new InputManager();
-        protected MyGameWindow _myGameWindow;
-
-        public Screen(MyGameWindow win) {
-            _myGameWindow = win;
+        public Screen() {
         }
 
 		public abstract void DoLogic();
@@ -23,12 +19,12 @@ namespace Fledermaus.Screens
 
 		public void ProcessKeyUp(Key key)
 		{
-			_inputManager.ProcessKeyUp(key);
+            InputManager.ProcessKeyUp(key);
 		}
 
 		public void ProcessKeyDown(Key key)
 		{
-			_inputManager.ProcessKeyDown(key);
+            InputManager.ProcessKeyDown(key);
 		}
 
 

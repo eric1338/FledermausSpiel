@@ -11,41 +11,42 @@ namespace Fledermaus.Screens
 	class GameScreen : Screen
 	{
 
-		private GameLogic _gameLogic = new GameLogic();
-		private GameGraphics _gameGraphics = new GameGraphics();
+		//private GameLogic _gameLogic = new GameLogic();
+		//private GameGraphics _gameGraphics = new GameGraphics();
 
-		private Level _level;
+		//private Level _level;
 
-		public GameScreen(MyGameWindow win) :base(win)
+		public GameScreen() :base()
 		{
-			_level = Levels.CreateTestLevel();
+			//_level = Levels.CreateTestLevel();
 
-			_gameLogic.Level = _level;
-			_gameGraphics.Level = _level;
+			//GameLogic.Level = _level;
+			//GameGraphics.Level = _level;
 
-			_inputManager.AddProlongedUserActionMapping(Key.W, UserAction.MoveUp);
-			_inputManager.AddProlongedUserActionMapping(Key.A, UserAction.MoveLeft);
-			_inputManager.AddProlongedUserActionMapping(Key.S, UserAction.MoveDown);
-			_inputManager.AddProlongedUserActionMapping(Key.D, UserAction.MoveRight);
-			_inputManager.AddProlongedUserActionMapping(Key.E, UserAction.RotateMirrorCW);
-			_inputManager.AddProlongedUserActionMapping(Key.Q, UserAction.RotateMirrorCCW);
+            InputManager.Clear();
+			InputManager.AddProlongedUserActionMapping(Key.W, UserAction.MoveUp);
+            InputManager.AddProlongedUserActionMapping(Key.A, UserAction.MoveLeft);
+            InputManager.AddProlongedUserActionMapping(Key.S, UserAction.MoveDown);
+            InputManager.AddProlongedUserActionMapping(Key.D, UserAction.MoveRight);
+            InputManager.AddProlongedUserActionMapping(Key.E, UserAction.RotateMirrorCW);
+            InputManager.AddProlongedUserActionMapping(Key.Q, UserAction.RotateMirrorCCW);
 
-			_inputManager.AddSingleUserActionMapping(Key.F, UserAction.ToggleMirrorLock);
-			_inputManager.AddSingleUserActionMapping(Key.G, UserAction.ToggleGodMode);
-			_inputManager.AddSingleUserActionMapping(Key.N, UserAction.ResetLevel);
-
-			_gameLogic.InputManager = _inputManager;
-		}
+            InputManager.AddSingleUserActionMapping(Key.F, UserAction.ToggleMirrorLock);
+            InputManager.AddSingleUserActionMapping(Key.G, UserAction.ToggleGodMode);
+            InputManager.AddSingleUserActionMapping(Key.N, UserAction.ResetLevel);
+            InputManager.AddSingleUserActionMapping(Key.Escape, UserAction.Cancel);
+            //_gameLogic.InputManager = _inputManager;
+        }
 
 		public override void DoLogic()
 		{
-			_gameLogic.ProcessInput();
-			_gameLogic.DoLogic();
+			GameLogic.ProcessInput();
+			GameLogic.DoLogic();
 		}
 
 		public override void Draw()
 		{
-			_gameGraphics.DrawLevel();
+            GameGraphics.DrawLevel();
 		}
 	}
 }

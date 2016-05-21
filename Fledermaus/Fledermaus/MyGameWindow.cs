@@ -6,16 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Fledermaus
 {
 	class MyGameWindow : GameWindow
 	{
 
-		public Screen CurrentScreen { get; set; }
+		public Fledermaus.Screens.Screen CurrentScreen { get; set; }
 		
-		public MyGameWindow() : base(800, 700)
+		public MyGameWindow(int width,int height) : base(width,height/*800, 700*/)
 		{
+
+            //Width
 			RenderFrame += MyGameWindow_RenderFrame;
 			UpdateFrame += MyGameWindow_UpdateFrame;
 			KeyUp += MyGameWindow_KeyUp;

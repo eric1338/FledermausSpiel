@@ -14,15 +14,15 @@ namespace Fledermaus.Screens
     {
 
 
-        public MainMenuScreen(MyGameWindow win) : base(win)
+        public MainMenuScreen() : base()
         {
-            menuButtons.Add(new MenuButton("Start Game", delegate(MyGameWindow _myGameWindow) { _myGameWindow.CurrentScreen = new StartMenuScreen(_myGameWindow); }, true));
-            menuButtons.Add(new MenuButton("Load Game", delegate (MyGameWindow _myGameWindow) { _myGameWindow.CurrentScreen = new LoadMenuScreen(_myGameWindow); }));
-            menuButtons.Add(new MenuButton("Highscore", delegate (MyGameWindow _myGameWindow) {  }));
-            menuButtons.Add(new MenuButton("Level Editor", delegate (MyGameWindow _myGameWindow) { _myGameWindow.CurrentScreen = new LevelEditorScreen(_myGameWindow); }));
-            menuButtons.Add(new MenuButton("Configuration", delegate (MyGameWindow _myGameWindow) { }));
-            menuButtons.Add(new MenuButton("Credits", delegate (MyGameWindow _myGameWindow) { }));
-            menuButtons.Add(new MenuButton("Exit", delegate (MyGameWindow _myGameWindow) { _myGameWindow.Exit(); }));
+            menuButtons.Add(new ButtonText("Start Game", delegate() { MyApplication.GameWindow.CurrentScreen = new StartMenuScreen(); }, true));
+            menuButtons.Add(new ButtonText("Load Game", delegate () { MyApplication.GameWindow.CurrentScreen = new LoadMenuScreen(); }));
+            menuButtons.Add(new ButtonText("Highscore", delegate () {  }));
+            menuButtons.Add(new ButtonText("Level Editor", delegate () { MyApplication.GameWindow.CurrentScreen = new LevelEditorScreen(); }));
+            menuButtons.Add(new ButtonText("Configuration", delegate () { }));
+            menuButtons.Add(new ButtonText("Credits", delegate () { }));
+            menuButtons.Add(new ButtonText("Exit", delegate () { MyApplication.Exit(); }));
         }
     }
 }

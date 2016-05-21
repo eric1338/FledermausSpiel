@@ -1,4 +1,5 @@
 ﻿using Fledermaus.GameObjects;
+using Fledermaus.Screens;
 using Fledermaus.Utils;
 using OpenTK;
 using System;
@@ -9,32 +10,32 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	class GameLogic
+	static class GameLogic
 	{
 
-		public bool MovementInputBlocked { get; set; }
-		public bool GamePaused { get; set; }
+		public static bool MovementInputBlocked { get; set; }
+		public static bool GamePaused { get; set; }
 
-		private bool _godMode = false;
+		private static bool _godMode = false;
 
-		public ILogicalLevel Level;
+		public static Level Level;
 
-		private ILogicalRoom CurrentRoom
+		private static ILogicalRoom CurrentRoom
 		{
 			get { return Level.GetCurrentRoom(); }
 		}
 
-		private ILogicalPlayer Player
+		private static ILogicalPlayer Player
 		{
 			get { return CurrentRoom.GetLogicalPlayer(); }
 		}
 
-		private ILogicalLightRay LightRay
+		private static ILogicalLightRay LightRay
 		{
 			get { return CurrentRoom.GetLogicalLightRay(); }
 		}
 
-		private IEnumerable<ILogicalMirror> Mirrors
+		private static IEnumerable<ILogicalMirror> Mirrors
 		{
 			get { return CurrentRoom.GetLogicalMirrors(); }
 		}
@@ -45,16 +46,17 @@ namespace Fledermaus
 		private const float _rotationSpeed = 0.006f;
 		private const float _minMirrorAccessibilityDistance = 0.14f;
 
-		public InputManager InputManager { get; set; }
+		//public InputManager InputManager { get; set; }
 
-		public void ProcessInput()
+		public static void ProcessInput()
 		{
 			ProcessProlongedUserActions();
 			ProcessSingleUserActions();
 		}
 
-		private void ProcessProlongedUserActions()
+		private static void ProcessProlongedUserActions()
 		{
+
 			if (MovementInputBlocked) return;
 
 			if (Player.IsFocusedToMirror())
@@ -90,7 +92,7 @@ namespace Fledermaus
 			}
 		}
 
-		private void TryToMovePlayer(float dx, float dy)
+		private static void TryToMovePlayer(float dx, float dy)
 		{
 			Vector2 deltaVector = new Vector2(dx, dy);
 			ILogicalPlayer tempPlayer = Player.CreateClone();
@@ -105,30 +107,34 @@ namespace Fledermaus
 
 		// TODO: UserAction und Function evtl mappen
 
-		private void ProcessSingleUserActions()
+		private static void ProcessSingleUserActions()
 		{
 			foreach (UserAction userAction in InputManager.GetSingleUserActionsAsList())
 			{
-				if (userAction == UserAction.ToggleMirrorLock && !MovementInputBlocked)
-				{
-					ToggleMirrorLock();
-				}
-				else if (userAction == UserAction.ResetLevel)
-				{
-					CurrentRoom.Reset();
-				}
-				else if (userAction == UserAction.ToggleGodMode)
-				{
-					_godMode = !_godMode;
-				}
-				else if (userAction == UserAction.TogglePauseGame)
-				{
-					TogglePauseGame();
-				}
+                if (userAction == UserAction.ToggleMirrorLock && !MovementInputBlocked)
+                {
+                    ToggleMirrorLock();
+                }
+                else if (userAction == UserAction.ResetLevel)
+                {
+                    CurrentRoom.Reset();
+                }
+                else if (userAction == UserAction.ToggleGodMode)
+                {
+                    _godMode = !_godMode;
+                }
+                else if (userAction == UserAction.TogglePauseGame)
+                {
+                    TogglePauseGame();
+                }
+                else if (userAction == UserAction.Cancel) {
+                    TogglePauseGame();
+                    MyApplication.GameWindow.CurrentScreen = new GameMenuScreen();
+                }
 			}
 		}
 
-		private void ToggleMirrorLock()
+		private static void ToggleMirrorLock()
 		{
 			if (Player.IsFocusedToMirror())
 			{
@@ -147,7 +153,7 @@ namespace Fledermaus
 			}
 		}
 
-		private void TogglePauseGame()
+		public static void TogglePauseGame()
 		{
 			if (GamePaused) UnpauseGame();
 			else PauseGame();
@@ -156,19 +162,19 @@ namespace Fledermaus
 		// TODO: GameGraphics iwie über Änderung informieren, damit alpha auf 0.15 gesetzt werden kann
 		// bzw. das Menüoverlay gezeigt werden kann
 
-		private void PauseGame()
+		private static void PauseGame()
 		{
 			GamePaused = true;
 			MovementInputBlocked = true;
 		}
 
-		private void UnpauseGame()
+		private static void UnpauseGame()
 		{
 			GamePaused = false;
 			MovementInputBlocked = false;
 		}
 
-		public void DoLogic()
+		public static void DoLogic()
 		{
 			if (GamePaused) return;
 
@@ -183,7 +189,7 @@ namespace Fledermaus
 			DetermineMirrorAccessibility();
 		}
 
-		private void CalculateLightRay()
+		private static void CalculateLightRay()
 		{
 			Line currentRay = LightRay.GetLastRay();
 
@@ -250,7 +256,7 @@ namespace Fledermaus
 			}
 		}
 
-		private void MoveNPCs()
+		private static void MoveNPCs()
 		{
 			foreach (ILogicalNPC npc in CurrentRoom.GetLogicalNPCs())
 			{
@@ -259,7 +265,7 @@ namespace Fledermaus
 			}
 		}
 
-		private void CheckPlayerLightCollision()
+		private static void CheckPlayerLightCollision()
 		{
 			if (_godMode) return;
 
@@ -270,12 +276,12 @@ namespace Fledermaus
 			}
 		}
 
-        private void CheckSolarPanel()
+        private static void CheckSolarPanel()
         {
 			CurrentRoom.IsExitOpen = Util.HasIntersection(CurrentRoom.GetSolarPanelLines(), LightRay);
         }
 
-        private void CheckExit()
+        private static void CheckExit()
         {
 			if (CurrentRoom.IsExitOpen && Util.HasIntersection(Player, CurrentRoom.GetExitLines()))
 			{
@@ -284,7 +290,7 @@ namespace Fledermaus
 			}
 		}
 
-		private void DetermineMirrorAccessibility()
+		private static void DetermineMirrorAccessibility()
 		{
 			foreach (ILogicalMirror mirror in Mirrors)
 			{

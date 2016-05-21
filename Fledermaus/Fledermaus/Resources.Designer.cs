@@ -63,9 +63,9 @@ namespace Fledermaus {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Evil_Font {
+        internal static System.Drawing.Bitmap Fire {
             get {
-                object obj = ResourceManager.GetObject("Evil_Font", resourceCulture);
+                object obj = ResourceManager.GetObject("Fire", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Fledermaus {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Fire {
+        internal static System.Drawing.Bitmap Player {
             get {
-                object obj = ResourceManager.GetObject("Fire", resourceCulture);
+                object obj = ResourceManager.GetObject("Player", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

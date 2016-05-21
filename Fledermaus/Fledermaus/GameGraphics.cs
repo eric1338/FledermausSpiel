@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	class GameGraphics
+	static class GameGraphics
 	{
 
 		private enum Colors
@@ -30,11 +30,11 @@ namespace Fledermaus
 			ExitClosed
 		}
 
-		public Level Level { get; set; }
+//		public static Level Level { get; set; }
 
-		private Vector2 _center = new Vector2(0.0f, 0.0f);
-		private float _scale = 1.0f;
-		private float _alpha = 1.0f;
+		private static Vector2 _center = new Vector2(0.0f, 0.0f);
+		private static float _scale = 1.0f;
+		private static float _alpha = 1.0f;
 
 		/*
 		private bool moveScreen = false;
@@ -65,7 +65,7 @@ namespace Fledermaus
 
 		*/
 
-		public void SetDrawSettings(Vector2 center, float scale, float alpha)
+		public static void SetDrawSettings(Vector2 center, float scale, float alpha)
 		{
 			_center = center;
 			_scale = scale;
@@ -74,17 +74,17 @@ namespace Fledermaus
 
 		// TODO: evtl vertical und horizontal scale
 
-		public void DrawLevel()
+		public static void DrawLevel()
 		{
 			SetDrawSettings(new Vector2(0.0f, 0.0f), 1.0f, 1.0f);
-			DrawRoom(Level.TestRoom);
-			SetDrawSettings(new Vector2(-1.8f, 0.0f), 1.0f, 0.1f);
+			DrawRoom(GameLogic.Level.TestRoom);
+/*			SetDrawSettings(new Vector2(-1.8f, 0.0f), 1.0f, 0.1f);
 			DrawRoom(Level.TestRoom);
 			SetDrawSettings(new Vector2(-1.8f, -1.8f), 1.0f, 0.1f);
 			DrawRoom(Level.TestRoom);
 			SetDrawSettings(new Vector2(0.0f, -1.8f), 1.0f, 0.1f);
 			DrawRoom(Level.TestRoom);
-
+*/
 			//SetDrawSettings(new Vector2(0.45f, 0.45f), 0.5f, 1.0f);
 			//DrawRoom(Level.TestRoom);
 			//SetDrawSettings(new Vector2(-0.45f, -0.45f), 0.5f, 0.1f);
@@ -95,7 +95,7 @@ namespace Fledermaus
 			//DrawRoom(Level.TestRoom);
 		}
 
-		public void DrawRoom(Room room)
+		public static void DrawRoom(Room room)
 		{
 			DrawRoomBounds(room.RoomBounds);
 			DrawLightRay(room.LightRay);
@@ -108,7 +108,7 @@ namespace Fledermaus
 			DrawExit(room.Exit, room.IsExitOpen);
 		}
 
-		private Vector3 GetColor(Colors color)
+		private static Vector3 GetColor(Colors color)
 		{
 			switch (color)
 			{
@@ -129,7 +129,7 @@ namespace Fledermaus
 			return new Vector3(0.0f, 0.0f, 0.0f);
 		}
 
-		private void SetColor(Colors color)
+		private static void SetColor(Colors color)
 		{
 			Vector3 colorVector = GetColor(color);
 
@@ -138,7 +138,7 @@ namespace Fledermaus
 			GL.Color4(colorVector.X, colorVector.Y, colorVector.Z, 1.0f);
 		}
 
-		private void DrawRoomBounds(RectangularGameObject room)
+		private static void DrawRoomBounds(RectangularGameObject room)
 		{
 			SetColor(Colors.RoomGround);
 			DrawRectangularGameObject(room);
@@ -147,35 +147,35 @@ namespace Fledermaus
 			DrawBounds(room, 0.003f);
 		}
 
-		private void DrawLightRay(LightRay lightRay)
+		private static void DrawLightRay(LightRay lightRay)
 		{
 			SetColor(Colors.LightRay);
 			DrawBounds(lightRay, 0.005f);
 		}
 
-		private void DrawPlayer(Player player)
+		private static void DrawPlayer(Player player)
 		{
 			SetColor(Colors.Player);
 			DrawBounds(player, 0.002f);
 		}
 
-		private void DrawNPCs(List<NPC> npcs)
+		private static void DrawNPCs(List<NPC> npcs)
 		{
 			foreach (NPC npc in npcs) DrawNPC(npc);
 		}
 
-		private void DrawNPC(NPC npc)
+		private static void DrawNPC(NPC npc)
 		{
 			SetColor(Colors.NPC);
 			DrawBounds(npc, 0.002f);
 		}
 
-		private void DrawMirrors(List<Mirror> mirrors)
+		private static void DrawMirrors(List<Mirror> mirrors)
 		{
 			foreach (Mirror m in mirrors) DrawMirror(m);
 		}
 
-		private void DrawMirror(Mirror mirror)
+		private static void DrawMirror(Mirror mirror)
 		{
 			SetColor(mirror.IsAccessible ? Colors.MirrorRailActive : Colors.MirrorRailInactive);
 			DrawLine(new Line(mirror.RailPosition1, mirror.RailPosition2), 0.005f);
@@ -184,24 +184,24 @@ namespace Fledermaus
 			DrawLine(mirror.GetMirrorLine(), 0.006f);
 		}
 
-		private void DrawObstacles(List<Obstacle> obstacles)
+		private static void DrawObstacles(List<Obstacle> obstacles)
 		{
 			foreach (Obstacle o in obstacles) DrawObstacle(o);
 		}
 
-		private void DrawObstacle(Obstacle obstacle)
+		private static void DrawObstacle(Obstacle obstacle)
 		{
 			SetColor(Colors.Obstacle);
 			DrawBounds(obstacle, 0.003f);
 		}
 
-		private void DrawSolarPanel(RectangularGameObject solarPanel)
+		private static void DrawSolarPanel(RectangularGameObject solarPanel)
 		{
 			SetColor(Colors.SolarPanel);
 			DrawRectangularGameObject(solarPanel);
 		}
 
-		private void DrawExit(RectangularGameObject exit, bool isExitOpen)
+		private static void DrawExit(RectangularGameObject exit, bool isExitOpen)
 		{
 			SetColor(isExitOpen ? Colors.ExitOpen : Colors.ExitClosed);
 			DrawRectangularGameObject(exit);
@@ -209,7 +209,7 @@ namespace Fledermaus
 
 		// --- //
 
-		private void DrawRectangularGameObject(RectangularGameObject rectangularGameObject)
+		private static void DrawRectangularGameObject(RectangularGameObject rectangularGameObject)
 		{
 			Vector2 topLeft = GetTransformedVector(rectangularGameObject.Point1);
 			Vector2 bottomRight = GetTransformedVector(rectangularGameObject.Point3);
@@ -217,17 +217,17 @@ namespace Fledermaus
 			DrawSquare(topLeft, bottomRight);
 		}
 
-		private void DrawBounds(IBounded bounds, float thickness)
+		private static void DrawBounds(IBounded bounds, float thickness)
 		{
 			foreach (Line v in bounds.GetLines()) DrawLine(v, thickness);
 		}
 
-		private void DrawLine(Line line, float thickness)
+		private static void DrawLine(Line line, float thickness)
 		{
 			DrawLine(GetTransformedVector(line.Point1), GetTransformedVector(line.Point2), thickness);
 		}
 
-		private void DrawLine(Vector2 p1, Vector2 p2, float thickness)
+		private static void DrawLine(Vector2 p1, Vector2 p2, float thickness)
 		{
 			Vector2 normal = p2 - p1;
 			normal.Normalize();
@@ -255,12 +255,12 @@ namespace Fledermaus
 			GL.End();
 		}
 
-		private Vector2 GetTransformedVector(Vector2 vector)
+		private static Vector2 GetTransformedVector(Vector2 vector)
 		{
 			return new Vector2(vector.X * _scale + _center.X, vector.Y * _scale + _center.Y);
 		}
 
-		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
+		private static void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
 		{
 			GL.Begin(PrimitiveType.Quads);
 			GL.Vertex2(topLeft.X, topLeft.Y);

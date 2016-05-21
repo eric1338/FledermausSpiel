@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	enum UserAction
+	public enum UserAction
 	{
 		MoveUp,
 		MoveDown,
@@ -18,6 +18,7 @@ namespace Fledermaus
 		ResetLevel,
 		TogglePauseGame,
 		ToggleGodMode,
-		Confirm
-	}
+		Confirm,
+        Cancel
+    }
 }

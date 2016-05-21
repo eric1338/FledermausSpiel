@@ -7,43 +7,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Fledermaus.Screens;
+using System.Windows;
 
 namespace Fledermaus.Screens
 {
-    class MenuButton
+    class ButtonText : Button
     {
-        private readonly float boundingBoxWidth = .8f;
-        private readonly float boundingBoxHeight = 1;
+
         private TextureFont font;
-        
+        protected readonly float boundingBoxHeight = .15f;
+        protected readonly float boundingBoxWidth = .8f;
 
         // public delegate void DoAction();
-        public delegate void DoAction(MyGameWindow _myGameWindow);
-        public DoAction doAction;
-
-        
-        public float Width { get; set; }
-        public float Height { get; set; }
- 
-        public float Position { get; set; }
-        public float Translation { get; set; }
 
         public String Text { get; set; }
-        public bool isSelected { get; set; }
 
 
-        public MenuButton( String buttonText, DoAction doAction, bool selected=false) {
+        public ButtonText( String buttonText, DoAction doAction, bool selected=false) : base( doAction, selected) {
             this.Text = buttonText;
-            this.doAction = doAction;
-            //DoAction = callback;
-            //Width = 0.2f;
+
+
             Width = buttonText.Length* boundingBoxWidth/20;
-            Height = boundingBoxHeight/10;
-            isSelected = selected;
+            Height = boundingBoxHeight;//10;
 
 
             //load font
-            font = new TextureFont(TextureLoader.FromBitmap(Resources.Fire), 10, 32, boundingBoxWidth, boundingBoxHeight, .7f);
+            font = new TextureFont(TextureLoader.FromBitmap(Resources.Fire), 10, 32, boundingBoxWidth, 1/*boundingBoxHeightHeight*15*/, .7f);
 
             //background clear color
             GL.ClearColor(Color.Black);
@@ -51,12 +40,9 @@ namespace Fledermaus.Screens
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
         }
-        public void showScreen()
+
+        public override void Draw(float center)
         {
-
-
-        }
-        public void draw(){
     /*        if (isSelected)
                 GL.Color3(0.0f, 1.0f, 0.0f);
             else
@@ -80,7 +66,8 @@ namespace Fledermaus.Screens
 
             GL.Enable(EnableCap.Blend); // for transparency in textures
                                         //print string
-            font.Print(-Width / 2, Position+Translation - (Height / 4), 0, 0.05f, Text);
+           
+            font.Print(center - (Width / 2), Position+Translation - (Height / 2), 0, 0.05f, Text);
             GL.Disable(EnableCap.Blend); // for transparency in textures
 
         }

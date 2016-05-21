@@ -7,21 +7,25 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	class InputManager
+	public static class InputManager
 	{
 
-		private Dictionary<Key, UserAction> _prolongedUserActionKeyMap = new Dictionary<Key, UserAction>();
-		private Dictionary<Key, UserAction> _singleUserActionKeyMap = new Dictionary<Key, UserAction>();
+		private static Dictionary<Key, UserAction> _prolongedUserActionKeyMap = new Dictionary<Key, UserAction>();
+        private static Dictionary<Key, UserAction> _singleUserActionKeyMap = new Dictionary<Key, UserAction>();
 
-		public Dictionary<UserAction, bool> ProlongedUserActions = new Dictionary<UserAction, bool>();
-		public Queue<UserAction> SingleUserActions = new Queue<UserAction>();
+        private static Dictionary<UserAction, bool> ProlongedUserActions = new Dictionary<UserAction, bool>();
+        private static Queue<UserAction> SingleUserActions = new Queue<UserAction>();
 
-		public InputManager()
+        static InputManager()
 		{
 
 		}
-
-		public void ProcessKeyUp(Key key)
+        public static void Clear()
+        {
+            _singleUserActionKeyMap.Clear();
+            _prolongedUserActionKeyMap.Clear();
+        }
+        public static void ProcessKeyUp(Key key)
 		{
 			if (_prolongedUserActionKeyMap.ContainsKey(key))
 			{
@@ -29,7 +33,7 @@ namespace Fledermaus
 			}
 		}
 
-		public void ProcessKeyDown(Key key)
+        public static void ProcessKeyDown(Key key)
 		{
 			if (_prolongedUserActionKeyMap.ContainsKey(key))
 			{
@@ -42,25 +46,26 @@ namespace Fledermaus
 			}
 		}
 
-		public bool IsUserActionActive(UserAction userAction)
+
+        public static bool IsUserActionActive(UserAction userAction)
 		{
 			return ProlongedUserActions.ContainsKey(userAction) && ProlongedUserActions[userAction];
 		}
 
-		public List<UserAction> GetSingleUserActionsAsList()
+        public static List<UserAction> GetSingleUserActionsAsList()
 		{
 			List<UserAction> singleUserActions = SingleUserActions.ToList<UserAction>();
 			SingleUserActions.Clear();
 
 			return singleUserActions;
 		}
-		
-		public void AddProlongedUserActionMapping(Key key, UserAction userAction)
+
+        public static void AddProlongedUserActionMapping(Key key, UserAction userAction)
 		{
 			_prolongedUserActionKeyMap.Add(key, userAction);
 		}
 
-		public void AddSingleUserActionMapping(Key key, UserAction userAction)
+        public static void AddSingleUserActionMapping(Key key, UserAction userAction)
 		{
 			_singleUserActionKeyMap.Add(key, userAction);
 		}

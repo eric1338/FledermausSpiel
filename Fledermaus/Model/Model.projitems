@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d35f11f3-2295-4f5d-9c97-7f68c7aadd86</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Model</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\Enemy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\EnemyNPC.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\Exit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\GameObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\LightRay.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\Mirror.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\MovingGameObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\Obstacle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\Room.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObject\SolarPanel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Konfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Level.cs" />
+  </ItemGroup>
+</Project>

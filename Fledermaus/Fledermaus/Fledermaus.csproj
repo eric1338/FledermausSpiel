@@ -36,15 +36,19 @@
     <Reference Include="OpenTK">
       <HintPath>..\Externals\OpenTK\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameGraphics.cs" />
@@ -70,13 +74,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Screens\Button.cs" />
+    <Compile Include="Screens\ButtonTexture.cs" />
+    <Compile Include="Screens\GameMenuScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Inputs.cs" />
     <Compile Include="Levels.cs" />
     <Compile Include="Screens\LevelEditorScreen.cs" />
+    <Compile Include="Screens\LevelEditorSideMenu.cs" />
     <Compile Include="Screens\LoadMenuScreen.cs" />
-    <Compile Include="Screens\MenuButton.cs" />
+    <Compile Include="Screens\ButtonText.cs" />
     <Compile Include="Screens\StartMenuScreen.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="MyGameWindow.cs" />
@@ -102,6 +110,7 @@
     <Folder Include="Levels\Custom\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\GameObjects\Player.png" />
     <Content Include="Resources\Menu\Evil_Font.png" />
     <None Include="Resources\Menu\Fire.png" />
   </ItemGroup>
@@ -111,6 +120,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <Import Project="..\Model\Model.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
