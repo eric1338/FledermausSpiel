@@ -9,8 +9,9 @@ namespace Fledermaus.Screens
 {
 	abstract class Screen
 	{
+		protected InputManager _inputManager = new InputManager();
 
-        public Screen() {
+		public Screen() {
         }
 
 		public abstract void DoLogic();
@@ -19,12 +20,12 @@ namespace Fledermaus.Screens
 
 		public void ProcessKeyUp(Key key)
 		{
-            InputManager.ProcessKeyUp(key);
+			_inputManager.ProcessKeyUp(key);
 		}
 
 		public void ProcessKeyDown(Key key)
 		{
-            InputManager.ProcessKeyDown(key);
+			_inputManager.ProcessKeyDown(key);
 		}
 
 

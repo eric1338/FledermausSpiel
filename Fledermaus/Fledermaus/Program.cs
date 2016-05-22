@@ -12,13 +12,15 @@ namespace Fledermaus
 {
 	static class MyApplication
 	{
+
         private static WindowState windowState;
-        private static MyGameWindow win;
+        private static MyGameWindow gameWindow;
 
         public static MyGameWindow GameWindow
         {
-            get { return win; }
+            get { return gameWindow; }
         }
+
         [STAThread]
         public static void Main()
         {
@@ -26,24 +28,26 @@ namespace Fledermaus
             //windowState = WindowState.Normal;
 
             if (windowState == WindowState.Fullscreen)
-                win = new MyGameWindow(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
+                gameWindow = new MyGameWindow(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
             else
-                win = new MyGameWindow(800, 700);
+                gameWindow = new MyGameWindow(800, 700);
 
 
             //win.CurrentScreen = new GameScreen(win);
-            win.CurrentScreen = new MainMenuScreen();
-            if(windowState == WindowState.Fullscreen)
-                win.WindowState = WindowState.Fullscreen;
-            System.Diagnostics.Debug.WriteLine("win.width" + win.Width);
-            System.Diagnostics.Debug.WriteLine("win.Height" + win.Height);
+            gameWindow.CurrentScreen = new MainMenuScreen();
 
-            win.Run(60.0);
+            if (windowState == WindowState.Fullscreen) gameWindow.WindowState = WindowState.Fullscreen;
+
+            System.Diagnostics.Debug.WriteLine("win.width" + gameWindow.Width);
+            System.Diagnostics.Debug.WriteLine("win.Height" + gameWindow.Height);
+
+            gameWindow.Run(60.0);
 
         }
+
         public static void Exit()
         {
-            win.Exit();
+            gameWindow.Exit();
         }
 
 

@@ -19,6 +19,6 @@ namespace Fledermaus
 		TogglePauseGame,
 		ToggleGodMode,
 		Confirm,
-        Cancel
+        OpenGameMenu
     }
 }

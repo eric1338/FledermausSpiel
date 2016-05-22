@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	public static class InputManager
+	public class InputManager
 	{
 
-		private static Dictionary<Key, UserAction> _prolongedUserActionKeyMap = new Dictionary<Key, UserAction>();
-        private static Dictionary<Key, UserAction> _singleUserActionKeyMap = new Dictionary<Key, UserAction>();
+		private Dictionary<Key, UserAction> _prolongedUserActionKeyMap = new Dictionary<Key, UserAction>();
+        private Dictionary<Key, UserAction> _singleUserActionKeyMap = new Dictionary<Key, UserAction>();
 
-        private static Dictionary<UserAction, bool> ProlongedUserActions = new Dictionary<UserAction, bool>();
-        private static Queue<UserAction> SingleUserActions = new Queue<UserAction>();
+        private Dictionary<UserAction, bool> ProlongedUserActions = new Dictionary<UserAction, bool>();
+        private Queue<UserAction> SingleUserActions = new Queue<UserAction>();
 
-        static InputManager()
+        public InputManager()
 		{
 
 		}
-        public static void Clear()
+        public void Clear()
         {
             _singleUserActionKeyMap.Clear();
             _prolongedUserActionKeyMap.Clear();
         }
-        public static void ProcessKeyUp(Key key)
+        public void ProcessKeyUp(Key key)
 		{
 			if (_prolongedUserActionKeyMap.ContainsKey(key))
 			{
@@ -33,7 +33,7 @@ namespace Fledermaus
 			}
 		}
 
-        public static void ProcessKeyDown(Key key)
+        public void ProcessKeyDown(Key key)
 		{
 			if (_prolongedUserActionKeyMap.ContainsKey(key))
 			{
@@ -47,12 +47,12 @@ namespace Fledermaus
 		}
 
 
-        public static bool IsUserActionActive(UserAction userAction)
+        public bool IsUserActionActive(UserAction userAction)
 		{
 			return ProlongedUserActions.ContainsKey(userAction) && ProlongedUserActions[userAction];
 		}
 
-        public static List<UserAction> GetSingleUserActionsAsList()
+        public List<UserAction> GetSingleUserActionsAsList()
 		{
 			List<UserAction> singleUserActions = SingleUserActions.ToList<UserAction>();
 			SingleUserActions.Clear();
@@ -60,12 +60,12 @@ namespace Fledermaus
 			return singleUserActions;
 		}
 
-        public static void AddProlongedUserActionMapping(Key key, UserAction userAction)
+        public void AddProlongedUserActionMapping(Key key, UserAction userAction)
 		{
 			_prolongedUserActionKeyMap.Add(key, userAction);
 		}
 
-        public static void AddSingleUserActionMapping(Key key, UserAction userAction)
+        public void AddSingleUserActionMapping(Key key, UserAction userAction)
 		{
 			_singleUserActionKeyMap.Add(key, userAction);
 		}

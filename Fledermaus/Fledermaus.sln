@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fledermaus", "Fledermaus\Fledermaus.csproj", "{26E6AFEB-5808-489F-82D4-377F49988DFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{C660F6AF-C100-4169-A9FB-61E1EBE87F34}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Model", "Model\Model.shproj", "{D35F11F3-2295-4F5D-9C97-7F68C7AADD86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{C660F6AF-C100-4169-A9FB-61E1EBE87F34}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

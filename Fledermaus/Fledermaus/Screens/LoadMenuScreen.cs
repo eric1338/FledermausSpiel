@@ -15,11 +15,11 @@ namespace Fledermaus.Screens
 
         public LoadMenuScreen() : base()
         {
-            menuButtons.Add(new ButtonText( "Level 1", delegate() { MyApplication.GameWindow.CurrentScreen = new GameScreen(); },true));
+            menuButtons.Add(new ButtonText( "Level 1", delegate() { MyApplication.GameWindow.CurrentScreen = new GameScreen(Levels.CreateTestLevel()); },true));
             menuButtons.Add(new ButtonText( "Level 2", delegate () { }));
-     //       menuButtons.Add(new MenuButton( "Level 3", delegate (MyGameWindow _myGameWindow) { }));
-   //         menuButtons.Add(new MenuButton( "Level 4", delegate (MyGameWindow _myGameWindow) { }));
- //           menuButtons.Add(new MenuButton( "Level 5", delegate (MyGameWindow _myGameWindow) { }));
+			//menuButtons.Add(new MenuButton( "Level 3", delegate (MyGameWindow _myGameWindow) { }));
+			//menuButtons.Add(new MenuButton( "Level 4", delegate (MyGameWindow _myGameWindow) { }));
+			//menuButtons.Add(new MenuButton( "Level 5", delegate (MyGameWindow _myGameWindow) { }));
             menuButtons.Add(new ButtonText( "Back", delegate () { MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(); }));
 
         }

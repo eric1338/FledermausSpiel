@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-    public interface ILogicalRoom
+	interface ILogicalRoom
 	{
 
 		ILogicalPlayer GetLogicalPlayer();
 		ILogicalLightRay GetLogicalLightRay();
 		IEnumerable<ILogicalMirror> GetLogicalMirrors();
 		IEnumerable<ILogicalNPC> GetLogicalNPCs();
+
+		IEnumerable<Tuple<IBounded, int>> GetRoomTransitionTriggers();
 
 		IBounded GetReflectingLines();
 		IBounded GetNonReflectingLines();

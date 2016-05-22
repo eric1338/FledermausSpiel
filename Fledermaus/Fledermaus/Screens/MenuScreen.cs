@@ -171,11 +171,11 @@ namespace Fledermaus.Screens
         public MenuScreen() : base() {
             Padding = .1f;
             BorderWidth = .02f;
-            InputManager.Clear();
-            InputManager.AddSingleUserActionMapping(Key.Up, UserAction.MoveUp);
-            InputManager.AddSingleUserActionMapping(Key.Down, UserAction.MoveDown);
-            InputManager.AddSingleUserActionMapping(Key.Enter, UserAction.Confirm);
-            InputManager.AddSingleUserActionMapping(Key.Escape, UserAction.Cancel);
+
+			_inputManager.AddSingleUserActionMapping(Key.Up, UserAction.MoveUp);
+			_inputManager.AddSingleUserActionMapping(Key.Down, UserAction.MoveDown);
+			_inputManager.AddSingleUserActionMapping(Key.Enter, UserAction.Confirm);
+			_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.OpenGameMenu);
 
             menuButtons.CollectionChanged += MenuButtons_CollectionChanged;
         }
@@ -306,7 +306,7 @@ namespace Fledermaus.Screens
 
         protected virtual void ProcessSingleUserActions()
         {
-            foreach (UserAction userAction in InputManager.GetSingleUserActionsAsList())
+            foreach (UserAction userAction in _inputManager.GetSingleUserActionsAsList())
             {
                 if (userAction == UserAction.MoveUp)
                     ActiveButton--;
@@ -314,7 +314,7 @@ namespace Fledermaus.Screens
                     ActiveButton++;
                 else if (userAction == UserAction.Confirm)
                     menuButtons[ActiveButton].doAction();
-                else if (userAction == UserAction.Cancel)
+                else if (userAction == UserAction.OpenGameMenu)
                     MyApplication.GameWindow.CurrentScreen = new MainMenuScreen();
                     
             }

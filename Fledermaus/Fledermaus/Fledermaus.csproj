@@ -79,7 +79,6 @@
     <Compile Include="Screens\GameMenuScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="InputManager.cs" />
-    <Compile Include="Inputs.cs" />
     <Compile Include="Levels.cs" />
     <Compile Include="Screens\LevelEditorScreen.cs" />
     <Compile Include="Screens\LevelEditorSideMenu.cs" />
@@ -94,17 +93,13 @@
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="UserAction.cs" />
     <Compile Include="Utils\Intersection.cs" />
+    <Compile Include="Utils\SmoothMovement.cs" />
+    <Compile Include="Utils\SmoothValueTransition.cs" />
     <Compile Include="Utils\Util.cs" />
     <Compile Include="Line.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Framework\Framework.csproj">
-      <Project>{c660f6af-c100-4169-a9fb-61e1ebe87f34}</Project>
-      <Name>Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Levels\Custom\" />
@@ -119,6 +114,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework\Framework.csproj">
+      <Project>{c660f6af-c100-4169-a9fb-61e1ebe87f34}</Project>
+      <Name>Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Model\Model.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

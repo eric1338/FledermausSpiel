@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	public class Room : ILogicalRoom
+	class Room : ILogicalRoom
 	{
 
-		public Vector2 LevelCenter { get; set; }
+		public int Index { get; set; }
+		public int Row { get; set; }
+		public int Column { get; set; }
 
 		public RectangularGameObject RoomBounds { get; set; }
 
@@ -25,6 +27,8 @@ namespace Fledermaus
 		public List<Obstacle> Obstacles { get; set; }
 		public List<NPC> NPCs { get; set; }
 
+		public List<Tuple<IBounded, int>> RoomTransitionTriggers { get; set; }
+
 		public bool IsExitOpen { get; set; }
 
 		public Room()
@@ -32,6 +36,8 @@ namespace Fledermaus
 			Mirrors = new List<Mirror>();
 			Obstacles = new List<Obstacle>();
 			NPCs = new List<NPC>();
+
+			RoomTransitionTriggers = new List<Tuple<IBounded, int>>();
 		}
 
 		public void AddMirror(Mirror mirror)
@@ -47,6 +53,11 @@ namespace Fledermaus
 		public void AddNPC(NPC npc)
 		{
 			NPCs.Add(npc);
+		}
+
+		public void AddRoomTransitionTrigger(IBounded triggerArea, int roomIndex)
+		{
+			RoomTransitionTriggers.Add(new Tuple<IBounded, int>(triggerArea, roomIndex));
 		}
 
 		public void Reset()
@@ -74,6 +85,11 @@ namespace Fledermaus
 		public IEnumerable<ILogicalNPC> GetLogicalNPCs()
 		{
 			return NPCs;
+		}
+
+		public IEnumerable<Tuple<IBounded, int>> GetRoomTransitionTriggers()
+		{
+			return RoomTransitionTriggers;
 		}
 
 		public IBounded GetReflectingLines()
