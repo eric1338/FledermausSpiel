@@ -20,11 +20,7 @@ namespace Fledermaus
 		{
 
 		}
-        public void Clear()
-        {
-            _singleUserActionKeyMap.Clear();
-            _prolongedUserActionKeyMap.Clear();
-        }
+
         public void ProcessKeyUp(Key key)
 		{
 			if (_prolongedUserActionKeyMap.ContainsKey(key))

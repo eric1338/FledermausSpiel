@@ -24,7 +24,7 @@ namespace Fledermaus
         [STAThread]
         public static void Main()
         {
-            windowState = WindowState.Fullscreen;
+            windowState = WindowState.Normal;
             //windowState = WindowState.Normal;
 
             if (windowState == WindowState.Fullscreen)

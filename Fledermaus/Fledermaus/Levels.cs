@@ -23,7 +23,8 @@ namespace Fledermaus
 
 			testRoom.SolarPanel = new RectangularGameObject(new Vector2(-1.04f, 0.2f), new Vector2(-0.975f, 0.0f));
 			testRoom.Exit = exit;
-			testRoom.LightRay = new LightRay(new Vector2(0.99f, 0.99f), new Vector2(-0.16f, -0.28f));
+			testRoom.AddLightRay(new LightRay(new Vector2(0.99f, 0.99f), new Vector2(-0.16f, -0.28f)));
+			testRoom.AddLightRay(new LightRay(new Vector2(0.89f, 0.89f), new Vector2(-0.26f, -0.38f)));
 
 			Mirror m = new Mirror(new Vector2(0.12f, -0.46f), new Vector2(0.81f, -0.63f));
 			testRoom.AddMirror(m);
@@ -102,7 +103,9 @@ namespace Fledermaus
 			RectangularGameObject exit = new RectangularGameObject(new Vector2(-1.04f, -0.6f), new Vector2(-0.975f, -0.8f));
 
 			testRoom1.Exit = new RectangularGameObject(new Vector2(-1.04f, -0.6f), new Vector2(-0.975f, -0.8f));
-			testRoom1.LightRay = new LightRay(new Vector2(0.99f, -0.89f), new Vector2(-0.16f, -0.28f));
+
+			testRoom1.AddLightRay(new LightRay(new Vector2(0.99f, -0.89f), new Vector2(-0.16f, -0.28f)));
+			testRoom1.AddLightRay(new LightRay(new Vector2(0.89f, -0.79f), new Vector2(-0.26f, -0.38f)));
 
 			Obstacle o = new Obstacle();
 			o.AddFirstPoint(new Vector2(-0.7f + x, 0.4f));

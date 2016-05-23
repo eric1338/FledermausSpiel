@@ -19,10 +19,10 @@ namespace Fledermaus
 		public RectangularGameObject RoomBounds { get; set; }
 
 		public Player Player { get; set; }
-		public LightRay LightRay { get; set; }
 		public RectangularGameObject SolarPanel { get; set; }
 		public RectangularGameObject Exit { get; set; }
 
+		public List<LightRay> LightRays { get; set; }
 		public List<Mirror> Mirrors { get; set; }
 		public List<Obstacle> Obstacles { get; set; }
 		public List<NPC> NPCs { get; set; }
@@ -33,11 +33,17 @@ namespace Fledermaus
 
 		public Room()
 		{
+			LightRays = new List<LightRay>();
 			Mirrors = new List<Mirror>();
 			Obstacles = new List<Obstacle>();
 			NPCs = new List<NPC>();
 
 			RoomTransitionTriggers = new List<Tuple<IBounded, int>>();
+		}
+
+		public void AddLightRay(LightRay lightRay)
+		{
+			LightRays.Add(lightRay);
 		}
 
 		public void AddMirror(Mirror mirror)
@@ -72,11 +78,6 @@ namespace Fledermaus
 			return Player;
 		}
 
-		public ILogicalLightRay GetLogicalLightRay()
-		{
-			return LightRay;
-		}
-
 		public IEnumerable<ILogicalMirror> GetLogicalMirrors()
 		{
 			return Mirrors;
@@ -85,6 +86,11 @@ namespace Fledermaus
 		public IEnumerable<ILogicalNPC> GetLogicalNPCs()
 		{
 			return NPCs;
+		}
+
+		public IEnumerable<ILogicalLightRay> GetLogicalLightRays()
+		{
+			return LightRays;
 		}
 
 		public IEnumerable<Tuple<IBounded, int>> GetRoomTransitionTriggers()
@@ -119,7 +125,7 @@ namespace Fledermaus
 		{
 			List<Line> lightLines = new List<Line>();
 
-			lightLines.AddRange(LightRay.GetLines());
+			foreach (LightRay lightRay in LightRays) lightLines.AddRange(lightRay.GetLines());
 
 			foreach (NPC npc in NPCs) lightLines.AddRange(npc.GetLines());
 

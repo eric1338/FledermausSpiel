@@ -12,7 +12,7 @@ namespace Fledermaus
 	{
 
 		ILogicalPlayer GetLogicalPlayer();
-		ILogicalLightRay GetLogicalLightRay();
+		IEnumerable<ILogicalLightRay> GetLogicalLightRays();
 		IEnumerable<ILogicalMirror> GetLogicalMirrors();
 		IEnumerable<ILogicalNPC> GetLogicalNPCs();
 

@@ -157,10 +157,10 @@ namespace Fledermaus
 		public void DrawRoom(Room room)
 		{
 			DrawRoomBounds(room.RoomBounds);
-			DrawLightRay(room.LightRay);
 			DrawPlayer(room.Player);
 			DrawNPCs(room.NPCs);
 
+			DrawLightRays(room.LightRays);
 			DrawMirrors(room.Mirrors);
 			DrawObstacles(room.Obstacles);
 			DrawSolarPanel(room.SolarPanel);
@@ -204,6 +204,11 @@ namespace Fledermaus
 
 			GL.Color3(0.1f, 0.1f, 0.1f);
 			DrawBounds(room, 0.003f);
+		}
+
+		private void DrawLightRays(List<LightRay> lightRays)
+		{
+			foreach (LightRay lightRay in lightRays) DrawLightRay(lightRay);
 		}
 
 		private void DrawLightRay(LightRay lightRay)

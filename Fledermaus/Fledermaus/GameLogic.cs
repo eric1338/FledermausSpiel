@@ -30,9 +30,9 @@ namespace Fledermaus
 			get { return CurrentRoom.GetLogicalPlayer(); }
 		}
 
-		private ILogicalLightRay LightRay
+		private IEnumerable<ILogicalLightRay> LightRays
 		{
-			get { return CurrentRoom.GetLogicalLightRay(); }
+			get { return CurrentRoom.GetLogicalLightRays(); }
 		}
 
 		private IEnumerable<ILogicalMirror> Mirrors
@@ -179,8 +179,8 @@ namespace Fledermaus
 		{
 			if (GamePaused) return;
 
-			LightRay.ResetRays();
-			CalculateLightRay();
+			ResetLighRays();
+			CalculateLightRays();
 
 			MoveNPCs();
 
@@ -192,9 +192,19 @@ namespace Fledermaus
 			DetermineMirrorAccessibility();
 		}
 
-		private void CalculateLightRay()
+		private void ResetLighRays()
 		{
-			Line currentRay = LightRay.GetLastRay();
+			foreach (ILogicalLightRay lightRay in LightRays) lightRay.ResetRays();
+		}
+
+		private void CalculateLightRays()
+		{
+			foreach (ILogicalLightRay lightRay in LightRays) CalculateLightRay(lightRay);
+		}
+
+		private void CalculateLightRay(ILogicalLightRay lightRay)
+		{
+			Line currentRay = lightRay.GetLastRay();
 
 			Intersection closestNonReflectingIntersection = Util.GetClosestIntersection(currentRay, CurrentRoom.GetNonReflectingLines());
 
@@ -249,13 +259,13 @@ namespace Fledermaus
 				Vector2 newDirection = lightDirection - 2 * (Vector2.Dot(normal, lightDirection)) * normal;
 				Vector2 point = new Vector2(intersectionPoint.X, intersectionPoint.Y) + newDirection * 0.0001f;
 
-				LightRay.AddNewRay(point, newDirection);
+				lightRay.AddNewRay(point, newDirection);
 
-				CalculateLightRay();
+				CalculateLightRay(lightRay);
 			}
 			else
 			{
-				LightRay.FinishRays(closestNonReflectingIntersection.Point);
+				lightRay.FinishRays(closestNonReflectingIntersection.Point);
 			}
 		}
 
@@ -292,7 +302,13 @@ namespace Fledermaus
 
         private void CheckSolarPanel()
         {
-			CurrentRoom.IsExitOpen = Util.HasIntersection(CurrentRoom.GetSolarPanelLines(), LightRay);
+			List<Line> lightRayLines = new List<Line>();
+
+			foreach (var lightRay in LightRays) lightRayLines.AddRange(lightRay.GetLines());
+
+			IBounded bounds = Util.CreateBoundsFromList(lightRayLines);
+
+			CurrentRoom.IsExitOpen = Util.HasIntersection(CurrentRoom.GetSolarPanelLines(), bounds);
         }
 
         private void CheckExit()
