@@ -23,11 +23,12 @@ namespace Fledermaus.Screens
         public String Text { get; set; }
 
 
-        public ButtonText( String buttonText, DoAction doAction, bool selected=false) : base( doAction, selected) {
+        public ButtonText(String buttonText, DoAction doAction, bool selected = false) : base(doAction, selected)
+        {
             this.Text = buttonText;
 
 
-            Width = buttonText.Length* boundingBoxWidth/20;
+            Width = buttonText.Length * boundingBoxWidth / 20;
             Height = boundingBoxHeight;//10;
 
 
@@ -41,24 +42,24 @@ namespace Fledermaus.Screens
 
         }
 
-        public override void Draw(float center)
+        public override void Draw()
         {
-    /*        if (isSelected)
-                GL.Color3(0.0f, 1.0f, 0.0f);
-            else
-                GL.Color3(1.0f, 0.0f, 0.0f);
+            /*        if (isSelected)
+                        GL.Color3(0.0f, 1.0f, 0.0f);
+                    else
+                        GL.Color3(1.0f, 0.0f, 0.0f);
 
-            GL.Begin(PrimitiveType.Quads);
-            GL.Vertex2(-Width / 2, Position-(Height/2));
-            GL.Vertex2( Width / 2, Position - (Height / 2));
-            GL.Vertex2( Width / 2, Position + (Height / 2));
-            GL.Vertex2(-Width / 2, Position + (Height / 2));
-            GL.End();
-            */
-           // GL.Clear(ClearBufferMask.ColorBufferBit);
+                    GL.Begin(PrimitiveType.Quads);
+                    GL.Vertex2(-Width / 2, Position-(Height/2));
+                    GL.Vertex2( Width / 2, Position - (Height / 2));
+                    GL.Vertex2( Width / 2, Position + (Height / 2));
+                    GL.Vertex2(-Width / 2, Position + (Height / 2));
+                    GL.End();
+                    */
+            // GL.Clear(ClearBufferMask.ColorBufferBit);
 
             //color is multiplied with texture color white == no change
-           // GL.Color3(Color.White);
+            // GL.Color3(Color.White);
             if (isSelected)
                 GL.Color3(Color.LightYellow);
             else
@@ -66,8 +67,8 @@ namespace Fledermaus.Screens
 
             GL.Enable(EnableCap.Blend); // for transparency in textures
                                         //print string
-           
-            font.Print(center - (Width / 2), Position+Translation - (Height / 2), 0, 0.05f, Text);
+
+            font.Print(Position.X - (Width / 2), Position.Y - (Height / 2), 0, 0.05f, Text);
             GL.Disable(EnableCap.Blend); // for transparency in textures
 
         }

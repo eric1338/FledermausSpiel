@@ -11,7 +11,7 @@ namespace Fledermaus.Screens
 
 		private GameScreen _gameScreen;
 
-		public GameMenuScreen(GameScreen gameScreen)
+		public GameMenuScreen(GameScreen gameScreen) : base ()
 		{
 			_gameScreen = gameScreen;
 			

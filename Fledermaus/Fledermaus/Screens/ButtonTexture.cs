@@ -13,10 +13,11 @@ namespace Fledermaus.Screens
     {
         private Texture texture;
 
-        public ButtonTexture(Bitmap bitmap, DoAction doAction, bool selected = false) : base( doAction, selected) {
+        public ButtonTexture(Bitmap bitmap, DoAction doAction, bool selected = false) : base(doAction, selected)
+        {
 
-            Width = 0.2f;
-            Height = 0.1f;
+            Width = 0.3f;
+            Height = 0.2f;
 
             texture = TextureLoader.FromBitmap(bitmap);
             //background clear color
@@ -25,7 +26,8 @@ namespace Fledermaus.Screens
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
         }
 
-        public override void Draw(float center) {
+        public override void Draw()
+        {
             //GL.Clear(ClearBufferMask.ColorBufferBit);
 
             if (isSelected)
@@ -34,11 +36,13 @@ namespace Fledermaus.Screens
             else
                 GL.Color3(Color.White);
 
+
+
             GL.Begin(PrimitiveType.Quads);
-            GL.Vertex2(center - Width / 2, Position + Translation - (Height / 2));
-            GL.Vertex2(center + Width / 2, Position + Translation - (Height / 2));
-            GL.Vertex2(center + Width / 2, Position + Translation + (Height / 2));
-            GL.Vertex2(center - Width / 2, Position + Translation + (Height / 2));
+            GL.Vertex2(Position.X - Width / 2, Position.Y - (Height / 2));
+            GL.Vertex2(Position.X + Width / 2, Position.Y - (Height / 2));
+            GL.Vertex2(Position.X + Width / 2, Position.Y + (Height / 2));
+            GL.Vertex2(Position.X - Width / 2, Position.Y + (Height / 2));
             GL.End();
 
             //color is multiplied with texture color => white == no change to texture color
@@ -52,14 +56,14 @@ namespace Fledermaus.Screens
             GL.Begin(PrimitiveType.Quads);
             //when using textures we have to set a texture coordinate for each vertex
             //by using the TexCoord command BEFORE the Vertex command
-            GL.TexCoord2(0.0f, 0.0f); GL.Vertex2((center - Width/2), (Position + Translation - (Height / 2)));
-            GL.TexCoord2(1.0f, 0.0f); GL.Vertex2((center + Width / 2), (Position + Translation - (Height / 2)));
-            GL.TexCoord2(1.0f, 1.0f); GL.Vertex2((center + Width / 2), (Position + Translation + (Height / 2)));
-            GL.TexCoord2(0.0f, 1.0f); GL.Vertex2((center - Width / 2), (Position + Translation + (Height / 2)));
+            GL.TexCoord2(0.0f, 0.0f); GL.Vertex2((Position.X - Width / 2), (Position.Y - (Height / 2)));
+            GL.TexCoord2(1.0f, 0.0f); GL.Vertex2((Position.X + Width / 2), (Position.Y - (Height / 2)));
+            GL.TexCoord2(1.0f, 1.0f); GL.Vertex2((Position.X + Width / 2), (Position.Y + (Height / 2)));
+            GL.TexCoord2(0.0f, 1.0f); GL.Vertex2((Position.X - Width / 2), (Position.Y + (Height / 2)));
             GL.End();
             //the texture is disabled, so no other draw calls use this texture
             texture.EndUse();
-            
+
         }
 
 

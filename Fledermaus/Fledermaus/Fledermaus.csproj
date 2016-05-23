@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameGraphics.cs" />
+    <Compile Include="GameGraphicsLevelEditor.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameObjects\ILogicalLevel.cs" />
     <Compile Include="GameObjects\ILogicalLightRay.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Levels.cs" />
+    <Compile Include="Screens\LevelEditorGameScreen.cs" />
     <Compile Include="Screens\LevelEditorScreen.cs" />
     <Compile Include="Screens\LevelEditorSideMenu.cs" />
     <Compile Include="Screens\LoadMenuScreen.cs" />

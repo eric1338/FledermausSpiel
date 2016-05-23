@@ -11,7 +11,8 @@ using System.Collections.Generic;
 
 namespace Fledermaus.Screens
 {
-    enum EditMode {
+    enum EditMode
+    {
         Selection = 0,
         Position = 1,
         Edit = 2
@@ -21,9 +22,10 @@ namespace Fledermaus.Screens
     {
 
         private Level level;
- //       private GameLogic gameLogic = new GameLogic();
- //       private GameGraphics gameGraphics = new GameGraphics();
-        private LevelEditorSideMenu sideMenu ;
+        //       private GameLogic gameLogic = new GameLogic();
+        //       private GameGraphics gameGraphics = new GameGraphics();
+        private LevelEditorSideMenu sideMenu;
+        private LevelEditorGameScreen gameScreen;
 
         private EditMode editMode;
 
@@ -53,22 +55,41 @@ namespace Fledermaus.Screens
         public LevelEditorScreen() : base()
         {
             sideMenu = new LevelEditorSideMenu(this);
+
             sideMenu.ShowBorder = true;
             sideMenu.Padding = .03f;
             sideMenu.BorderWidth = 0.01f;
             sideMenu.HorizontalAlignment = HorizontalAlignment.Left;
-            createTestLevel();
-            var filename = "Level1.xml";
-            saveLevel(Directory.GetCurrentDirectory()+"\\Levels\\",filename);
+            sideMenu.MaxHeight = 2.0f;
+
+            float scale2 = 1.0f / 2.0f * (2.0f - sideMenu.MaxWidth);
+
+            gameScreen = new LevelEditorGameScreen();
+            gameScreen.ShowBorder = true;
+            gameScreen.HorizontalAlignment = HorizontalAlignment.Center;
+            gameScreen.MaxHeight = 2.0f * scale2;
+            gameScreen.ContentWidth = 2.0f * scale2 - 2 * Padding - 2 * BorderWidth;
+            gameScreen.Scale = scale2;// 2/100*(2.0f - sideMenu.MaxWidth-2*Padding-2*BorderWidth),
+            gameScreen.Center = new Vector2((2.0f - 2.0f * scale2) / 2, (2.0f - 2.0f * scale2) / 2);
+
+            Level = new Level();
+ //           createTestLevel();
+ //           var filename = "Level1.xml";
+  //          saveLevel(Directory.GetCurrentDirectory() + "\\Levels\\", filename);
 
             EditMode = EditMode.Selection;
             //InputManager.Clear();
 
         }
+        public void setInputManager(InputManager inputManager)
+        {
+            this._inputManager = inputManager;
+        }
         private void createTestLevel()
         {
             Level = new Level();
-            Level.Player = new Player(){
+            Level.Player = new Player()
+            {
                 InitialPosition = new Vector2(Konfiguration.Round(0.8f), Konfiguration.Round(-0.7f)),
                 RelativeBounds = new List<Vector2>() { new Vector2(Konfiguration.Round(-0.05f), Konfiguration.Round(-0.05f)),
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(-0.05f)),
@@ -97,7 +118,8 @@ namespace Fledermaus.Screens
             };
         }
 
-        private bool saveLevel(String filePath, String fileName) {
+        private bool saveLevel(String filePath, String fileName)
+        {
 
             if (!Directory.Exists(filePath))
             {
@@ -105,7 +127,7 @@ namespace Fledermaus.Screens
             }
 
             XmlSerializer x = new XmlSerializer(typeof(Level));
-            TextWriter writer = new StreamWriter(filePath+fileName);
+            TextWriter writer = new StreamWriter(filePath + fileName);
             x.Serialize(writer, level);
 
             return true;
@@ -113,21 +135,24 @@ namespace Fledermaus.Screens
 
         public override void DoLogic()
         {
-            switch (EditMode) {
+
+            switch (EditMode)
+            {
                 case EditMode.Selection: sideMenu.DoLogic(); break;
                 case EditMode.Position: break;
                 case EditMode.Edit: break;
 
             }
 
- //           gameLogic.ProcessInput();
- //           gameLogic.DoLogic();
+            //           gameLogic.ProcessInput();
+            //           gameLogic.DoLogic();
         }
 
         public override void Draw()
         {
             sideMenu.Draw();
- //           gameGraphics.DrawLevel();
+            gameScreen.Draw(level);
+            //           gameGraphics.DrawLevel();
         }
     }
 }

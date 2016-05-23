@@ -22,5 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameObject\SolarPanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Konfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Level.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Serializer.cs" />
   </ItemGroup>
 </Project>
