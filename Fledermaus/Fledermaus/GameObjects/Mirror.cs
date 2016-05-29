@@ -8,24 +8,31 @@ using Fledermaus.Utils;
 
 namespace Fledermaus.GameObjects
 {
-    public class Mirror : ILogicalMirror
+	public class Mirror : ILogicalMirror
 	{
-		
-		public float StartingAngle = 20.0f;
 
-		public float MirrorLength = 0.2f;
+		public float StartingAngle;
+		public float StartingRelativePosition;
+
+		public float MirrorLength = 0.15f;
 
 		public float RelativePosition { get; set; }
 		public float Rotation { get; set; }
 
 		public float MaximumRotation { get; set; }
+		public float MinimumRotation { get; set; }
 
 		public Vector2 RailPosition1 { get; set; }
 		public Vector2 RailPosition2 { get; set; }
 
 		public bool IsAccessible { get; set; }
 
-		public Mirror(Vector2 railPosition1, Vector2 railPosition2)
+		public Mirror(Vector2 railPosition1, Vector2 railPosition2) : this(railPosition1, railPosition2, 20f, 0.5f)
+		{
+
+		}
+
+		public Mirror(Vector2 railPosition1, Vector2 railPosition2, float startingAngle, float startingRelativePosition)
 		{
 			if (railPosition1.X < railPosition2.X)
 			{
@@ -38,8 +45,14 @@ namespace Fledermaus.GameObjects
 				RailPosition2 = railPosition1;
 			}
 
-			RelativePosition = 0.5f;
+			StartingAngle = startingAngle;
 			Rotation = Util.ConvertDegreeToRadian(StartingAngle);
+
+			StartingRelativePosition = startingRelativePosition;
+			RelativePosition = StartingRelativePosition;
+
+
+			MinimumRotation = Util.ConvertDegreeToRadian(-40.0f);
 			MaximumRotation = Util.ConvertDegreeToRadian(40.0f);
 		}
 
@@ -126,12 +139,12 @@ namespace Fledermaus.GameObjects
 
 		public void RotateCCW(float deltaAngle)
 		{
-			Rotation = Math.Max(-MaximumRotation, Rotation - deltaAngle);
+			Rotation = Math.Max(MinimumRotation, Rotation - deltaAngle);
 		}
 
 		public void Reset()
 		{
-			RelativePosition = 0.5f;
+			RelativePosition = StartingRelativePosition;
 			Rotation = Util.ConvertDegreeToRadian(StartingAngle);
 		}
 

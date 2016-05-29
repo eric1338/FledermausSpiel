@@ -13,6 +13,23 @@ namespace Fledermaus.GameObjects
 		private Vector2 _firstPoint;
 		private Vector2 _lastPoint;
 
+		public Obstacle()
+		{
+
+		}
+
+		public static Obstacle CreateRectangular(Vector2 topLeft, Vector2 bottomRight)
+		{
+			Obstacle obstacle = new Obstacle();
+
+			obstacle.AddFirstPoint(topLeft);
+			obstacle.AddFollowingPoint(new Vector2(bottomRight.X, topLeft.Y));
+			obstacle.AddFollowingPoint(bottomRight);
+			obstacle.AddLastPoint(new Vector2(topLeft.X, bottomRight.Y));
+
+			return obstacle;
+		}
+
 		public void AddFirstPoint(Vector2 point)
 		{
 			_firstPoint = point;
