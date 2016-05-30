@@ -214,7 +214,24 @@ namespace Fledermaus
 		private void DrawLightRay(LightRay lightRay)
 		{
 			SetColor(Colors.LightRay);
-			DrawBounds(lightRay, 0.005f);
+			DrawBounds(lightRay, 0.004f);
+
+			if (lightRay.GetLines().ToList().Count < 1) return;
+
+			Line lastLine = lightRay.GetLines().ToList().Last();
+
+			Vector2 oppositeDirection = lastLine.GetDirectionVector() * -1;
+			oppositeDirection.Normalize();
+
+			Vector2 arrowVector1 = Util.GetRotatedVector(oppositeDirection, 0.9f);
+			Vector2 arrowVector2 = Util.GetRotatedVector(oppositeDirection, -0.9f);
+
+			Line arrowLine1 = Line.CreateParameterized(lastLine.Point2, arrowVector1, 0.05f);
+			Line arrowLine2 = Line.CreateParameterized(lastLine.Point2, arrowVector2, 0.05f);
+
+			IBounded arrowLines = Util.CreateBoundsFromList(new List<Line>() { arrowLine1, arrowLine2 });
+
+			DrawBounds(arrowLines, 0.004f);
 		}
 
 		private void DrawPlayer(Player player)
