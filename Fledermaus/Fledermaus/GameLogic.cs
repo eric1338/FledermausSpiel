@@ -40,10 +40,13 @@ namespace Fledermaus
 			get { return CurrentRoom.GetLogicalMirrors(); }
 		}
 
+		private const float InitialPlayerMovementSpeed = 0.004f;
+		private const float MaximumPlayerMovementSpeed = 0.01f;
+		private const float PlayerMovementSpeedIncrease = 0.0004f;
+		private float _playerMovementSpeed = InitialPlayerMovementSpeed;
 
-		private const float _playerMovementSpeed = 0.01f;
-		private const float _mirrorMovementSpeed = 0.02f;
-		private const float _rotationSpeed = 0.006f;
+		private const float _mirrorMovementSpeed = 0.01f;
+		private const float _rotationSpeed = 0.004f;
 		private const float _minMirrorAccessibilityDistance = 0.14f;
 
 		public InputManager InputManager { get; set; }
@@ -83,10 +86,13 @@ namespace Fledermaus
 				float dx = 0.0f;
 				float dy = 0.0f;
 
-				if (InputManager.IsUserActionActive(UserAction.MoveUp)) dy = 0.01f;
-				if (InputManager.IsUserActionActive(UserAction.MoveDown)) dy = -0.01f;
-				if (InputManager.IsUserActionActive(UserAction.MoveLeft)) dx = -0.01f;
-				if (InputManager.IsUserActionActive(UserAction.MoveRight)) dx = 0.01f;
+				if (InputManager.IsUserActionActive(UserAction.MoveUp)) dy = _playerMovementSpeed;
+				if (InputManager.IsUserActionActive(UserAction.MoveDown)) dy = -_playerMovementSpeed;
+				if (InputManager.IsUserActionActive(UserAction.MoveLeft)) dx = -_playerMovementSpeed;
+				if (InputManager.IsUserActionActive(UserAction.MoveRight)) dx = _playerMovementSpeed;
+
+				if (dx == 0.0f && dy == 0.0f) _playerMovementSpeed = InitialPlayerMovementSpeed;
+				else if (_playerMovementSpeed < MaximumPlayerMovementSpeed) _playerMovementSpeed += PlayerMovementSpeedIncrease;
 
 				TryToMovePlayer(dx, 0.0f);
 				TryToMovePlayer(0.0f, dy);
@@ -165,12 +171,14 @@ namespace Fledermaus
 
 		public void PauseGame()
 		{
+			Level.PauseTimer();
 			GamePaused = true;
 			MovementInputBlocked = true;
 		}
 
 		public void UnpauseGame()
 		{
+			Level.UnpauseTimer();
 			GamePaused = false;
 			MovementInputBlocked = false;
 		}
@@ -284,6 +292,15 @@ namespace Fledermaus
 			{
 				if (Util.HasIntersection(Player, roomTransitionTrigger.Item1))
 				{
+					// temp
+					if (roomTransitionTrigger.Item2 < 0)
+					{
+						Level.FinishLevel();
+						GameScreen.FinishLevel();
+						PauseGame();
+						return;
+					}
+
 					Level.SwitchCurrentRoom(roomTransitionTrigger.Item2);
 				}
 			}

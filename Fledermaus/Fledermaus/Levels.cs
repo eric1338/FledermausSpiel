@@ -65,6 +65,7 @@ namespace Fledermaus
 			r5.Index = 5;
 			r5.Row = 2;
 			r5.Column = 1;
+			r5.AddRoomTransitionTrigger(r5.Exit, -1);
 
 			level1.AddRoom(r1);
 			level1.AddRoom(r2);
@@ -197,7 +198,7 @@ namespace Fledermaus
 			Mirror m1 = new Mirror(new Vector2(0.0f, -0.25f), new Vector2(0.1f, 0.4f), 0.5f, 0.2f);
 			m1.SetRotationBounds(0.45f, 0.55f);
 			room.AddMirror(m1);
-			Mirror m2 = new Mirror(new Vector2(0.3f, 0.6f), new Vector2(0.55f, 0.25f));
+			Mirror m2 = new Mirror(new Vector2(0.3f, 0.6f), new Vector2(0.55f, 0.25f), 0.68f, 0.5f);
 			room.AddMirror(m2);
 
 			room.Exit = new RectangularGameObject(new Vector2(-1.03f, 0.9f), new Vector2(-0.97f, 0.65f));

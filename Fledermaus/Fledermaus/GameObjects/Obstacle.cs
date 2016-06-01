@@ -22,7 +22,7 @@ namespace Fledermaus.GameObjects
 			for (int i = 0; i < vertices.Count; i++)
 			{
 				if (i == 0) AddFirstPoint(vertices[i]);
-				if (i + 1 == vertices.Count) AddLastPoint(vertices[i]);
+				else if (i + 1 == vertices.Count) AddLastPoint(vertices[i]);
 				else AddFollowingPoint(vertices[i]);
 			}
 		}

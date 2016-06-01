@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,21 +10,16 @@ namespace Fledermaus.GameObjects
 	class Level : ILogicalLevel
 	{
 
-		class RoomTransition
-		{
-			Room destiny;
-			IBounded trigger;
-		}
-
-
+		public List<Room> Rooms { get; set; }
 		public Room CurrentRoom;
 
-		public List<Room> Rooms { get; set; }	
-
+		private Stopwatch _stopwatch = new Stopwatch();
+		public List<float> Times = new List<float>();
 
 		public Level()
 		{
 			Rooms = new List<Room>();
+			_stopwatch.Start();
 		}
 
 		private Room GetRoom(int index)
@@ -45,6 +41,16 @@ namespace Fledermaus.GameObjects
 				CurrentRoom = newCurrentRoom;
 				CurrentRoom.Player.Reset();
 			}
+
+			AddNewRoomTime();
+			_stopwatch.Start();
+		}
+
+		private void AddNewRoomTime()
+		{
+			_stopwatch.Stop();
+			Times.Add((float)_stopwatch.Elapsed.TotalSeconds);
+			_stopwatch.Reset();
 		}
 
 		public void AddRoom(Room room)
@@ -64,6 +70,40 @@ namespace Fledermaus.GameObjects
 		public ILogicalRoom GetCurrentRoom()
 		{
 			return CurrentRoom;
+		}
+
+		public void StartTimer()
+		{
+			_stopwatch.Start();
+		}
+
+		public void PauseTimer()
+		{
+			_stopwatch.Stop();
+		}
+
+		public void UnpauseTimer()
+		{
+			_stopwatch.Start();
+		}
+
+		public void StopTimer()
+		{
+			_stopwatch.Stop();
+		}
+
+		public void FinishLevel()
+		{
+			AddNewRoomTime();
+		}
+
+		public float GetTotalTime()
+		{
+			float totalTime = 0.0f;
+
+			foreach (float time in Times) totalTime += time;
+
+			return totalTime;
 		}
 	}
 }
