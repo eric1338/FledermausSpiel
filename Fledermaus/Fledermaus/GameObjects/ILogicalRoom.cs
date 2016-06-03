@@ -18,13 +18,13 @@ namespace Fledermaus
 
 		IEnumerable<Tuple<IBounded, int>> GetRoomTransitionTriggers();
 
-		IBounded GetReflectingLines();
-		IBounded GetNonReflectingLines();
+		IBounded GetReflectingBounds();
+		IBounded GetNonReflectingBounds();
 
-		IBounded GetLightLines();
+		IBounded GetLightBounds();
 
-		IBounded GetSolarPanelLines();
-		IBounded GetExitLines();
+		IBounded GetSolarPanelBounds();
+		IBounded GetExitBounds();
 
 		bool IsExitOpen { get; set; }
 

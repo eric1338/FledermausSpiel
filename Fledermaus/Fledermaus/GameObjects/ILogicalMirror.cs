@@ -10,6 +10,10 @@ namespace Fledermaus.GameObjects
     public interface ILogicalMirror : IBounded
 	{
 
+		Vector2 RailPosition1 { get; set; }
+		Vector2 RailPosition2 { get; set; }
+
+		float Rotation { get; set; }
 		bool IsAccessible { get; set; }
 
 		void MoveMirrorUp(float deltaDistance);

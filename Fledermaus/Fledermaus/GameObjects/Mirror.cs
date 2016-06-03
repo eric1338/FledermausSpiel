@@ -11,6 +11,9 @@ namespace Fledermaus.GameObjects
 	public class Mirror : ILogicalMirror
 	{
 
+		public Vector2 RailPosition1 { get; set; }
+		public Vector2 RailPosition2 { get; set; }
+
 		public float StartingAngle;
 		public float StartingRelativePosition;
 
@@ -21,9 +24,6 @@ namespace Fledermaus.GameObjects
 
 		public float MaximumRotation { get; set; }
 		public float MinimumRotation { get; set; }
-
-		public Vector2 RailPosition1 { get; set; }
-		public Vector2 RailPosition2 { get; set; }
 
 		public bool IsAccessible { get; set; }
 

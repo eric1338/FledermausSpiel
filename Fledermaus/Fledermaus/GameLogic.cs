@@ -40,14 +40,43 @@ namespace Fledermaus
 			get { return CurrentRoom.GetLogicalMirrors(); }
 		}
 
-		private const float InitialPlayerMovementSpeed = 0.004f;
-		private const float MaximumPlayerMovementSpeed = 0.01f;
-		private const float PlayerMovementSpeedIncrease = 0.0004f;
-		private float _playerMovementSpeed = InitialPlayerMovementSpeed;
 
-		private const float _mirrorMovementSpeed = 0.01f;
-		private const float _rotationSpeed = 0.004f;
-		private const float _minMirrorAccessibilityDistance = 0.14f;
+		private class SmoothSpeedValue
+		{
+
+			private float _initialSpeed;
+			private float _maximumSpeed;
+			private float _speedIncrease;
+
+			private float _speed;
+
+			public SmoothSpeedValue(float initialSpeed, float maximumSpeed)
+			{
+				_initialSpeed = initialSpeed;
+				_maximumSpeed = maximumSpeed;
+
+				_speedIncrease = (_maximumSpeed - _initialSpeed) / 25.0f;
+			}
+
+			public float GetSpeed()
+			{
+				_speed = Math.Min(_speed + _speedIncrease, _maximumSpeed);
+
+				return _speed;
+			}
+
+			public void ResetSpeed()
+			{
+				_speed = _initialSpeed;
+			}
+
+		}
+
+		private SmoothSpeedValue _playerMovement = new SmoothSpeedValue(0.004f, 0.01f);
+		private SmoothSpeedValue _mirrorMovement = new SmoothSpeedValue(0.004f, 0.01f);
+		private SmoothSpeedValue _mirrorRotation = new SmoothSpeedValue(0.004f, 0.008f);
+
+		private const float _minMirrorAccessibilityDistance = 0.15f;
 
 		public InputManager InputManager { get; set; }
 
@@ -65,38 +94,81 @@ namespace Fledermaus
 
 			if (Player.IsFocusedToMirror())
 			{
+				_playerMovement.ResetSpeed();
+
 				ILogicalMirror currentMirror = Player.CurrentMirror;
+
+				// Movement
+
+				float mirrorMovementSpeed = _mirrorMovement.GetSpeed();
 
 				bool moveLeft = InputManager.IsUserActionActive(UserAction.MoveLeft);
 				bool moveRight = InputManager.IsUserActionActive(UserAction.MoveRight);
 
-				if (moveLeft) currentMirror.MoveMirrorUp(_mirrorMovementSpeed);
-				if (moveRight) currentMirror.MoveMirrorDown(_mirrorMovementSpeed);
+				if (moveLeft) currentMirror.MoveMirrorUp(mirrorMovementSpeed);
+				if (moveRight) currentMirror.MoveMirrorDown(mirrorMovementSpeed);
 
-				if (moveLeft || moveRight)
-				{
-					Player.Position = currentMirror.GetMirrorPosition() + Player.VectorToMirror;
-				}
+				if (moveLeft || moveRight) Player.Position = currentMirror.GetMirrorPosition() + Player.VectorToMirror;
+				else _mirrorMovement.ResetSpeed();
 
-				if (InputManager.IsUserActionActive(UserAction.RotateMirrorCW)) currentMirror.RotateCW(_rotationSpeed);
-				if (InputManager.IsUserActionActive(UserAction.RotateMirrorCCW)) currentMirror.RotateCCW(_rotationSpeed);
+				// Rotation
+
+				float mirrorRotationSpeed = _mirrorRotation.GetSpeed();
+
+				bool rotateCW = InputManager.IsUserActionActive(UserAction.RotateMirrorCW);
+				bool rotateCCW = InputManager.IsUserActionActive(UserAction.RotateMirrorCCW);
+
+				if (rotateCW) currentMirror.RotateCW(mirrorRotationSpeed);
+				if (rotateCCW) currentMirror.RotateCCW(mirrorRotationSpeed);
+
+				//Player.Rotation = currentMirror.Rotation;
+				SetPlayerRotation(currentMirror);
+
+				if (!rotateCW && !rotateCCW) _mirrorRotation.ResetSpeed();
 			}
 			else
 			{
+				_mirrorMovement.ResetSpeed();
+				_mirrorRotation.ResetSpeed();
+
 				float dx = 0.0f;
 				float dy = 0.0f;
 
-				if (InputManager.IsUserActionActive(UserAction.MoveUp)) dy = _playerMovementSpeed;
-				if (InputManager.IsUserActionActive(UserAction.MoveDown)) dy = -_playerMovementSpeed;
-				if (InputManager.IsUserActionActive(UserAction.MoveLeft)) dx = -_playerMovementSpeed;
-				if (InputManager.IsUserActionActive(UserAction.MoveRight)) dx = _playerMovementSpeed;
+				float playerMovementSpeed = _playerMovement.GetSpeed();
 
-				if (dx == 0.0f && dy == 0.0f) _playerMovementSpeed = InitialPlayerMovementSpeed;
-				else if (_playerMovementSpeed < MaximumPlayerMovementSpeed) _playerMovementSpeed += PlayerMovementSpeedIncrease;
+				if (InputManager.IsUserActionActive(UserAction.MoveUp)) dy = playerMovementSpeed;
+				if (InputManager.IsUserActionActive(UserAction.MoveDown)) dy = -playerMovementSpeed;
+				if (InputManager.IsUserActionActive(UserAction.MoveLeft)) dx = -playerMovementSpeed;
+				if (InputManager.IsUserActionActive(UserAction.MoveRight)) dx = playerMovementSpeed;
+
+				if (dx == 0.0f && dy == 0.0f) _playerMovement.ResetSpeed();
 
 				TryToMovePlayer(dx, 0.0f);
 				TryToMovePlayer(0.0f, dy);
 			}
+		}
+
+		// WIP
+		private void SetPlayerRotation(ILogicalMirror mirror)
+		{
+			//Console.WriteLine("RP: " + Util.CalculateAngle(mirror.RailPosition1, mirror.RailPosition2) * 57.1f);
+			//Console.WriteLine("An: " + mirror.Rotation * 57.1f);
+
+			//float railAngle = Util.CalculateAngle(mirror.RailPosition1, mirror.RailPosition2);
+
+			Vector2 pp = new Vector2(mirror.RailPosition1.X + 1f, mirror.RailPosition1.Y) - mirror.RailPosition1;
+			float railAngle = Util.CalculateAngle(mirror.RailPosition2 - mirror.RailPosition1, pp);
+
+			//Console.WriteLine("RA: " + railAngle * 57.1f);
+
+			float rotation = railAngle + mirror.Rotation;
+
+			if (Player.Position.Y > mirror.GetMirrorPosition().Y) rotation += 3.14f;
+
+			//Console.WriteLine("To: " + rotation * 57.1f);
+			//Console.WriteLine(" ");
+
+			Player.Rotation = 0.0f;
 		}
 
 		private void TryToMovePlayer(float dx, float dy)
@@ -107,7 +179,9 @@ namespace Fledermaus
 
 			tempPlayer.Position += deltaVector;
 
-			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetNonReflectingLines())) movePlayer = false;
+			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetNonReflectingBounds())) movePlayer = false;
+			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetReflectingBounds())) movePlayer = false;
+			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetLightBounds())) movePlayer = false;
 
 			if (movePlayer) Player.Position += deltaVector;
 		}
@@ -153,7 +227,8 @@ namespace Fledermaus
 				{
 					if (mirror.IsAccessible)
 					{
-						Player.CurrentMirror = mirror;
+						Player.FocusMirror(mirror);
+						SetPlayerRotation(mirror);
 						Player.VectorToMirror = Player.Position - mirror.GetMirrorPosition();
 					}
 				}
@@ -214,7 +289,7 @@ namespace Fledermaus
 		{
 			Line currentRay = lightRay.GetLastRay();
 
-			Intersection closestNonReflectingIntersection = Util.GetClosestIntersection(currentRay, CurrentRoom.GetNonReflectingLines());
+			Intersection closestNonReflectingIntersection = Util.GetClosestIntersection(currentRay, CurrentRoom.GetNonReflectingBounds());
 
 			var mirrorIntersections = new List<Tuple<Intersection, ILogicalMirror>>();
 
@@ -258,11 +333,6 @@ namespace Fledermaus
 				lightDirection.Normalize();
 
 				Vector2 normal = mirror.GetMirrorNormal1();
-
-				//Vector2 normal2 = mirror.GetMirrorNormal2();
-				//float angle1 = Util.CalculateAngle(normal1, lightDirection);
-				//float angle2 = Util.CalculateAngle(normal2, lightDirection);
-				//Vector2 normal = angle1 < angle2 ? normal1 : normal2;
 
 				Vector2 newDirection = lightDirection - 2 * (Vector2.Dot(normal, lightDirection)) * normal;
 				Vector2 point = new Vector2(intersectionPoint.X, intersectionPoint.Y) + newDirection * 0.0001f;
@@ -310,7 +380,7 @@ namespace Fledermaus
 		{
 			if (_godMode) return;
 
-			if (Util.HasIntersection(Player, CurrentRoom.GetLightLines()))
+			if (Util.HasIntersection(Player, CurrentRoom.GetLightBounds()))
 			{
 				Console.WriteLine("verloren :(");
 				CurrentRoom.Reset();
@@ -325,12 +395,12 @@ namespace Fledermaus
 
 			IBounded bounds = Util.CreateBoundsFromList(lightRayLines);
 
-			CurrentRoom.IsExitOpen = Util.HasIntersection(CurrentRoom.GetSolarPanelLines(), bounds);
+			CurrentRoom.IsExitOpen = Util.HasIntersection(CurrentRoom.GetSolarPanelBounds(), bounds);
         }
 
         private void CheckExit()
         {
-			if (CurrentRoom.IsExitOpen && Util.HasIntersection(Player, CurrentRoom.GetExitLines()))
+			if (CurrentRoom.IsExitOpen && Util.HasIntersection(Player, CurrentRoom.GetExitBounds()))
 			{
 				Console.WriteLine("gewonnen :)");
 				CurrentRoom.Reset();
