@@ -104,11 +104,15 @@ namespace Fledermaus
 
 				bool moveLeft = InputManager.IsUserActionActive(UserAction.MoveLeft);
 				bool moveRight = InputManager.IsUserActionActive(UserAction.MoveRight);
+				bool moveUp = InputManager.IsUserActionActive(UserAction.MoveUp);
+				bool moveDown = InputManager.IsUserActionActive(UserAction.MoveDown);
 
-				if (moveLeft) currentMirror.MoveMirrorUp(mirrorMovementSpeed);
-				if (moveRight) currentMirror.MoveMirrorDown(mirrorMovementSpeed);
+				if (moveLeft) currentMirror.MoveMirrorLeft(mirrorMovementSpeed);
+				if (moveRight) currentMirror.MoveMirrorRight(mirrorMovementSpeed);
+				if (moveUp) currentMirror.MoveMirrorUp(mirrorMovementSpeed);
+				if (moveDown) currentMirror.MoveMirrorDown(mirrorMovementSpeed);
 
-				if (moveLeft || moveRight) Player.Position = currentMirror.GetMirrorPosition() + Player.VectorToMirror;
+				if (moveLeft || moveRight || moveUp || moveDown) Player.Position = currentMirror.GetMirrorPosition() + Player.VectorToMirror;
 				else _mirrorMovement.ResetSpeed();
 
 				// Rotation
@@ -181,7 +185,7 @@ namespace Fledermaus
 
 			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetNonReflectingBounds())) movePlayer = false;
 			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetReflectingBounds())) movePlayer = false;
-			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetLightBounds())) movePlayer = false;
+			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetLightBounds()) && !_godMode) movePlayer = false;
 
 			if (movePlayer) Player.Position += deltaVector;
 		}
@@ -368,6 +372,7 @@ namespace Fledermaus
 						Level.FinishLevel();
 						GameScreen.FinishLevel();
 						PauseGame();
+
 						return;
 					}
 

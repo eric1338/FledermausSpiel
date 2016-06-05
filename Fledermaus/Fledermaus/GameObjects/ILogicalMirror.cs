@@ -16,6 +16,8 @@ namespace Fledermaus.GameObjects
 		float Rotation { get; set; }
 		bool IsAccessible { get; set; }
 
+		void MoveMirrorRight(float deltaDistance);
+		void MoveMirrorLeft(float deltaDistance);
 		void MoveMirrorUp(float deltaDistance);
 		void MoveMirrorDown(float deltaDistance);
 

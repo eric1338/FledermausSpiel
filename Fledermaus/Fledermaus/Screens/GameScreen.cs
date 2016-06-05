@@ -29,6 +29,12 @@ namespace Fledermaus.Screens
 			_inputManager.AddProlongedUserActionMapping(Key.A, UserAction.MoveLeft);
 			_inputManager.AddProlongedUserActionMapping(Key.S, UserAction.MoveDown);
 			_inputManager.AddProlongedUserActionMapping(Key.D, UserAction.MoveRight);
+
+			_inputManager.AddProlongedUserActionMapping(Key.Up, UserAction.MoveUp);
+			_inputManager.AddProlongedUserActionMapping(Key.Left, UserAction.MoveLeft);
+			_inputManager.AddProlongedUserActionMapping(Key.Down, UserAction.MoveDown);
+			_inputManager.AddProlongedUserActionMapping(Key.Right, UserAction.MoveRight);
+
 			_inputManager.AddProlongedUserActionMapping(Key.E, UserAction.RotateMirrorCW);
 			_inputManager.AddProlongedUserActionMapping(Key.Q, UserAction.RotateMirrorCCW);
 
