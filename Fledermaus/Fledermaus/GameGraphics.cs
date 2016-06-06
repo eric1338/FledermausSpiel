@@ -149,7 +149,7 @@ namespace Fledermaus
 					float y = room.Row == 1 ? 0.25f : -0.25f;
 
 					RoomDrawSettings roomDrawSettings = rd.Value;
-					roomDrawSettings.SmoothMovement = new SmoothMovement(roomDrawSettings.Position, new Vector2(x, y), roomDrawSettings.Alpha, 1.0f,
+					roomDrawSettings.SmoothMovement = new SmoothMovement(roomDrawSettings.Position, new Vector2(x, y), roomDrawSettings.Alpha, 0.0f,
 						roomDrawSettings.Scale, scale);
 				}
 
@@ -171,23 +171,22 @@ namespace Fledermaus
 			foreach (Room room in Level.Rooms)
 			{
 				SetDrawSettings(room);
-				DrawRoom(room);
+				DrawRoom(room, room == Level.CurrentRoom);
 			}
 
 			_lastCurrentRoom = Level.CurrentRoom;
 		}
 
-		public void DrawRoom(Room room)
+		public void DrawRoom(Room room, bool drawPlayer)
 		{
 			DrawRoomBounds(room.RoomBounds);
-			DrawPlayer(room.Player);
-			DrawNPCs(room.NPCs);
-
-			DrawLightRays(room.LightRays);
 			DrawMirrors(room.Mirrors);
-			DrawObstacles(room.Obstacles);
-			DrawSolarPanel(room.SolarPanel);
+
+			if (drawPlayer) DrawPlayer(room.Player);
+
 			DrawExit(room.Exit, room.IsExitOpen);
+			DrawLightRays(room.LightRays);
+			DrawObstacles(room.Obstacles);
 		}
 
 		private Vector3 GetColor(Colors color)
@@ -195,7 +194,6 @@ namespace Fledermaus
 			switch (color)
 			{
 				case Colors.Player: return new Vector3(1.0f, 0.8f, 0.6f);
-				case Colors.NPC: return new Vector3(1.0f, 0.4f, 0.0f);
 				case Colors.LightRay: return new Vector3(1.0f, 0.6f, 0.0f);
 				case Colors.RoomGround: return new Vector3(0.16f, 0.16f, 0.16f);
 				case Colors.Obstacle: return new Vector3(1.0f, 0.2f, 0.2f);
@@ -203,7 +201,6 @@ namespace Fledermaus
 				case Colors.MirrorInactive: return new Vector3(0.4f, 0.45f, 0.5f);
 				case Colors.MirrorRailActive: return new Vector3(0.6f, 0.6f, 0.6f);
 				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
-				case Colors.SolarPanel: return new Vector3(0.3f, 0.3f, 1.0f);
 				case Colors.ExitOpen: return new Vector3(0.4f, 1.0f, 0.3f);
 				case Colors.ExitClosed: return new Vector3(1.0f, 0.4f, 0.6f);
 			}
@@ -263,17 +260,6 @@ namespace Fledermaus
 			DrawBounds(player, 0.002f);
 		}
 
-		private void DrawNPCs(List<NPC> npcs)
-		{
-			foreach (NPC npc in npcs) DrawNPC(npc);
-		}
-
-		private void DrawNPC(NPC npc)
-		{
-			SetColor(Colors.NPC);
-			DrawBounds(npc, 0.002f);
-		}
-
 		private void DrawMirrors(List<Mirror> mirrors)
 		{
 			foreach (Mirror m in mirrors) DrawMirror(m);
@@ -297,12 +283,6 @@ namespace Fledermaus
 		{
 			SetColor(Colors.Obstacle);
 			DrawBounds(obstacle, 0.003f);
-		}
-
-		private void DrawSolarPanel(RectangularGameObject solarPanel)
-		{
-			SetColor(Colors.SolarPanel);
-			DrawRectangularGameObject(solarPanel);
 		}
 
 		private void DrawExit(RectangularGameObject exit, bool isExitOpen)

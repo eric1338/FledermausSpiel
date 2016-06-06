@@ -22,7 +22,6 @@ namespace Fledermaus
 		{
 			Room room = new Room();
 			room.RoomBounds = new RectangularGameObject(new Vector2(-1f, 1f), new Vector2(1f, -1f));
-			room.SolarPanel = new RectangularGameObject(new Vector2(101f, 101f), new Vector2(100f, 100f));
 
 			return room;
 		}
@@ -30,7 +29,6 @@ namespace Fledermaus
 		private static void SetStdValues(Room room)
 		{
 			room.RoomBounds = new RectangularGameObject(new Vector2(-1f, 1f), new Vector2(1f, -1f));
-			room.SolarPanel = new RectangularGameObject(new Vector2(101f, 101f), new Vector2(100f, 100f));
 		}
 
 		public static Level CreateLevel1()
