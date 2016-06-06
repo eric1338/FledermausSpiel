@@ -9,6 +9,10 @@
     <Import_RootNamespace>Model</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\LevelVisual.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\PlayerVisual.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\RoomVisual.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\GameObjectVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObject\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObject\EnemyNPC.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObject\Exit.cs" />

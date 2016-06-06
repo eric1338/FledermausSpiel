@@ -49,7 +49,7 @@ namespace Fledermaus.Screens
 
         public Button(DoAction doAction, bool selected = false)
         {
-            MyApplication.GameWindow.MouseMove += Mouse_Move;
+           
 
             this.doAction = doAction;
             isSelected = selected;
@@ -57,27 +57,9 @@ namespace Fledermaus.Screens
         }
         ~Button()
         {
-            MyApplication.GameWindow.MouseMove -= Mouse_Move;
+           // MyApplication.GameWindow.MouseMove -= Mouse_Move;
         }
 
-        private void Mouse_Move(object sender, MouseMoveEventArgs e)
-        {
-
-            Vector2 relPos = new Vector2((e.Mouse.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
-                                          ((e.Mouse.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f)) * -1;
-
-            //      System.Diagnostics.Debug.WriteLine("Mouse X: " + e.Mouse.X + "\t" + relPos.X);
-            //      System.Diagnostics.Debug.WriteLine("Mouse Y: " + e.Mouse.Y + "\t" + relPos.Y);
-            /*
-                        if (relPos.X > this.center.X - contenWidth / 2 && relPos.X < this.center.X + contenWidth / 2)
-                        {
-                            System.Diagnostics.Debug.WriteLine("Inside Menu X");
-                            if (relPos.Y > this.center.Y - contentHeight / 2 && relPos.X < this.center.X + contenWidth / 2)
-                            {
-                            }
-
-                        }*/
-        }
 
 
 

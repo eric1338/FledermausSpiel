@@ -50,14 +50,36 @@ namespace Fledermaus
 
             _center = origin ?? new Vector2(.0f, .0f);
             _scale = scale;
-            if (level != null) { 
-                if (level.Player != null) DrawPlayer(level.Player);
-                //DrawRoom(GameLogic.Level.TestRoom);
+            if (level != null) {
+                foreach (var room in level.Rooms)
+                    DrawRoom(room);
+
+
             }
 		}
 
+        private static void DrawRoom(Model.GameObject.Room room)
+        {
+            _scale = 0.2f;
+            var scPosition = room.Position * _scale;
+            var scBounds = scaleBounds(room.RelativeBounds);
 
-		private static Vector3 GetColor(Colors color)
+            //DrawSquare(scPosition, scBounds);
+
+            if (room.Player != null)
+            {
+                SetColor(Colors.RoomGround);
+                DrawSquare(scPosition, scBounds);
+
+                DrawPlayer(room.Player);
+            }
+            else {
+                SetColor(Colors.SolarPanel);
+                DrawSquare(scPosition, scBounds);
+            }
+        }
+
+        private static Vector3 GetColor(Colors color)
 		{
 			switch (color)
 			{
@@ -90,15 +112,20 @@ namespace Fledermaus
 		private static void DrawPlayer(Player player)
 		{
 			SetColor(Colors.Player);
-			DrawBounds(player.RelativeBounds, 0.002f);
+            DrawSquare(_scale * player.InitialPosition, scaleBounds(player.RelativeBounds));
+
+            //DrawBounds(_scale*player.InitialPosition, scaleBounds( player.RelativeBounds), 0.002f);
 		}
 
-		private static void DrawBounds(List<Vector2> bounds, float thickness= 0.002f)
+		private static void DrawBounds(Vector2 position,List<Vector2> bounds, float thickness= 0.002f)
 		{
-            for (int i = 0; i < bounds.Count - 1; i++)
-                DrawLine( bounds[i], bounds[i+1], thickness);
-            DrawLine( bounds.Last(), bounds.First(), thickness);
-
+            
+            List<Vector2> absbounds = new List<Vector2>();
+            foreach (var bound in bounds)
+                absbounds.Add(position + bound);
+            for (int i = 0; i < absbounds.Count - 1; i++)
+                DrawLine(absbounds[i], absbounds[i+1], thickness);
+            DrawLine(absbounds.Last(), absbounds.First(), thickness);
         }
 
 /*		private static void DrawLine(Line line, float thickness)
@@ -138,13 +165,26 @@ namespace Fledermaus
 			GL.Vertex2( p22 );
 			GL.End();
 		}
+        private static List<Vector2> scaleBounds(List<Vector2> bounds ) {
+            var scBounds = new List<Vector2>();
+            foreach (var bound in bounds)
+                scBounds.Add(_scale * bound);
 
-		private static Vector2 GetTransformedVector(Vector2 vector)
+            return scBounds;
+
+        }
+        private static Vector2 GetTransformedVector(Vector2 vector)
 		{
 			return new Vector2(vector.X * _scale + _center.X, vector.Y * _scale + _center.Y);
 		}
-
-		private static void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
+        private static void DrawSquare(Vector2 position, List<Vector2> bounds)
+        {
+            GL.Begin(PrimitiveType.Quads);
+            foreach (var bound in bounds)
+                GL.Vertex2(position.X + bound.X, position.Y + bound.Y);
+            GL.End();
+        }
+        private static void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
 		{
 			GL.Begin(PrimitiveType.Quads);
 			GL.Vertex2(topLeft.X, topLeft.Y);

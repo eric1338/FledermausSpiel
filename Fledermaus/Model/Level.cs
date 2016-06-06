@@ -6,107 +6,41 @@ namespace Model
 {
     public class Level
     {
-        private Player player;
-        private LightRay lightRay;
-        private SolarPanel solarPanel;
-        private Exit exit;
+        private string name;
+        private List<Room> rooms;
 
 
-        private List<Mirror> mirrors;
-        private List<Enemy> enemies;
-        private List<Obstacle> obstacles;
 
-        public Level() {
-        }
-
-        public Player Player
+        public string Name
         {
             get
             {
-                return player;
+                return name;
             }
 
             set
             {
-                player = value;
+                name = value;
             }
         }
 
-        public LightRay LightRay
+        public List<Room> Rooms
         {
             get
             {
-                return lightRay;
+                return rooms;
             }
 
             set
             {
-                lightRay = value;
+                rooms = value;
             }
         }
 
-        public SolarPanel SolarPanel
+
+        public Level()
         {
-            get
-            {
-                return solarPanel;
-            }
-
-            set
-            {
-                solarPanel = value;
-            }
-        }
-
-        public Exit Exit
-        {
-            get
-            {
-                return exit;
-            }
-
-            set
-            {
-                exit = value;
-            }
-        }
-
-        public List<Mirror> Mirrors
-        {
-            get
-            {
-                return mirrors;
-            }
-
-            set
-            {
-                mirrors = value;
-            }
-        }
-        public List<Enemy> Enemies
-        {
-            get
-            {
-                return enemies;
-            }
-
-            set
-            {
-                enemies = value;
-            }
-        }
-
-        public List<Obstacle> Obstacles
-        {
-            get
-            {
-                return obstacles;
-            }
-
-            set
-            {
-                obstacles = value;
-            }
+            rooms = new List<Room>();
         }
     }
 }

@@ -11,15 +11,23 @@ using System.Windows;
 
 namespace Fledermaus.Screens
 {
-	abstract class Screen
+	public abstract class Screen
 	{
 		protected InputManager _inputManager = new InputManager();
 
+        private float height;
+        private float width;
+        private Vector2 position;
+        protected bool showBorder;
+
+
+
         protected Vector2 center;
         private float scale;
+
         protected float marging;
         protected float padding;
-        protected bool showBorder;
+       // protected bool showBorder;
         protected float borderWidth;
         protected HorizontalAlignment horizontalAlignment;// = HorizontalAlignment.Center;
         protected float contenWidth;
@@ -39,6 +47,11 @@ namespace Fledermaus.Screens
 
             }
             get { return horizontalAlignment; }
+        }
+
+        internal void ProcessMouseWheel(MouseWheelEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         public virtual float ContentWidth
@@ -175,17 +188,82 @@ namespace Fledermaus.Screens
             }
         }
 
+        protected float Height
+        {
+            get
+            {
+                return height;
+            }
+
+            set
+            {
+                height = value;
+            }
+        }
+
+        protected float Width
+        {
+            get
+            {
+                return width;
+            }
+
+            set
+            {
+                width = value;
+            }
+        }
+
+        protected Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
+
+            set
+            {
+                position = value;
+            }
+        }
+
         public Screen()
         {
-
-            horizontalAlignment = HorizontalAlignment.Center;
+            Width = .2f;
+            height = .2f;
+            Position = new Vector2(.0f, .0f);
+            //horizontalAlignment = HorizontalAlignment.Center;
             Center = new Vector2(.0f, .0f);
             Scale = 1.0f;
             Padding = .03f;
-            BorderWidth = 0.01f;
-            /*          Padding = .1f;
-                      Marging = .1f;
-                      BorderWidth = .01f;*/
+        }
+        public Screen(float width, float height, Vector2 position)
+        {
+            Width = width;
+            Height = height;
+            Position = position;
+        }
+
+        public virtual bool isPointInScreen(System.Drawing.Point point)
+        {
+            var ret = false;
+
+            Vector2 relPos = new Vector2((point.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
+                  ((point.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
+            var left = Scale*( Position.X - Width / 2.0f);
+            var right = Scale*(Position.X + Width / 2.0f);
+            var top = Scale*(Position.Y + Height / 2);
+            var bottm = Scale * (Position.Y - Height / 2);
+            if (relPos.X > left && relPos.X < right)
+            {
+
+                if (relPos.Y < top && relPos.Y > bottm)
+                {
+                    ret = true;
+                }
+            }
+
+            return ret;
         }
 
         public abstract void DoLogic();
@@ -207,22 +285,23 @@ namespace Fledermaus.Screens
 
             GL.Begin(PrimitiveType.Quads);
 
-            GL.Vertex2(Center.X - MaxWidth / 2, (Center.Y + MaxHeight / 2));
-            GL.Vertex2(Center.X - MaxWidth / 2, (Center.Y - MaxHeight / 2));
-            GL.Vertex2(Center.X + MaxWidth / 2, (Center.Y - MaxHeight / 2));
-            GL.Vertex2(Center.X + MaxWidth / 2, (Center.Y + MaxHeight / 2));
+            GL.Vertex2( (Center.X - MaxWidth / 2) , (Center.Y + MaxHeight / 2));
+            GL.Vertex2( (Center.X - MaxWidth / 2) , (Center.Y - MaxHeight / 2));
+            GL.Vertex2( (Center.X + MaxWidth / 2), (Center.Y - MaxHeight / 2));
+            GL.Vertex2( (Center.X + MaxWidth / 2), (Center.Y + MaxHeight / 2));
 
             GL.End();
             GL.Color3(Color.Black);
             GL.Begin(PrimitiveType.Quads);
 
-            GL.Vertex2((Center.X - MaxWidth / 2 + borderWidth), (Center.Y + MaxHeight / 2 - borderWidth));
-            GL.Vertex2((Center.X - MaxWidth / 2 + borderWidth), (Center.Y - MaxHeight / 2 + borderWidth));
-            GL.Vertex2((Center.X + MaxWidth / 2 - borderWidth), (Center.Y - MaxHeight / 2 + borderWidth));
-            GL.Vertex2((Center.X + MaxWidth / 2 - borderWidth), (Center.Y + MaxHeight / 2 - borderWidth));
+            GL.Vertex2( (Center.X - MaxWidth / 2 + borderWidth),  (Center.Y + MaxHeight / 2 - borderWidth));
+            GL.Vertex2( (Center.X - MaxWidth / 2 + borderWidth),  (Center.Y - MaxHeight / 2 + borderWidth));
+            GL.Vertex2( (Center.X + MaxWidth / 2 - borderWidth), (Center.Y - MaxHeight / 2 + borderWidth));
+            GL.Vertex2( (Center.X + MaxWidth / 2 - borderWidth),  (Center.Y + MaxHeight / 2 - borderWidth));
 
             GL.End();
         }
+
 
         public void ProcessKeyUp(Key key)
         {
@@ -232,6 +311,16 @@ namespace Fledermaus.Screens
         public void ProcessKeyDown(Key key)
         {
             _inputManager.ProcessKeyDown(key);
+        }
+        public virtual void ProcessMouseMove(MouseMoveEventArgs e)
+        {
+
+            //_inputManager.ProcessKeyDown(button);
+        }
+        public virtual void ProcessMouseButtonDown(MouseButtonEventArgs e)
+        {
+
+            //_inputManager.ProcessKeyDown(button);
         }
 
 

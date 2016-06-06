@@ -33,7 +33,7 @@ namespace Fledermaus.Screens
         }
         private void addPlayer()
         {
-            owner.Level.Player = new Player()
+ /*           owner.Level.Player = new Player()
             {
                 RelativeBounds = new List<Vector2>(){
                             new Vector2(Konfiguration.Round(-0.0325f),Konfiguration.Round(-0.1f)),
@@ -41,7 +41,7 @@ namespace Fledermaus.Screens
                             new Vector2(Konfiguration.Round(0.0325f),Konfiguration.Round(0.1f)),
                             new Vector2(Konfiguration.Round(-0.0325f),Konfiguration.Round(0.1f)),
                         },
-            };
+            };*/
         }
     }
 }

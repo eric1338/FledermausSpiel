@@ -25,13 +25,13 @@ namespace Fledermaus
         public static void Main()
         {
             windowState = WindowState.Normal;
+            
             //windowState = WindowState.Normal;
 
             if (windowState == WindowState.Fullscreen)
                 gameWindow = new MyGameWindow(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
             else
                 gameWindow = new MyGameWindow(800, 700);
-
 
             //win.CurrentScreen = new GameScreen(win);
             gameWindow.CurrentScreen = new MainMenuScreen();
@@ -45,11 +45,11 @@ namespace Fledermaus
 
         }
 
+ 
+
         public static void Exit()
         {
             gameWindow.Exit();
         }
-
-
 	}
 }

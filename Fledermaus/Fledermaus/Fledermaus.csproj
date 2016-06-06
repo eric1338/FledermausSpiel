@@ -70,6 +70,8 @@
     <Compile Include="GameObjects\Room.cs" />
     <Compile Include="GameObjects\StaticGameObject.cs" />
     <Compile Include="IBounded.cs" />
+    <Compile Include="Screens\ScreenArea.cs" />
+    <Compile Include="Utils\LevelParser.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -84,9 +86,7 @@
     <Compile Include="Screens\LevelEditorGameScreen.cs" />
     <Compile Include="Screens\LevelEditorScreen.cs" />
     <Compile Include="Screens\LevelEditorSideMenu.cs" />
-    <Compile Include="Screens\LoadMenuScreen.cs" />
     <Compile Include="Screens\ButtonText.cs" />
-    <Compile Include="Screens\StartMenuScreen.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="MyGameWindow.cs" />
     <Compile Include="Program.cs" />

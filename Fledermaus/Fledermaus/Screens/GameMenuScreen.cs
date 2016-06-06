@@ -21,7 +21,7 @@ namespace Fledermaus.Screens
 				true
 			));
 			menuButtons.Add(new ButtonText("Save Game", delegate () { }));
-			menuButtons.Add(new ButtonText("Load Game", delegate () { MyApplication.GameWindow.CurrentScreen = new LoadMenuScreen(); }));
+//			menuButtons.Add(new ButtonText("Load Game", delegate () { MyApplication.GameWindow.CurrentScreen = new LoadMenuScreen(); }));
 
 			menuButtons.Add(new ButtonText("Main Menu", delegate () { MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(); }));
 			menuButtons.Add(new ButtonText("Configuration", delegate () { }));

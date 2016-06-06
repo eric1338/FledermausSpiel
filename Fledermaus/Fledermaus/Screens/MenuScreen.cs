@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace Fledermaus.Screens
 {
-    abstract class MenuScreen : Screen
+    class MenuScreen : Screen
     {
 
 
@@ -23,8 +23,10 @@ namespace Fledermaus.Screens
 
         protected bool isActive = true;
 
+        private ContentAlignment contentAlignment;
 
-        protected ObservableCollection<Button> menuButtons = new ObservableCollection<Button>();
+
+        public ObservableCollection<Button> menuButtons = new ObservableCollection<Button>();
         public bool IsActive
         {
             set
@@ -84,10 +86,24 @@ namespace Fledermaus.Screens
             get { return horizontalAlignment; }
         }
 
+        public ContentAlignment ContentAlignment
+        {
+            get
+            {
+                return contentAlignment;
+            }
+
+            set
+            {
+                contentAlignment = value;
+            }
+        }
+
         public MenuScreen() : base()
         {
 
-
+        //    MyApplication.GameWindow.MouseMove += Mouse_Move;
+        //    MyApplication.GameWindow.MouseDown += GameWindow_MouseDown;
             //inputManager.Clear();
             _inputManager.AddSingleUserActionMapping(Key.Up, UserAction.MoveUp);
             _inputManager.AddSingleUserActionMapping(Key.Down, UserAction.MoveDown);
@@ -96,14 +112,42 @@ namespace Fledermaus.Screens
 
             menuButtons.CollectionChanged += MenuButtons_CollectionChanged;
         }
+        public MenuScreen(float width, float height, Vector2 position) : base(width, height, position) {
+
+            _inputManager.AddSingleUserActionMapping(Key.Up, UserAction.MoveUp);
+            _inputManager.AddSingleUserActionMapping(Key.Down, UserAction.MoveDown);
+            _inputManager.AddSingleUserActionMapping(Key.Enter, UserAction.Confirm);
+            _inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.OpenGameMenu);
+
+            menuButtons.CollectionChanged += MenuButtons_CollectionChanged;
+        }
+
+        private void GameWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            menuButtons[ActiveButton].doAction();
+        }
 
 
 
-        private void MenuButtons_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+ /*       private void Mouse_Move(object sender, MouseMoveEventArgs e)
+        {
+            Vector2 relPos = new Vector2((e.Mouse.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
+                                          ((e.Mouse.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f)) * -1;
+            if(relPos.X>Center.X-MaxWidth/2 && relPos.X < Center.X + MaxWidth / 2)
+            {
+                foreach (var button in menuButtons)
+                    if (relPos.Y < button.Position.Y + button.Height / 2 && relPos.Y > button.Position.Y - button.Height / 2) {
+                        ActiveButton = menuButtons.IndexOf(button);
+                        System.Diagnostics.Debug.WriteLine("MouseOver Button mit index: " + ActiveButton);
+                    }
+            }
+        }
+*/
+
+      private void MenuButtons_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             var list = sender as ObservableCollection<Button>;
             var count = list.Count;
-
 
 
             var widthTotal = .0f;
@@ -119,7 +163,8 @@ namespace Fledermaus.Screens
             contenWidth = widthTotal;
             contentHeight = heightTotal;
 
-            setInitPositionOfButtons();
+            if (menuButtons.Count > 0)
+                setInitPositionOfButtons();
 
         }
 
@@ -129,46 +174,21 @@ namespace Fledermaus.Screens
             var height = .0f;
             // set new Positions 
 
-
             for (int i = 0; i < count; i++)
             {
-                menuButtons[i].Position = new Vector2(Center.X, Center.Y - height + menuButtons[i].Height / 2);//getPositionofButton(i);
+                menuButtons[i].Position = new Vector2(Center.X, Center.Y - height + menuButtons[i].Height / 2);
                 height += menuButtons[i].Height;
             }
 
             var tmpTranslation = contentHeight / 2;
+            if (menuButtons.Count>0)
             while (menuButtons.First().Position.Y + menuButtons.First().Height / 2 + tmpTranslation > 1 - Padding)
                 tmpTranslation -= menuButtons.First().Height;
 
             foreach (var button in menuButtons)
                 button.Position += new Vector2(.0f, tmpTranslation);
         }
-        /// <summary>
-        /// Get the y Position of the Button by the index and count of Buttons in the List
-        /// </summary>
-        /// <param name="index">Index of the Button in the List</param>
-        /// <param name="count">Elements in the List</param>
-        /// <returns></returns>
-/*        private Vector2 getPositionofButton(int index) {
 
-            var heightTotal = .0f;
-            foreach (var button in menuButtons)
-                heightTotal += button.Height;
-
-            float firstPos = heightTotal/2;
-            for (int i=0; firstPos > (1.0f - BorderWidth-Padding);i++)
-            {
-                var tmp = firstPos - menuButtons[i].Height;
-                firstPos = (float)Math.Round(tmp, 5);
-            }
-            var yPos = firstPos;
-            for (int i = 0; i <= index; i++)
-                yPos -= menuButtons[i].Height;
-
-            return new Vector2(this.Center.X,Konfiguration.Round(yPos));
-
-        }
-        */
 
         public override void DoLogic()
         {
@@ -178,20 +198,10 @@ namespace Fledermaus.Screens
         public override void Draw()
         {
             base.Draw();
-            /*
-                        float menuCenter = .0f; 
-                        switch (horizontalAlignment)
-                        {
-                            case HorizontalAlignment.Left: menuCenter = (int)horizontalAlignment - 1 + BorderWidth+Padding + ContentWidth / 2 ; break;
-                            case HorizontalAlignment.Center: menuCenter = .0f; break;
-                            case HorizontalAlignment.Right: menuCenter = (int)horizontalAlignment - 1 - ContentWidth / 2; break;
-                            case HorizontalAlignment.Stretch:  break;
-                        }*/
+
             foreach (var mb in menuButtons)
                 mb.Draw();
-
         }
-
 
         protected virtual void ProcessSingleUserActions()
         {
@@ -201,12 +211,32 @@ namespace Fledermaus.Screens
                     ActiveButton--;
                 else if (userAction == UserAction.MoveDown)
                     ActiveButton++;
-                else if (userAction == UserAction.Confirm)
+                else if (userAction == UserAction.Confirm) {
+
                     menuButtons[ActiveButton].doAction();
+                }
                 else if (userAction == UserAction.OpenGameMenu)
                     MyApplication.GameWindow.CurrentScreen = new MainMenuScreen();
 
             }
         }
+        public override void ProcessMouseMove(MouseMoveEventArgs e)
+        {
+            Vector2 relPos = new Vector2((e.Mouse.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
+                              ((e.Mouse.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
+            if (relPos.X > Center.X - MaxWidth / 2 && relPos.X < Center.X + MaxWidth / 2)
+            {
+                foreach (var button in menuButtons)
+                    if (relPos.Y < button.Position.Y + button.Height / 2 && relPos.Y > button.Position.Y - button.Height / 2)
+                    {
+                        ActiveButton = menuButtons.IndexOf(button);
+                    }
+            }
+        }
+        public override void ProcessMouseButtonDown(MouseButtonEventArgs e)
+        {
+            menuButtons[ActiveButton].doAction();
+        }
+
     }
 }
