@@ -98,7 +98,7 @@ namespace Fledermaus
 			return RoomTransitionTriggers;
 		}
 
-		public IBounded GetReflectingLines()
+		public IBounded GetReflectingBounds()
 		{
 			List<Line> reflectingLines = new List<Line>();
 
@@ -110,7 +110,7 @@ namespace Fledermaus
 			return Util.CreateBoundsFromList(reflectingLines);
 		}
 
-		public IBounded GetNonReflectingLines()
+		public IBounded GetNonReflectingBounds()
 		{
 			List<Line> nonReflectingLines = new List<Line>();
 
@@ -121,7 +121,7 @@ namespace Fledermaus
 			return Util.CreateBoundsFromList(nonReflectingLines);
 		}
 
-		public IBounded GetLightLines()
+		public IBounded GetLightBounds()
 		{
 			List<Line> lightLines = new List<Line>();
 
@@ -132,12 +132,12 @@ namespace Fledermaus
 			return Util.CreateBoundsFromList(lightLines);
 		}
 
-		public IBounded GetSolarPanelLines()
+		public IBounded GetSolarPanelBounds()
 		{
 			return SolarPanel;
 		}
 
-		public IBounded GetExitLines()
+		public IBounded GetExitBounds()
 		{
 			return Exit;
 		}

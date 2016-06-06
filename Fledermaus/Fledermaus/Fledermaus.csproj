@@ -70,7 +70,6 @@
     <Compile Include="GameObjects\Room.cs" />
     <Compile Include="GameObjects\StaticGameObject.cs" />
     <Compile Include="IBounded.cs" />
-    <Compile Include="Screens\ScreenArea.cs" />
     <Compile Include="Utils\LevelParser.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

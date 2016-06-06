@@ -129,9 +129,32 @@ namespace Fledermaus
 			}
 		}
 
+		public static bool test = false;
+
 		public void DrawLevel()
 		{
 			Tick();
+
+			if (test)
+			{
+				foreach (var rd in RoomDrawSettingsList)
+				{
+					Room room = rd.Key;
+
+					float scale = 0.25f;
+
+					// nur LVL3
+					float x = (room.Column * scale * 2) - 1f;
+					//float y = (room.Row * scale * 2 + 0.25f) - 1f;
+					float y = room.Row == 1 ? 0.25f : -0.25f;
+
+					RoomDrawSettings roomDrawSettings = rd.Value;
+					roomDrawSettings.SmoothMovement = new SmoothMovement(roomDrawSettings.Position, new Vector2(x, y), roomDrawSettings.Alpha, 1.0f,
+						roomDrawSettings.Scale, scale);
+				}
+
+				test = false;
+			}
 
 			if (ShouldMove())
 			{
@@ -214,7 +237,24 @@ namespace Fledermaus
 		private void DrawLightRay(LightRay lightRay)
 		{
 			SetColor(Colors.LightRay);
-			DrawBounds(lightRay, 0.005f);
+			DrawBounds(lightRay, 0.004f);
+
+			if (lightRay.GetLines().ToList().Count < 1) return;
+
+			Line lastLine = lightRay.GetLines().ToList().Last();
+
+			Vector2 oppositeDirection = lastLine.GetDirectionVector() * -1;
+			oppositeDirection.Normalize();
+
+			Vector2 arrowVector1 = Util.GetRotatedVector(oppositeDirection, 0.9f);
+			Vector2 arrowVector2 = Util.GetRotatedVector(oppositeDirection, -0.9f);
+
+			Line arrowLine1 = Line.CreateParameterized(lastLine.Point2, arrowVector1, 0.05f);
+			Line arrowLine2 = Line.CreateParameterized(lastLine.Point2, arrowVector2, 0.05f);
+
+			IBounded arrowLines = Util.CreateBoundsFromList(new List<Line>() { arrowLine1, arrowLine2 });
+
+			DrawBounds(arrowLines, 0.004f);
 		}
 
 		private void DrawPlayer(Player player)
@@ -288,7 +328,7 @@ namespace Fledermaus
 
 		private void DrawLine(Line line, float thickness)
 		{
-			DrawLine(GetTransformedVector(line.Point1), GetTransformedVector(line.Point2), thickness);
+			DrawLine(GetTransformedVector(line.Point1), GetTransformedVector(line.Point2), thickness * _scale);
 		}
 
 		private void DrawLine(Vector2 p1, Vector2 p2, float thickness)

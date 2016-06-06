@@ -14,8 +14,12 @@ namespace Fledermaus.Screens
 		private GameLogic _gameLogic = new GameLogic();
 		private GameGraphics _gameGraphics = new GameGraphics();
 
+		private Level _level;
+
 		public GameScreen(Level level) : base()
 		{
+			_level = level;
+
 			_gameLogic.Level = level;
 			_gameGraphics.Level = level;
 
@@ -25,11 +29,18 @@ namespace Fledermaus.Screens
 			_inputManager.AddProlongedUserActionMapping(Key.A, UserAction.MoveLeft);
 			_inputManager.AddProlongedUserActionMapping(Key.S, UserAction.MoveDown);
 			_inputManager.AddProlongedUserActionMapping(Key.D, UserAction.MoveRight);
+
+			_inputManager.AddProlongedUserActionMapping(Key.Up, UserAction.MoveUp);
+			_inputManager.AddProlongedUserActionMapping(Key.Left, UserAction.MoveLeft);
+			_inputManager.AddProlongedUserActionMapping(Key.Down, UserAction.MoveDown);
+			_inputManager.AddProlongedUserActionMapping(Key.Right, UserAction.MoveRight);
+
 			_inputManager.AddProlongedUserActionMapping(Key.E, UserAction.RotateMirrorCW);
 			_inputManager.AddProlongedUserActionMapping(Key.Q, UserAction.RotateMirrorCCW);
 
 			_inputManager.AddSingleUserActionMapping(Key.F, UserAction.ToggleMirrorLock);
 			_inputManager.AddSingleUserActionMapping(Key.G, UserAction.ToggleGodMode);
+			_inputManager.AddSingleUserActionMapping(Key.P, UserAction.TogglePauseGame);
 			_inputManager.AddSingleUserActionMapping(Key.N, UserAction.ResetLevel);
 			_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.OpenGameMenu);
 
@@ -58,6 +69,19 @@ namespace Fledermaus.Screens
 		public void ResumeGame()
 		{
 			_gameLogic.UnpauseGame();
+		}
+
+		public void FinishLevel()
+		{
+			Console.WriteLine("Level geschafft! :D");
+			
+			for (int i = 0; i < _level.Times.Count; i++)
+			{
+				Console.WriteLine("Raum " + (i + 1) + ": " + _level.Times[i] + " Sekunden");
+			}
+
+			Console.WriteLine("----");
+			Console.WriteLine("gesamt: " + _level.GetTotalTime() + " Sekunden");
 		}
 
 	}

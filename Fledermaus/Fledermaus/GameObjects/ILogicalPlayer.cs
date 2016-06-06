@@ -13,8 +13,11 @@ namespace Fledermaus.GameObjects
 		Vector2 Position { get; set; }
 		Vector2 VectorToMirror { get; set; }
 
+		float Rotation { get; set; }
+
 		ILogicalMirror CurrentMirror { get; set; }
 		bool IsFocusedToMirror();
+		void FocusMirror(ILogicalMirror mirror);
 		void UnfocusCurrentMirror();
 
 		ILogicalPlayer CreateClone();

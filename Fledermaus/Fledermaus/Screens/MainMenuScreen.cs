@@ -1,4 +1,5 @@
-﻿using Fledermaus.Screens;
+﻿using Fledermaus.GameObjects;
+using Fledermaus.Screens;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
@@ -34,13 +35,46 @@ namespace Fledermaus.Screens
         private void CreateStartMenu ()
         {
             menuButtons.Clear();
-            menuButtons.Add(new ButtonText("Test Level", delegate () { StartTestLevel(); }, true));
+ /*           menuButtons.Add(new ButtonText("Test Level", delegate () { StartTestLevel(); }, true));
             menuButtons.Add(new ButtonText("Level 2", delegate () { }));
             menuButtons.Add(new ButtonText("Level 3", delegate () { }));
             menuButtons.Add(new ButtonText("Level 4", delegate () { }));
             menuButtons.Add(new ButtonText("Level 5", delegate () { }));
-            menuButtons.Add(new ButtonText("Back", delegate () { CreateMainMenu(); }));
+            menuButtons.Add(new ButtonText("Back", delegate () { CreateMainMenu(); }));*/
+
+            menuButtons.Add(new ButtonText("Test Level", StartTestLevel, true));
+            menuButtons.Add(new ButtonText("Level 1", StartLevel1));
+            menuButtons.Add(new ButtonText("Level 2", StartLevel2));
+            menuButtons.Add(new ButtonText("Level 3", StartLevel3));
+            menuButtons.Add(new ButtonText("Back", delegate () { MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(); }));
         }
+
+  /*      private void StartTestLevel()
+        {
+        }*/
+
+        private void StartLevel1()
+        {
+            StartLevel(Levels.CreateLevel1());
+        }
+
+        private void StartLevel2()
+        {
+            StartLevel(Levels.CreateLevel2());
+        }
+
+        private void StartLevel3()
+        {
+            StartLevel(Levels.CreateLevel3());
+        }
+
+        private void StartLevel(Level level)
+        {
+            GameScreen gameScreen = new GameScreen(level);
+
+            MyApplication.GameWindow.CurrentScreen = gameScreen;
+        }
+  
         private void StartTestLevel()
         {
             GameScreen gameScreen = new GameScreen(Levels.CreateTestLevel());

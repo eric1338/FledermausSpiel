@@ -17,6 +17,15 @@ namespace Fledermaus.GameObjects
 		{
 
 		}
+		public Obstacle(List<Vector2> vertices)
+		{
+			for (int i = 0; i < vertices.Count; i++)
+			{
+				if (i == 0) AddFirstPoint(vertices[i]);
+				else if (i + 1 == vertices.Count) AddLastPoint(vertices[i]);
+				else AddFollowingPoint(vertices[i]);
+			}
+		}
 
 		public static Obstacle CreateRectangular(Vector2 topLeft, Vector2 bottomRight)
 		{
