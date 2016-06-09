@@ -14,16 +14,13 @@ namespace Fledermaus
 		ILogicalPlayer GetLogicalPlayer();
 		IEnumerable<ILogicalLightRay> GetLogicalLightRays();
 		IEnumerable<ILogicalMirror> GetLogicalMirrors();
-		IEnumerable<ILogicalNPC> GetLogicalNPCs();
 
 		IEnumerable<Tuple<IBounded, int>> GetRoomTransitionTriggers();
 
 		IBounded GetReflectingBounds();
 		IBounded GetNonReflectingBounds();
-
 		IBounded GetLightBounds();
-
-		IBounded GetSolarPanelBounds();
+		
 		IBounded GetExitBounds();
 
 		bool IsExitOpen { get; set; }

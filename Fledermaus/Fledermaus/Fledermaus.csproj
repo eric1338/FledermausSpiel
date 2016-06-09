@@ -57,13 +57,11 @@
     <Compile Include="GameObjects\ILogicalLevel.cs" />
     <Compile Include="GameObjects\ILogicalLightRay.cs" />
     <Compile Include="GameObjects\ILogicalMirror.cs" />
-    <Compile Include="GameObjects\ILogicalNPC.cs" />
     <Compile Include="GameObjects\ILogicalPlayer.cs" />
     <Compile Include="GameObjects\ILogicalRoom.cs" />
     <Compile Include="GameObjects\Level.cs" />
     <Compile Include="GameObjects\LightRay.cs" />
     <Compile Include="GameObjects\Mirror.cs" />
-    <Compile Include="GameObjects\NPC.cs" />
     <Compile Include="GameObjects\Obstacle.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\RectangularGameObject.cs" />

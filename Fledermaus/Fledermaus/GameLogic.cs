@@ -245,9 +245,6 @@ namespace Fledermaus
 			else PauseGame();
 		}
 
-		// TODO: GameGraphics iwie über Änderung informieren, damit alpha auf 0.15 gesetzt werden kann
-		// bzw. das Menüoverlay gezeigt werden kann
-
 		public void PauseGame()
 		{
 			Level.PauseTimer();
@@ -269,12 +266,9 @@ namespace Fledermaus
 			ResetLighRays();
 			CalculateLightRays();
 
-			MoveNPCs();
-
 			CheckRoomTransitionTriggers();
 
 			CheckPlayerLightCollision();
-            CheckSolarPanel();
 			CheckExit();
 			DetermineMirrorAccessibility();
 		}
@@ -351,15 +345,6 @@ namespace Fledermaus
 			}
 		}
 
-		private void MoveNPCs()
-		{
-			foreach (ILogicalNPC npc in CurrentRoom.GetLogicalNPCs())
-			{
-				npc.PointOfInterest = Player.Position;
-				npc.TickAndMove();
-			}
-		}
-
 		private void CheckRoomTransitionTriggers()
 		{
 			foreach (Tuple<IBounded, int> roomTransitionTrigger in CurrentRoom.GetRoomTransitionTriggers())
@@ -393,17 +378,6 @@ namespace Fledermaus
 				CurrentRoom.Reset();
 			}
 		}
-
-        private void CheckSolarPanel()
-        {
-			List<Line> lightRayLines = new List<Line>();
-
-			foreach (var lightRay in LightRays) lightRayLines.AddRange(lightRay.GetLines());
-
-			IBounded bounds = Util.CreateBoundsFromList(lightRayLines);
-
-			CurrentRoom.IsExitOpen = Util.HasIntersection(CurrentRoom.GetSolarPanelBounds(), bounds);
-        }
 
         private void CheckExit()
         {
