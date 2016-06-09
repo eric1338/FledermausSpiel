@@ -18,11 +18,16 @@ namespace Fledermaus.Screens
     {
         Selection = 0,
         Position = 1,
-        Edit = 2
+        Edit = 2,
+            Ready = 3,
     }
 
     class LevelEditorScreen : Screen
     {
+        private GameLogic _gameLogic = new GameLogic();
+        private GameGraphics _gameGraphics = new GameGraphics();
+        private Fledermaus.GameObjects.Level _level = new GameObjects.Level();
+
 
         private Level level;
         private LevelVisual levelVisual;
@@ -34,8 +39,9 @@ namespace Fledermaus.Screens
 
         private EditMode editMode;
         private Vector2 offset;
+        private bool showSideMenu;
 
-        private Model.GameObject.GameObject objectToPosition;
+        //private Model.GameObject.GameObject objectToPosition;
 
         protected float ZoomTo { get; set; }
 
@@ -104,25 +110,35 @@ namespace Fledermaus.Screens
             }
         }
 
+        public bool ShowSideMenu
+        {
+            get
+            {
+                return showSideMenu;
+            }
+
+            set
+            {
+                showSideMenu = value;
+            }
+        }
+
         public LevelEditorScreen() : base()
         {
+
             editMode = EditMode.Selection;
             MoveTo = new Vector2(.0f, .0f);
             Offset = new Vector2(.0f, .0f);
             Scale = 0.2f;
             createSideMenu();
-            createGameScreen();
+            //          createGameScreen();
 
-
+            _level=Levels.CreateLevel1();
+            _gameGraphics.Level = _level;
             Level = new Level();
             LevelVisual = new LevelVisual();
  //           createStartupLevel();
             createVisualStartupLevel();
-            //           var filename = "Level1.xml";
-            //          saveLevel(Directory.GetCurrentDirectory() + "\\Levels\\", filename);
-
-           // EditMode = EditMode.Selection;
-            //InputManager.Clear();
 
         }
 
@@ -145,15 +161,29 @@ namespace Fledermaus.Screens
         {
 
             sideMenu = new MenuScreen();
- /*           sideMenu.ShowBorder = true;
+            sideMenu.ShowBorder = true;
             sideMenu.Padding = .03f;
             sideMenu.BorderWidth = 0.01f;
-            sideMenu.HorizontalAlignment = HorizontalAlignment.Left;
+            //sideMenu.HorizontalAlignment = HorizontalAlignment.Center;
             sideMenu.MaxHeight = 2.0f;
             sideMenu.menuButtons.Add(
                 new ButtonTexture(Resources.Player,
                 delegate () {
-        
+                selectedRoom.LightRayVisuals.Add(new LightRayVisual() {
+                    Data = new Model.GameObject.LightRay() {
+                        RayDirection = new Vector2(-1.0f,-1.0f),
+                        RelativeBounds = new List<Vector2>()
+                        {
+                            new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(.02f)),
+                            new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(-.02f)),
+                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(-.02f)),
+                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(.02f))
+                        }
+                    },
+                    
+                }
+                    
+                );
                 },
                 true)
             );
@@ -163,7 +193,8 @@ namespace Fledermaus.Screens
 
                 },
                 false)
-            );*/
+            );
+            sideMenu.Center = new Vector2(-1.0f + sideMenu.MaxWidth/2, .0f);
 
             /*
             sideMenu = new LevelEditorSideMenu(this);
@@ -331,20 +362,18 @@ namespace Fledermaus.Screens
                         });*/
 
         }
-        private List<Screen> getContentAsList() {
-            return new List<Screen>() { sideMenu, gameScreen };
-        }
 
         public override void DoLogic()
         {
-
-            switch (EditMode)
+            if(ShowSideMenu)
+                sideMenu.DoLogic();
+ /*           switch (EditMode)
             {
                 case EditMode.Selection: sideMenu.DoLogic(); break;
                 case EditMode.Position: break;
                 case EditMode.Edit: break;
-
-            }
+                
+            }*/
 
             //           gameLogic.ProcessInput();
             //           gameLogic.DoLogic();
@@ -416,96 +445,64 @@ namespace Fledermaus.Screens
                 }
             }
 
+ _gameGraphics.SetDrawSettings(offset, Scale, .0f);
+            _gameGraphics.DrawLevel();
 
             foreach (var room in levelVisual.Rooms)
                 room.Draw(-Offset, Scale);
 
+            if (ShowSideMenu)
+                sideMenu.Draw();
+
+           
         }
         public override void ProcessMouseMove(MouseMoveEventArgs e)
         {
-            if (editMode == EditMode.Selection)
+            if (showSideMenu)
+                sideMenu.ProcessMouseMove(e);
+            else
             {
-                foreach (var room in levelVisual.Rooms)
+                if (editMode == EditMode.Selection)
                 {
-                    if (room.isPointInScreen(e.Position))
-                        SelectedRoom = room;
-                }
-            }
-            else if (editMode == EditMode.Edit)
-            {
-                
-                foreach (var room in levelVisual.Rooms)
-                {
-                    if (room.IsSelected)
+                    foreach (var room in levelVisual.Rooms)
                     {
-                        if (room.PlayerVisual.isPointInScreen(e.Position))
-                            room.PlayerVisual.IsSelected = true;
-                        else
-                            room.PlayerVisual.IsSelected = false;
+                        if (room.isPointInScreen(e.Position))
+                            SelectedRoom = room;
                     }
-
                 }
-            }
-            else if (EditMode == EditMode.Position) {
-                Vector2 relPos = new Vector2((e.Position.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
-                ((e.Position.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
+                else
+                {
 
-                objectToPosition.Position = relPos;
-            }
-            else { 
-                selectedRoom.ProcessMouseMove(e);
+                    selectedRoom.ProcessMouseMove(e);
+                }
             }
         }
         public override void ProcessMouseButtonDown(MouseButtonEventArgs e)
         {
-            if (editMode == EditMode.Selection)
+            if (e.Button == MouseButton.Left)
             {
-                ZoomTo = 1.0f;
-                foreach (var room in LevelVisual.Rooms)
+                if (showSideMenu)
+                    sideMenu.ProcessMouseButtonDown(e);
+                if (editMode == EditMode.Selection)
                 {
-                    if (room.IsSelected)
-                        MoveTo = room.Data.Position;
-                }
-                editMode = EditMode.Edit;
-            }
-            else if (editMode == EditMode.Edit) {
-                foreach (var room in LevelVisual.Rooms)
-                {
-                    if(room.PlayerVisual!=null)
-                    if (room.PlayerVisual.IsSelected)
-                        objectToPosition = room.PlayerVisual.Data;
-                }
-                
-                EditMode = EditMode.Position;
-            }
-            else if (editMode == EditMode.Position)
-            {
-                
-                EditMode = EditMode.Edit;
-            }
-
-            //Scale = 1.0f;
-     //       var _timer = new System.Threading.Thread(new System.Threading.ThreadStart(delegate {
-   /*             Scale = 1.0f;
-                System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-
-                watch.Start();
-                for(float i = 0; i<0.8f; i+= watch.ElapsedMilliseconds/10000)
-                // Long running operation
-                    Scale += watch.ElapsedMilliseconds;// new System.Threading.Timer(delegate {
-    
-               // _timer.Change(Math.Max(0, TIME_INTERVAL_IN_MILLISECONDS - watch.ElapsedMilliseconds), Timeout.Infinite);
-            }));
-      */
-            Vector2 relPos = new Vector2((e.Mouse.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
-                  ((e.Mouse.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1); 
-            if (relPos.X > Scale*Center.X - Scale * MaxWidth / 2 && relPos.X < Scale*Center.X + Scale * MaxWidth / 2)
-            {
-                foreach (var content in getContentAsList())
-                    if (relPos.Y < Scale*content.Center.Y + Scale*content.MaxHeight / 2 && relPos.Y > Scale*content.Center.Y - Scale * content.MaxHeight / 2)
+                    ZoomTo = 1.0f;
+                    foreach (var room in LevelVisual.Rooms)
                     {
-                        content.ProcessMouseButtonDown(e);
+                        if (room.IsSelected)
+                            MoveTo = room.Data.Position;
                     }
+                    editMode = EditMode.Edit;
+                    if (SelectedRoom.EditMode == EditMode.Ready)
+                        SelectedRoom.EditMode = editMode;
+                }
+                else
+                {
+                    SelectedRoom.ProcessMouseButtonDown(e);
+                }
+            }
+            else if (e.Button == MouseButton.Right)
+            {
+               ShowSideMenu = !ShowSideMenu;
             }
         }
     }

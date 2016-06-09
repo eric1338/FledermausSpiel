@@ -40,7 +40,7 @@ namespace Model.GameObjectVisual
             }
         }
 
-        public abstract void Draw();
+        //public override void Draw();
 
         public override bool isPointInScreen(System.Drawing.Point point)
         {

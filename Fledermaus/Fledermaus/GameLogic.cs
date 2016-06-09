@@ -172,7 +172,7 @@ namespace Fledermaus
 			//Console.WriteLine("To: " + rotation * 57.1f);
 			//Console.WriteLine(" ");
 
-			Player.Rotation = 0.0f;
+			//Player.Rotation = 0.0f;
 		}
 
 		private void TryToMovePlayer(float dx, float dy)
@@ -372,6 +372,8 @@ namespace Fledermaus
 						Level.FinishLevel();
 						GameScreen.FinishLevel();
 						PauseGame();
+
+                        GameGraphics.test = true;
 
 						return;
 					}

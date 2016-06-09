@@ -197,6 +197,7 @@ namespace Fledermaus.Screens
 
         public override void Draw()
         {
+            setInitPositionOfButtons();
             base.Draw();
 
             foreach (var mb in menuButtons)

@@ -117,7 +117,39 @@ namespace Fledermaus
             //DrawBounds(_scale*player.InitialPosition, scaleBounds( player.RelativeBounds), 0.002f);
 		}
 
-		private static void DrawBounds(Vector2 position,List<Vector2> bounds, float thickness= 0.002f)
+        public static void DrawLightRay(Fledermaus.GameObjects.LightRay lightRay)
+        {
+            SetColor(Colors.LightRay);
+            DrawBounds(lightRay, 0.004f);
+
+            if (lightRay.GetLines().ToList().Count < 1) return;
+
+            Line lastLine = lightRay.GetLines().ToList().Last();
+
+            Vector2 oppositeDirection = lastLine.GetDirectionVector() * -1;
+            oppositeDirection.Normalize();
+
+            Vector2 arrowVector1 = Util.GetRotatedVector(oppositeDirection, 0.9f);
+            Vector2 arrowVector2 = Util.GetRotatedVector(oppositeDirection, -0.9f);
+
+            Line arrowLine1 = Line.CreateParameterized(lastLine.Point2, arrowVector1, 0.05f);
+            Line arrowLine2 = Line.CreateParameterized(lastLine.Point2, arrowVector2, 0.05f);
+
+            IBounded arrowLines = Util.CreateBoundsFromList(new List<Line>() { arrowLine1, arrowLine2 });
+
+            DrawBounds(arrowLines, 0.004f);
+        }
+        private static void DrawBounds(IBounded bounds, float thickness)
+        {
+            foreach (Line v in bounds.GetLines()) DrawLine(v, thickness);
+        }
+
+        private static void DrawLine(Line line, float thickness)
+        {
+            DrawLine(GetTransformedVector(line.Point1), GetTransformedVector(line.Point2), thickness * _scale);
+        }
+
+        private static void DrawBounds(Vector2 position,List<Vector2> bounds, float thickness= 0.002f)
 		{
             
             List<Vector2> absbounds = new List<Vector2>();

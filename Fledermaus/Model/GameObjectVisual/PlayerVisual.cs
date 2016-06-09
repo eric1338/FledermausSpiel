@@ -24,8 +24,6 @@ namespace Model.GameObjectVisual
 
         public override void Draw()
         {
-            
-
 
         }
 
@@ -42,10 +40,9 @@ namespace Model.GameObjectVisual
                 var tmp = new List<Vector2>();
                 foreach (var bound in Data.RelativeBounds)
                     tmp.Add(bound * 1.1f);
-                DrawSquare(Data.Position, tmp/*Data.RelativeBounds*1.01f*/);
+                DrawSquare(Data.Position, tmp);
             }
-            GL.Color3(Color.Beige);
-            //DrawSquare(_scale * player.InitialPosition, scaleBounds(player.RelativeBounds)); if ( ((Room)this.Data).Player != null)
+            GL.Color3(Color.RosyBrown);
 
             DrawSquare(offset+Data.Position, Data.RelativeBounds);
 

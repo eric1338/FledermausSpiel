@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\LevelVisual.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\LightRayVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\PlayerVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\RoomVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\GameObjectVisual.cs" />

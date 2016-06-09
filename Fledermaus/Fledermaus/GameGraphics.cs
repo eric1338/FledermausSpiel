@@ -361,7 +361,7 @@ namespace Fledermaus
 
 		private Vector2 GetTransformedVector(Vector2 vector)
 		{
-			return new Vector2(vector.X * _scale + _center.X, vector.Y * _scale + _center.Y);
+			return new Vector2((vector.X * _scale + _center.X) * (1080f / 1920f), vector.Y * _scale + _center.Y);
 		}
 
 		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
