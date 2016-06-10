@@ -25,9 +25,7 @@ namespace Fledermaus
 			MirrorInactive,
 			MirrorRailActive,
 			MirrorRailInactive,
-			SolarPanel,
-			ExitOpen,
-			ExitClosed
+			Exit
 		}
 
 		public Level Level { get; set; }
@@ -184,7 +182,7 @@ namespace Fledermaus
 
 			if (drawPlayer) DrawPlayer(room.Player);
 
-			DrawExit(room.Exit, room.IsExitOpen);
+			DrawExit(room.Exit);
 			DrawLightRays(room.LightRays);
 			DrawObstacles(room.Obstacles);
 		}
@@ -201,8 +199,7 @@ namespace Fledermaus
 				case Colors.MirrorInactive: return new Vector3(0.4f, 0.45f, 0.5f);
 				case Colors.MirrorRailActive: return new Vector3(0.6f, 0.6f, 0.6f);
 				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
-				case Colors.ExitOpen: return new Vector3(0.4f, 1.0f, 0.3f);
-				case Colors.ExitClosed: return new Vector3(1.0f, 0.4f, 0.6f);
+				case Colors.Exit: return new Vector3(1.0f, 0.4f, 0.6f);
 			}
 
 			return new Vector3(0.0f, 0.0f, 0.0f);
@@ -272,6 +269,11 @@ namespace Fledermaus
 
 			SetColor(mirror.IsAccessible ? Colors.MirrorActive : Colors.MirrorInactive);
 			DrawLine(mirror.GetMirrorLine(), 0.006f);
+
+			SetColor(Colors.LightRay);
+			DrawLine(new Line(mirror.GetMirrorPosition(), mirror.GetP1()), 0.005f);
+			SetColor(Colors.Exit);
+			DrawLine(new Line(mirror.GetMirrorPosition(), mirror.GetP2()), 0.005f);
 		}
 
 		private void DrawObstacles(List<Obstacle> obstacles)
@@ -285,9 +287,9 @@ namespace Fledermaus
 			DrawBounds(obstacle, 0.003f);
 		}
 
-		private void DrawExit(RectangularGameObject exit, bool isExitOpen)
+		private void DrawExit(RectangularGameObject exit)
 		{
-			SetColor(isExitOpen ? Colors.ExitOpen : Colors.ExitClosed);
+			SetColor(Colors.Exit);
 			DrawRectangularGameObject(exit);
 		}
 

@@ -235,7 +235,6 @@ namespace Fledermaus
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
 			room.AddLightRay(new LightRay(new Vector2(0.3f, 0.98f), new Vector2(-0.1f, -0.12f)));
-			//room.AddLightRay(new LightRay(new Vector2(0.5f, 0.98f), new Vector2(-0.1f, -0.9f)));
 			room.AddLightRay(new LightRay(new Vector2(-0.98f, 0.4f), new Vector2(0.2f, -0.1f)));
 			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.4f), new Vector2(-1.0f, -0.05f)));
 
@@ -248,7 +247,7 @@ namespace Fledermaus
 			Mirror m3 = new Mirror(new Vector2(-0.36f, -0.1f), new Vector2(-0.3f, -0.6f), 1.0f, 0.2f);
 			m3.SetRotationBounds(0.8f, 1.6f);
 			room.AddMirror(m3);
-			Mirror m4 = new Mirror(new Vector2(0.63f, -0.08f), new Vector2(0.58f, -0.8f), 0.6f, 0.25f);
+			Mirror m4 = new Mirror(new Vector2(0.58f, -0.8f), new Vector2(0.63f, -0.08f), 0.6f, 0.25f);
 			m4.SetRotationBounds(0.4f, 0.8f);
 			room.AddMirror(m4);
 

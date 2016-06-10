@@ -23,8 +23,6 @@ namespace Fledermaus
 		
 		IBounded GetExitBounds();
 
-		bool IsExitOpen { get; set; }
-
 		void Reset();
 	}
 }

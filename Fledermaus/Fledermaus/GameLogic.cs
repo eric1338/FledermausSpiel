@@ -160,20 +160,30 @@ namespace Fledermaus
 
 			//float railAngle = Util.CalculateAngle(mirror.RailPosition1, mirror.RailPosition2);
 
-			Vector2 pp = new Vector2(mirror.RailPosition1.X + 1f, mirror.RailPosition1.Y) - mirror.RailPosition1;
-			float railAngle = Util.CalculateAngle(mirror.RailPosition2 - mirror.RailPosition1, pp);
+			//Vector2 pp = new Vector2(mirror.RailPosition1.X + 1f, mirror.RailPosition1.Y) - mirror.RailPosition1;
+			//float railAngle = Util.CalculateAngle(mirror.RailPosition2 - mirror.RailPosition1, pp);
 
 			//Console.WriteLine("RA: " + railAngle * 57.1f);
 
-			float rotation = railAngle + mirror.Rotation;
+			//float rotation = railAngle + mirror.Rotation;
 
-			if (Player.Position.Y > mirror.GetMirrorPosition().Y) rotation += 3.14f;
+			//if (Player.Position.Y > mirror.GetMirrorPosition().Y) rotation += 3.14f;
 
 			//Console.WriteLine("To: " + rotation * 57.1f);
 			//Console.WriteLine(" ");
 
-			Player.Rotation = 0.0f;
+			Vector2 pa = mirror.GetPA();
+			Vector2 pb = mirror.GetPB();
+
+			bool n1 = (Player.Position - pa).Length < (Player.Position - pb).Length;
+
+			Vector2 normal = n1 ? mirror.GetMirrorNormal1() : mirror.GetMirrorNormal2();
+
+			Player.Rotation = Util.CalculateAngle(new Vector2(0f, -1f), normal);
+
+			Player.Position = n1 ? pa : pb;
 		}
+
 
 		private void TryToMovePlayer(float dx, float dy)
 		{
@@ -379,7 +389,7 @@ namespace Fledermaus
 
         private void CheckExit()
         {
-			if (CurrentRoom.IsExitOpen && Util.HasIntersection(Player, CurrentRoom.GetExitBounds()))
+			if (Util.HasIntersection(Player, CurrentRoom.GetExitBounds()))
 			{
 				Console.WriteLine("gewonnen :)");
 				CurrentRoom.Reset();

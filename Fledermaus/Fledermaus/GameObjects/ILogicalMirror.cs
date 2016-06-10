@@ -29,6 +29,10 @@ namespace Fledermaus.GameObjects
 		Vector2 GetMirrorNormal2();
 
 		Line GetMirrorLine();
-		
+
+		Vector2 GetPA();
+		Vector2 GetPB();
+		void Test();
+
 	}
 }

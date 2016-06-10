@@ -55,6 +55,35 @@ namespace Fledermaus.GameObjects
 			MaximumRotation = Util.ConvertDegreeToRadian(40.0f);
 		}
 
+		public Vector2 GetPA()
+		{
+			return GetMirrorPosition() + GetMirrorNormal1() * 0.05f;
+		}
+
+		public Vector2 GetPB()
+		{
+			return GetMirrorPosition() + GetMirrorNormal2() * 0.05f;
+		}
+
+		public Vector2 GetP1()
+		{
+			return GetPA().Y > GetPB().Y ? GetPA() : GetPB();
+		}
+
+		public Vector2 GetP2()
+		{
+			return GetPA().Y < GetPB().Y ? GetPA() : GetPB();
+		}
+
+		public void Test()
+		{
+			Vector2 p1 = GetP1();
+			Vector2 p2 = GetP2();
+
+			Console.WriteLine("Rotation: " + Rotation);
+
+		}
+
 		public void SetRotationBounds(float minimumRotation, float maximumRotation)
 		{
 			MinimumRotation = minimumRotation;
