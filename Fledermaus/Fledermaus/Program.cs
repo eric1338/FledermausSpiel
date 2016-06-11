@@ -24,7 +24,12 @@ namespace Fledermaus
         [STAThread]
         public static void Main()
         {
-            windowState = WindowState.Normal;
+			// TODO: anders
+			Data.PlayerData.Instance.CreateLevelHighscores("Level 1", 5);
+			Data.PlayerData.Instance.CreateLevelHighscores("Level 2", 5);
+			Data.PlayerData.Instance.CreateLevelHighscores("Level 3", 5);
+
+			windowState = WindowState.Normal;
             
             //windowState = WindowState.Normal;
 

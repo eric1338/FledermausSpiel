@@ -269,11 +269,6 @@ namespace Fledermaus
 
 			SetColor(mirror.IsAccessible ? Colors.MirrorActive : Colors.MirrorInactive);
 			DrawLine(mirror.GetMirrorLine(), 0.006f);
-
-			SetColor(Colors.LightRay);
-			DrawLine(new Line(mirror.GetMirrorPosition(), mirror.GetP1()), 0.005f);
-			SetColor(Colors.Exit);
-			DrawLine(new Line(mirror.GetMirrorPosition(), mirror.GetP2()), 0.005f);
 		}
 
 		private void DrawObstacles(List<Obstacle> obstacles)

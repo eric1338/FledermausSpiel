@@ -35,7 +35,6 @@ namespace Fledermaus.GameObjects
 		public void UnfocusCurrentMirror()
 		{
 			CurrentMirror = null;
-			Rotation = 0.0f;
 		}
 
 		public bool IsFocusedToMirror()

@@ -33,7 +33,7 @@ namespace Fledermaus
 
 		public static Level CreateLevel1()
 		{
-			Level level1 = new Level();
+			Level level1 = new Level("Level 1");
 
 			Room r1 = CreateL1R1();
 			r1.Index = 1;
@@ -78,7 +78,7 @@ namespace Fledermaus
 
 		public static Level CreateLevel2()
 		{
-			Level level2 = new Level();
+			Level level2 = new Level("Level 2");
 
 			Room r1 = CreateL2R1();
 			r1.Index = 1;
@@ -123,7 +123,7 @@ namespace Fledermaus
 
 		public static Level CreateLevel3()
 		{
-			Level level3 = new Level();
+			Level level3 = new Level("Level 3");
 
 			Room r1 = CreateL3R1();
 			r1.Index = 1;

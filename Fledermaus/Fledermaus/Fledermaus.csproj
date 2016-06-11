@@ -51,6 +51,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\LevelHighscores.cs" />
     <Compile Include="GameGraphics.cs" />
     <Compile Include="GameGraphicsLevelEditor.cs" />
     <Compile Include="GameLogic.cs" />
@@ -67,7 +68,9 @@
     <Compile Include="GameObjects\RectangularGameObject.cs" />
     <Compile Include="GameObjects\Room.cs" />
     <Compile Include="GameObjects\StaticGameObject.cs" />
-    <Compile Include="IBounded.cs" />
+    <Compile Include="GameObjects\IBounded.cs" />
+    <Compile Include="Data\PlayerData.cs" />
+    <Compile Include="Screens\LevelEndScreen.cs" />
     <Compile Include="Utils\LevelParser.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
