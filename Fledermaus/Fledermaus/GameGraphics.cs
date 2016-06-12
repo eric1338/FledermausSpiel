@@ -14,6 +14,9 @@ namespace Fledermaus
 	class GameGraphics
 	{
 
+
+		Texture tex = TextureLoader.FromBitmap(Resources.woodfloor);
+
 		private enum Colors
 		{
 			Player,
@@ -131,6 +134,11 @@ namespace Fledermaus
 
 		public void DrawLevel()
 		{
+			GL.Clear(ClearBufferMask.ColorBufferBit);
+			GL.LoadIdentity();
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
 			Tick();
 
 			if (test)
@@ -173,11 +181,16 @@ namespace Fledermaus
 			}
 
 			_lastCurrentRoom = Level.CurrentRoom;
+
+			GL.Disable(EnableCap.Blend);
 		}
 
 		public void DrawRoom(Room room, bool drawPlayer)
 		{
+			tex.BeginUse();
 			DrawRoomBounds(room.RoomBounds);
+			tex.EndUse();
+
 			DrawMirrors(room.Mirrors);
 
 			if (drawPlayer) DrawPlayer(room.Player);
@@ -185,6 +198,7 @@ namespace Fledermaus
 			DrawExit(room.Exit);
 			DrawLightRays(room.LightRays);
 			DrawObstacles(room.Obstacles);
+
 		}
 
 		private Vector3 GetColor(Colors color)
@@ -216,8 +230,9 @@ namespace Fledermaus
 
 		private void DrawRoomBounds(RectangularGameObject room)
 		{
-			SetColor(Colors.RoomGround);
-			DrawRectangularGameObject(room);
+			//SetColor(Colors.RoomGround);
+			GL.Color3(1f, 1f, 1f);
+			DrawRectangularGameObject(room, true);
 
 			GL.Color3(0.1f, 0.1f, 0.1f);
 			DrawBounds(room, 0.003f);
@@ -290,12 +305,12 @@ namespace Fledermaus
 
 		// --- //
 
-		private void DrawRectangularGameObject(RectangularGameObject rectangularGameObject)
+		private void DrawRectangularGameObject(RectangularGameObject rectangularGameObject, bool texture = false)
 		{
 			Vector2 topLeft = GetTransformedVector(rectangularGameObject.Point1);
 			Vector2 bottomRight = GetTransformedVector(rectangularGameObject.Point3);
 
-			DrawSquare(topLeft, bottomRight);
+			DrawSquare(topLeft, bottomRight, texture);
 		}
 
 		private void DrawBounds(IBounded bounds, float thickness)
@@ -341,13 +356,19 @@ namespace Fledermaus
 			return new Vector2(vector.X * _scale + _center.X, vector.Y * _scale + _center.Y);
 		}
 
-		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
+		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight, bool useTexture = false)
 		{
+			if (useTexture) GL.Color3(1f, 1f, 1f);
+
 			GL.Begin(PrimitiveType.Quads);
-			GL.Vertex2(topLeft.X, topLeft.Y);
-			GL.Vertex2(bottomRight.X, topLeft.Y);
-			GL.Vertex2(bottomRight.X, bottomRight.Y);
+			if (useTexture) GL.TexCoord2(0.0f, 0.0f);
 			GL.Vertex2(topLeft.X, bottomRight.Y);
+			if (useTexture) GL.TexCoord2(1.0f, 0.0f);
+			GL.Vertex2(topLeft.X, topLeft.Y);
+			if (useTexture) GL.TexCoord2(1.0f, 1.0f);
+			GL.Vertex2(bottomRight.X, topLeft.Y);
+			if (useTexture) GL.TexCoord2(0.0f, 1.0f);
+			GL.Vertex2(bottomRight.X, bottomRight.Y);
 			GL.End();
 		}
 

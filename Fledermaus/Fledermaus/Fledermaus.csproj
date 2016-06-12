@@ -109,6 +109,7 @@
   <ItemGroup>
     <Content Include="Resources\GameObjects\Player.png" />
     <Content Include="Resources\Menu\Evil_Font.png" />
+    <Content Include="Resources\Textures\woodfloor.png" />
     <None Include="Resources\Menu\Fire.png" />
   </ItemGroup>
   <ItemGroup>
