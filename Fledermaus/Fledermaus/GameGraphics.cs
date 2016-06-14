@@ -14,15 +14,11 @@ namespace Fledermaus
 	class GameGraphics
 	{
 
-
-		Texture tex = TextureLoader.FromBitmap(Resources.woodfloor);
-
 		private enum Colors
 		{
 			Player,
 			NPC,
 			LightRay,
-			RoomGround,
 			Obstacle,
 			MirrorActive,
 			MirrorInactive,
@@ -30,23 +26,6 @@ namespace Fledermaus
 			MirrorRailInactive,
 			Exit
 		}
-
-		public Level Level { get; set; }
-
-		private Vector2 _center = new Vector2(0.0f, 0.0f);
-		private float _scale = 1.0f;
-		private float _alpha = 1.0f;
-
-		private float globalScale = 0.9f;
-
-		public void SetDrawSettings(Vector2 center, float scale, float alpha)
-		{
-			_center = center;
-			_scale = scale;
-			_alpha = alpha;
-		}
-
-		private Dictionary<Room, RoomDrawSettings> RoomDrawSettingsList = new Dictionary<Room, RoomDrawSettings>();
 
 		private class RoomDrawSettings
 		{
@@ -64,6 +43,68 @@ namespace Fledermaus
 			}
 		}
 
+		public Level Level { get; set; }
+
+		private Vector2 _center = new Vector2(0.0f, 0.0f);
+		private float _scale = 1.0f;
+		private float _alpha = 1.0f;
+
+		private float globalScale = 0.9f;
+
+		private Texture _playerTexture;
+		private Texture _floorTexture;
+		private Texture _exitTexture;
+		private Texture _obstacleTexture;
+
+		private Dictionary<Room, RoomDrawSettings> RoomDrawSettingsList = new Dictionary<Room, RoomDrawSettings>();
+
+		private Room _lastCurrentRoom = null;
+
+
+		public GameGraphics()
+		{
+			Textures.Instance.LoadTextures();
+
+			_playerTexture = Textures.Instance.PlayerTexture;
+			_floorTexture = Textures.Instance.FloorTexture;
+			_exitTexture = Textures.Instance.ExitTexture;
+			_obstacleTexture = Textures.Instance.ObstacleTexture;
+		}
+
+
+		private Vector3 GetColor(Colors color)
+		{
+			switch (color)
+			{
+				case Colors.Player: return new Vector3(1.0f, 0.8f, 0.6f);
+				case Colors.LightRay: return new Vector3(1.0f, 0.6f, 0.0f);
+				case Colors.Obstacle: return new Vector3(1.0f, 0.2f, 0.2f);
+				case Colors.MirrorActive: return new Vector3(0.4f, 0.5f, 0.94f);
+				case Colors.MirrorInactive: return new Vector3(0.4f, 0.45f, 0.5f);
+				case Colors.MirrorRailActive: return new Vector3(0.6f, 0.6f, 0.6f);
+				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
+				case Colors.Exit: return new Vector3(1.0f, 0.4f, 0.6f);
+			}
+
+			return new Vector3(0.0f, 0.0f, 0.0f);
+		}
+
+		private void SetColor(Colors color)
+		{
+			Vector3 colorVector = GetColor(color);
+
+			colorVector *= _alpha;
+
+			GL.Color4(colorVector.X, colorVector.Y, colorVector.Z, 1.0f);
+		}
+
+		public void SetDrawSettings(Vector2 center, float scale, float alpha)
+		{
+			_center = center;
+			_scale = scale;
+			_alpha = alpha;
+		}
+
 		private void Tick()
 		{
 			var roomDrawSettingsList = RoomDrawSettingsList.ToList();
@@ -76,6 +117,11 @@ namespace Fledermaus
 			}
 		}
 
+		private bool ShouldMove()
+		{
+			return Level.CurrentRoom != _lastCurrentRoom;
+		}
+
 		private void SetDrawSettings(Room room)
 		{
 			RoomDrawSettings roomDrawSettings = RoomDrawSettingsList[room];
@@ -83,19 +129,12 @@ namespace Fledermaus
 			if (roomDrawSettings.SmoothMovement != null)
 			{
 				roomDrawSettings.Position = roomDrawSettings.SmoothMovement.GetPosition();
+
 				if (roomDrawSettings.SmoothMovement.GetAlpha() >= 0) roomDrawSettings.Alpha = roomDrawSettings.SmoothMovement.GetAlpha();
 				if (roomDrawSettings.SmoothMovement.GetScale() >= 0) roomDrawSettings.Scale = roomDrawSettings.SmoothMovement.GetScale();
 			}
 
 			SetDrawSettings(roomDrawSettings.Position, roomDrawSettings.Scale, roomDrawSettings.Alpha);
-		}
-
-
-		private Room _lastCurrentRoom = null;
-
-		private bool ShouldMove()
-		{
-			return Level.CurrentRoom != _lastCurrentRoom;
 		}
 
 		private void InitializeRoomDrawSettings()
@@ -164,14 +203,8 @@ namespace Fledermaus
 
 			if (ShouldMove())
 			{
-				if (RoomDrawSettingsList.Count < 1)
-				{
-					InitializeRoomDrawSettings();
-				}
-				else
-				{
-					UpdateRoomDrawSettings();
-				}
+				if (RoomDrawSettingsList.Count < 1) InitializeRoomDrawSettings();
+				else UpdateRoomDrawSettings();
 			}
 
 			foreach (Room room in Level.Rooms)
@@ -187,9 +220,8 @@ namespace Fledermaus
 
 		public void DrawRoom(Room room, bool drawPlayer)
 		{
-			tex.BeginUse();
 			DrawRoomBounds(room.RoomBounds);
-			tex.EndUse();
+			DrawFloor(room.RoomBounds);
 
 			DrawMirrors(room.Mirrors);
 
@@ -201,38 +233,26 @@ namespace Fledermaus
 
 		}
 
-		private Vector3 GetColor(Colors color)
+		private void DrawFloor(RectangularGameObject room)
 		{
-			switch (color)
-			{
-				case Colors.Player: return new Vector3(1.0f, 0.8f, 0.6f);
-				case Colors.LightRay: return new Vector3(1.0f, 0.6f, 0.0f);
-				case Colors.RoomGround: return new Vector3(0.16f, 0.16f, 0.16f);
-				case Colors.Obstacle: return new Vector3(1.0f, 0.2f, 0.2f);
-				case Colors.MirrorActive: return new Vector3(0.4f, 0.5f, 0.94f);
-				case Colors.MirrorInactive: return new Vector3(0.4f, 0.45f, 0.5f);
-				case Colors.MirrorRailActive: return new Vector3(0.6f, 0.6f, 0.6f);
-				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
-				case Colors.Exit: return new Vector3(1.0f, 0.4f, 0.6f);
-			}
+			float halfWidth = (room.BottomRight.X - room.TopLeft.X) / 2f;
+			float halfHeight = (room.TopLeft.Y - room.BottomRight.Y) / 2f;
 
-			return new Vector3(0.0f, 0.0f, 0.0f);
-		}
+			Vector2 topLeft = room.TopLeft;
+			Vector2 bottomRight = room.BottomRight;
 
-		private void SetColor(Colors color)
-		{
-			Vector3 colorVector = GetColor(color);
+			float centerX = topLeft.X + halfWidth;
+			float centerY = topLeft.Y - halfHeight;
 
-			colorVector *= _alpha;
-
-			GL.Color4(colorVector.X, colorVector.Y, colorVector.Z, 1.0f);
+			DrawRectangularTexture(_floorTexture, topLeft, new Vector2(centerX, centerY));
+			DrawRectangularTexture(_floorTexture, new Vector2(topLeft.X, centerY), new Vector2(centerX, bottomRight.Y));
+			DrawRectangularTexture(_floorTexture, new Vector2(centerX, topLeft.Y), new Vector2(bottomRight.X, centerY));
+			DrawRectangularTexture(_floorTexture, new Vector2(centerX, centerY), bottomRight);
 		}
 
 		private void DrawRoomBounds(RectangularGameObject room)
 		{
-			//SetColor(Colors.RoomGround);
-			GL.Color3(1f, 1f, 1f);
-			DrawRectangularGameObject(room, true);
+			DrawRectangularGameObject(room);
 
 			GL.Color3(0.1f, 0.1f, 0.1f);
 			DrawBounds(room, 0.003f);
@@ -305,12 +325,12 @@ namespace Fledermaus
 
 		// --- //
 
-		private void DrawRectangularGameObject(RectangularGameObject rectangularGameObject, bool texture = false)
+		private void DrawRectangularGameObject(RectangularGameObject rectangularGameObject)
 		{
-			Vector2 topLeft = GetTransformedVector(rectangularGameObject.Point1);
-			Vector2 bottomRight = GetTransformedVector(rectangularGameObject.Point3);
+			Vector2 topLeft = GetTransformedVector(rectangularGameObject.TopLeft);
+			Vector2 bottomRight = GetTransformedVector(rectangularGameObject.BottomRight);
 
-			DrawSquare(topLeft, bottomRight, texture);
+			DrawSquare(topLeft, bottomRight);
 		}
 
 		private void DrawBounds(IBounded bounds, float thickness)
@@ -351,39 +371,43 @@ namespace Fledermaus
 			GL.End();
 		}
 
-		private Vector2 GetTransformedVector(Vector2 vector)
+		private void DrawRectangularTexture(Texture texture, Vector2 topLeft, Vector2 bottomRight)
 		{
-			return new Vector2(vector.X * _scale + _center.X, vector.Y * _scale + _center.Y);
+			DrawRectangularTexture2(texture, GetTransformedVector(topLeft), GetTransformedVector(bottomRight));
 		}
-
-		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight, bool useTexture = false)
+		private void DrawRectangularTexture2(Texture texture, Vector2 topLeft, Vector2 bottomRight)
 		{
-			if (useTexture) GL.Color3(1f, 1f, 1f);
+			texture.BeginUse();
+
+			GL.Color3(_alpha, _alpha, _alpha);
 
 			GL.Begin(PrimitiveType.Quads);
-			if (useTexture) GL.TexCoord2(0.0f, 0.0f);
+			GL.TexCoord2(0.0f, 0.0f);
 			GL.Vertex2(topLeft.X, bottomRight.Y);
-			if (useTexture) GL.TexCoord2(1.0f, 0.0f);
+			GL.TexCoord2(1.0f, 0.0f);
 			GL.Vertex2(topLeft.X, topLeft.Y);
-			if (useTexture) GL.TexCoord2(1.0f, 1.0f);
+			GL.TexCoord2(1.0f, 1.0f);
 			GL.Vertex2(bottomRight.X, topLeft.Y);
-			if (useTexture) GL.TexCoord2(0.0f, 1.0f);
+			GL.TexCoord2(0.0f, 1.0f);
+			GL.Vertex2(bottomRight.X, bottomRight.Y);
+			GL.End();
+
+			texture.EndUse();
+		}
+
+		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
+		{
+			GL.Begin(PrimitiveType.Quads);
+			GL.Vertex2(topLeft.X, bottomRight.Y);
+			GL.Vertex2(topLeft.X, topLeft.Y);
+			GL.Vertex2(bottomRight.X, topLeft.Y);
 			GL.Vertex2(bottomRight.X, bottomRight.Y);
 			GL.End();
 		}
 
-		private void DrawCoordinateSystem()
+		private Vector2 GetTransformedVector(Vector2 vector)
 		{
-			GL.Color3(1.0f, 0.0f, 0.3f);
-
-			GL.Begin(PrimitiveType.Lines);
-			GL.Vertex2(0f, 1f);
-			GL.Vertex2(0f, -1f);
-			GL.End();
-			GL.Begin(PrimitiveType.Lines);
-			GL.Vertex2(-1f, 0f);
-			GL.Vertex2(1f, 0f);
-			GL.End();
+			return new Vector2(vector.X * _scale + _center.X, vector.Y * _scale + _center.Y);
 		}
 
 	}

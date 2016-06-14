@@ -35,10 +35,8 @@ namespace Fledermaus
             }
         }
 
-        public MyGameWindow(int width,int height) : base(width,height/*800, 700*/)
+        public MyGameWindow(int width, int height) : base(width, height)
 		{
-
-            //Width
 			RenderFrame += MyGameWindow_RenderFrame;
 			UpdateFrame += MyGameWindow_UpdateFrame;
 			KeyUp += MyGameWindow_KeyUp;
@@ -82,11 +80,13 @@ namespace Fledermaus
 		private void MyGameWindow_RenderFrame(object sender, FrameEventArgs e)
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
+
             if (ClientSize.Width >= ClientSize.Height)
-                windowScale = new Vector2( ClientSize.Height/ClientSize.Width ,1.0f);
-                GL.Viewport(ClientSize);
-            
-              
+			{
+				windowScale = new Vector2(ClientSize.Height / ClientSize.Width, 1.0f);
+				GL.Viewport(ClientSize);
+			}
+
 			CurrentScreen?.Draw();
 
 			SwapBuffers();

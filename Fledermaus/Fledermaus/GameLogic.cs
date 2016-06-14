@@ -22,6 +22,8 @@ namespace Fledermaus
 		private const float _minMirrorAccessibilityDistance = 0.15f;
 		private const float _playerDistanceFromMirror = 0.05f;
 
+		private bool _isReseting = false;
+		private int _resetCounter = 0;
 		private bool _godMode = false;
 
 		public ILogicalLevel Level;
@@ -277,6 +279,8 @@ namespace Fledermaus
 
 		public void DoLogic()
 		{
+			if (_isReseting) CheckReset();
+
 			if (GamePaused) return;
 
 			ResetLighRays();
@@ -388,8 +392,29 @@ namespace Fledermaus
 
 			if (Util.HasIntersection(Player, CurrentRoom.GetLightBounds()))
 			{
-				Console.WriteLine("verloren :(");
+				StartReset();
+			}
+		}
+
+		private void StartReset()
+		{
+			PauseGame();
+			MovementInputBlocked = true;
+			_isReseting = true;
+		}
+
+		private void CheckReset()
+		{
+			_resetCounter++;
+
+			if (_resetCounter > 60)
+			{
+				_resetCounter = 0;
 				CurrentRoom.Reset();
+
+				_isReseting = false;
+				MovementInputBlocked = false;
+				UnpauseGame();
 			}
 		}
 

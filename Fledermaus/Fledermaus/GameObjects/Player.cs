@@ -117,6 +117,7 @@ namespace Fledermaus.GameObjects
 		{
 			UnfocusCurrentMirror();
 			Position = _initialPosition;
+			Rotation = 0.0f;
 		}
 
 		public ILogicalPlayer CreateClone()

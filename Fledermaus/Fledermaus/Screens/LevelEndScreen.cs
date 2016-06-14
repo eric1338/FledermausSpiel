@@ -34,7 +34,12 @@ namespace Fledermaus.Screens
 
 		public LevelEndScreen(Level level)
 		{
+			// Test
+
 			_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.Confirm);
+
+			if (level.Name == "Level 1") PlayerData.Instance.UnlockLevel("Level 2");
+			if (level.Name == "Level 2") PlayerData.Instance.UnlockLevel("Level 3");
 
 			LevelHighscores highscores = PlayerData.Instance.GetLevelHighscores(level.Name);
 

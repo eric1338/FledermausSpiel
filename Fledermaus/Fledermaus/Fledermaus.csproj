@@ -71,6 +71,7 @@
     <Compile Include="GameObjects\IBounded.cs" />
     <Compile Include="Data\PlayerData.cs" />
     <Compile Include="Screens\LevelEndScreen.cs" />
+    <Compile Include="Textures.cs" />
     <Compile Include="Utils\LevelParser.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
