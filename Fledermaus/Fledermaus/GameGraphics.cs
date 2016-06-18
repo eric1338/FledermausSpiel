@@ -36,14 +36,30 @@ namespace Fledermaus
 		private float _scale = 1.0f;
 		private float _alpha = 1.0f;
 
-		private float globalScale = 0.9f;
+		private float globalScale = 1.0f;
 
 		public void SetDrawSettings(Vector2 center, float scale, float alpha)
 		{
-			_center = center;
-			_scale = scale;
-			_alpha = alpha;
-		}
+            /*          if (!forLevelEditor)
+                      {
+                          _center = center;
+                          _scale = scale;
+                          _alpha = alpha;
+                      }
+                      else
+                      {*/
+                _center = center * scale / globalScale;
+                _scale = scale;
+                _alpha = alpha;
+
+                foreach (var setting in RoomDrawSettingsList)
+                {
+                    //setting.Value.Position = center/ globalScale * scale;
+                    setting.Value.Alpha = 1.0f;
+                    setting.Value.Scale = /*globalScale**/scale;
+                }
+ //           }
+        }
 
 		private Dictionary<Room, RoomDrawSettings> RoomDrawSettingsList = new Dictionary<Room, RoomDrawSettings>();
 
@@ -60,6 +76,8 @@ namespace Fledermaus
 				Position = position;
 				Alpha = alpha;
 				Scale = scale;
+
+              
 			}
 		}
 
@@ -99,7 +117,7 @@ namespace Fledermaus
 
 		private void InitializeRoomDrawSettings()
 		{
-			RoomDrawSettings currentRoomDrawSettings = new RoomDrawSettings(new Vector2(0, 0), 1.0f, globalScale);
+			RoomDrawSettings currentRoomDrawSettings = new RoomDrawSettings(new Vector2(0, 0), 1.0f, globalScale*_scale);
 
 			RoomDrawSettingsList.Add(Level.CurrentRoom, currentRoomDrawSettings);
 
@@ -121,8 +139,8 @@ namespace Fledermaus
 
 			foreach (Room room in Level.GetOtherRooms())
 			{
-				float x = (room.Column - Level.CurrentRoom.Column) * 2 * globalScale;
-				float y = (room.Row - Level.CurrentRoom.Row) * -2 * globalScale;
+				float x = (room.Column - Level.CurrentRoom.Column) * 2 * globalScale/**_scale*/;
+				float y = (room.Row - Level.CurrentRoom.Row) * -2 * globalScale/**_scale*/;
 
 				RoomDrawSettings roomDrawSettings = RoomDrawSettingsList[room];
 				roomDrawSettings.SmoothMovement = new SmoothMovement(roomDrawSettings.Position, new Vector2(x, y), roomDrawSettings.Alpha, 0.1f);
@@ -341,7 +359,7 @@ namespace Fledermaus
 
 		private Vector2 GetTransformedVector(Vector2 vector)
 		{
-			return new Vector2((vector.X * _scale + _center.X) * (1080f / 1920f), vector.Y * _scale + _center.Y);
+			return new Vector2((vector.X * _scale + _center.X)/* * (1080f / 1920f)*/, vector.Y * _scale + _center.Y);
 		}
 
 		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight)

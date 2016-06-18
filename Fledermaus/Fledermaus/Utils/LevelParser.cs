@@ -16,7 +16,7 @@ namespace Fledermaus
 
             foreach (Model.GameObject.Room modRoom in modLevel.Rooms) { 
                 Room room = new Room();
-                room.Player = new Player(modRoom.Player.InitialPosition);
+                room.Player = new Player(modRoom.Player.Position);
 
                 foreach (var modLightRay in modRoom.LightRays) {
                     LightRay lr = new LightRay(modLightRay.Position, modLightRay.RayDirection);

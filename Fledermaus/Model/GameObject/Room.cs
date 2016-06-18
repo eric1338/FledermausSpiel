@@ -8,6 +8,8 @@ namespace Model.GameObject
     {
 
         private Player player;
+        private int column;
+        private int row;
 
         private SolarPanel solarPanel;
 
@@ -107,7 +109,31 @@ namespace Model.GameObject
             }
         }
 
+        public int Row
+        {
+            get
+            {
+                return row;
+            }
 
+            set
+            {
+                row = value;
+            }
+        }
+
+        public int Column
+        {
+            get
+            {
+                return column;
+            }
+
+            set
+            {
+                column = value;
+            }
+        }
 
         public Room()
         {

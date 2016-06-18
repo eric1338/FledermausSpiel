@@ -6,7 +6,7 @@ namespace Model.GameObject
 {
     public class MovingGameObject : GameObject
     {
-        protected Vector2 initPosition;
+ /*       protected Vector2 initPosition;
  
         public Vector2 InitialPosition
         {
@@ -20,7 +20,7 @@ namespace Model.GameObject
                 initPosition = value;
             }
         }
-
+*/
         public MovingGameObject()
         {
 

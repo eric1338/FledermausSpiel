@@ -24,6 +24,9 @@ namespace Fledermaus.Screens
 
     class LevelEditorScreen : Screen
     {
+        private const int RowsToZero = 2;
+        private const int ColumnsToZero = 3;
+
         private GameLogic _gameLogic = new GameLogic();
         private GameGraphics _gameGraphics = new GameGraphics();
         private Fledermaus.GameObjects.Level _level = new GameObjects.Level();
@@ -35,7 +38,7 @@ namespace Fledermaus.Screens
         //       private GameLogic gameLogic = new GameLogic();
         //       private GameGraphics gameGraphics = new GameGraphics();
         private MenuScreen sideMenu;
-        private LevelEditorGameScreen gameScreen;
+        //private LevelEditorGameScreen gameScreen;
 
         private EditMode editMode;
         private Vector2 offset;
@@ -132,17 +135,87 @@ namespace Fledermaus.Screens
             Scale = 0.2f;
             createSideMenu();
             //          createGameScreen();
-
-            _level=Levels.CreateLevel1();
-            _gameGraphics.Level = _level;
             Level = new Level();
             LevelVisual = new LevelVisual();
+            
+            _level =Levels.CreateLevel1();
+            _gameLogic.Level = _level;
+            foreach (var _room in _level.Rooms) {
+                LevelVisual.Rooms.Add(new RoomVisual() {
+                    _Room = _room,
+                    PlayerVisual = new PlayerVisual() {
+                        Data = new Player() {
+                            //InitialPosition = _room.Player.Position,
+                            Position = _room.Player.Position,
+                            RelativeBounds = new List<Vector2>() {  new Vector2(0.0f, 0.03f),
+                                                                    new Vector2(0.025f, 0.01f),
+                                                                    new Vector2(0.07f, 0.02f),
+
+                                                                    new Vector2(0.02f, -0.045f),
+                                                                    new Vector2(0.0f, -0.03f),
+                                                                    new Vector2(-0.02f, -0.045f),
+
+                                                                    new Vector2(-0.07f, 0.02f),
+                                                                    new Vector2(-0.025f, 0.01f)
+                        },
+            }
+                    },
+                    Data = new Model.GameObject.Room() {
+                        
+                        Column = _room.Column,
+                        Row = _room.Row,
+                        RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.95f), Konfiguration.Round(.95f)),
+                                                            new Vector2( Konfiguration.Round(-.95f), Konfiguration.Round(-.95f)),
+                                                            new Vector2( Konfiguration.Round(.95f), Konfiguration.Round(-.95f)),
+                                                            new Vector2( Konfiguration.Round(.95f), Konfiguration.Round(.95f))
+                        },
+                    }
+                });
+                foreach (var lightray in _room.LightRays) {
+                    LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].LightRayVisuals.Add(
+                        new LightRayVisual() {
+                            Data = new LightRay()
+                            {
+                                Position = lightray.Origin,
+                                RayDirection = lightray.FirstDirection,
+                                RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(.02f)),
+                                                            new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(-.02f)),
+                                                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(-.02f)),
+                                                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(.02f))
+                                }
+                            }
+                
+                        });
+                } 
+                foreach(var mirror in _room.Mirrors)
+                {
+                    
+                    var mirV = new MirrorVisual() {
+                        Data = new Mirror()
+                        {
+
+                        },
+                    };
+                }   
+                foreach(var obstacle in _room.Obstacles)
+                {
+                    var obstV = new ObstacleVisual()
+                    {
+                        
+                    };
+                }
+            }
+            foreach (var roomV in levelVisual.Rooms)
+                level.Rooms.Add(roomV.Data as Model.GameObject.Room);
+
+            _gameGraphics.Level = _level;
+
  //           createStartupLevel();
-            createVisualStartupLevel();
+//            createVisualStartupLevel();
 
         }
 
-        private void createGameScreen()
+  /*      private void createGameScreen()
         {
             float scale2 = 1.0f / 2.0f * (2.0f - sideMenu.MaxWidth);
 
@@ -155,7 +228,7 @@ namespace Fledermaus.Screens
             gameScreen.ContentWidth = 2.0f * scale2 - 2 * Padding - 2 * BorderWidth;
             gameScreen.Scale = scale2;// 2/100*(2.0f - sideMenu.MaxWidth-2*Padding-2*BorderWidth),
             gameScreen.Center = new Vector2((2.0f - 2.0f * scale2) / 2, (2.0f - 2.0f * scale2) / 2);
-        }
+        }*/
 
         private void createSideMenu()
         {
@@ -169,21 +242,27 @@ namespace Fledermaus.Screens
             sideMenu.menuButtons.Add(
                 new ButtonTexture(Resources.Player,
                 delegate () {
-                selectedRoom.LightRayVisuals.Add(new LightRayVisual() {
-                    Data = new Model.GameObject.LightRay() {
-                        RayDirection = new Vector2(-1.0f,-1.0f),
-                        RelativeBounds = new List<Vector2>()
+                    var lrv = new LightRayVisual()
+                    {
+                        Data = new Model.GameObject.LightRay()
+                        {
+                            RayDirection = new Vector2(.2f, .0f),
+                            RelativeBounds = new List<Vector2>()
                         {
                             new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(.02f)),
                             new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(-.02f)),
                             new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(-.02f)),
                             new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(.02f))
                         }
-                    },
-                    
-                }
-                    
-                );
+                        },
+
+                    };
+                    selectedRoom.LightRayVisuals.Add(lrv);
+                    _level.CurrentRoom.AddLightRay(new GameObjects.LightRay(lrv.Data.Position,((LightRay)lrv.Data).RayDirection));
+
+
+
+
                 },
                 true)
             );
@@ -225,7 +304,7 @@ namespace Fledermaus.Screens
                     },
                     Player = new Model.GameObject.Player()
                     {
-                        InitialPosition = new Vector2(Konfiguration.Round(0.0f), Konfiguration.Round(-0.0f)),
+                        //InitialPosition = new Vector2(Konfiguration.Round(0.0f), Konfiguration.Round(-0.0f)),
                         RelativeBounds = new List<Vector2>() { new Vector2(Konfiguration.Round(-0.05f), Konfiguration.Round(-0.05f)),
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(-0.05f)),
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(0.05f)),
@@ -254,7 +333,7 @@ namespace Fledermaus.Screens
                     },
                     Player = new Model.GameObject.Player()
                     {
-                        InitialPosition = new Vector2(Konfiguration.Round(2.0f), Konfiguration.Round(-0.0f)),
+                        //InitialPosition = new Vector2(Konfiguration.Round(2.0f), Konfiguration.Round(-0.0f)),
                         RelativeBounds = new List<Vector2>() { new Vector2(Konfiguration.Round(-0.05f), Konfiguration.Round(-0.05f)),
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(-0.05f)),
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(0.05f)),
@@ -285,7 +364,7 @@ namespace Fledermaus.Screens
             Level.Rooms.Add(room);
             room.Player = new Model.GameObject.Player()
             {
-                InitialPosition = new Vector2(Konfiguration.Round(0.8f), Konfiguration.Round(-0.7f)),
+                //InitialPosition = new Vector2(Konfiguration.Round(0.8f), Konfiguration.Round(-0.7f)),
                 RelativeBounds = new List<Vector2>() { new Vector2(Konfiguration.Round(-0.05f), Konfiguration.Round(-0.05f)),
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(-0.05f)),
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(0.05f)),
@@ -365,18 +444,11 @@ namespace Fledermaus.Screens
 
         public override void DoLogic()
         {
-            if(ShowSideMenu)
-                sideMenu.DoLogic();
- /*           switch (EditMode)
-            {
-                case EditMode.Selection: sideMenu.DoLogic(); break;
-                case EditMode.Position: break;
-                case EditMode.Edit: break;
-                
-            }*/
+            _gameLogic.DoLogic();
 
-            //           gameLogic.ProcessInput();
-            //           gameLogic.DoLogic();
+            if (ShowSideMenu)
+                sideMenu.DoLogic();
+
         }
 
         public override void Draw()
@@ -403,10 +475,10 @@ namespace Fledermaus.Screens
                 }
             }
 
-            if (MoveTo.X != .0f ) {
+            if (MoveTo.X != Offset.X/*.0f*/ ) {
                 if(MoveTo.X > Offset.X)
                 {
-                    offset.X +=(MoveTo.X-Offset.X)/(10);
+                    offset.X += Math.Abs(MoveTo.X-Offset.X)/(10);
                     if (offset.X >= MoveTo.X) {
                         offset.X = MoveTo.X;
                         MoveTo = new Vector2(.0f, MoveTo.Y);
@@ -414,7 +486,7 @@ namespace Fledermaus.Screens
                 }
                 if (MoveTo.X < Offset.X)
                 {
-                    offset.X -= (MoveTo.X - Offset.X) / (10);
+                    offset.X -= Math.Abs(MoveTo.X - Offset.X) / (10);
                     if (offset.X <= MoveTo.X)
                     {
                         offset.X = MoveTo.X;
@@ -423,11 +495,11 @@ namespace Fledermaus.Screens
                 }
             }
 
-            if (MoveTo.Y != .0f)
+            if (MoveTo.Y !=Offset.Y/* .0f*/)
             {
                 if (MoveTo.Y > Offset.Y)
                 {
-                    offset.Y += (MoveTo.Y - Offset.Y) / (10);
+                    offset.Y += Math.Abs(MoveTo.Y - Offset.Y) / (10);
                     if (offset.Y >= MoveTo.Y)
                     {
                         offset.Y = MoveTo.Y;
@@ -436,7 +508,7 @@ namespace Fledermaus.Screens
                 }
                 if (MoveTo.Y < Offset.Y)
                 {
-                    offset.Y -= (MoveTo.Y - Offset.Y) / (10);
+                    offset.Y -= Math.Abs(MoveTo.Y - Offset.Y) / (10);
                     if (offset.Y <= MoveTo.Y)
                     {
                         offset.Y = MoveTo.Y;
@@ -445,11 +517,9 @@ namespace Fledermaus.Screens
                 }
             }
 
- _gameGraphics.SetDrawSettings(offset, Scale, .0f);
-            _gameGraphics.DrawLevel();
-
             foreach (var room in levelVisual.Rooms)
                 room.Draw(-Offset, Scale);
+
 
             if (ShowSideMenu)
                 sideMenu.Draw();
@@ -459,39 +529,44 @@ namespace Fledermaus.Screens
         public override void ProcessMouseMove(MouseMoveEventArgs e)
         {
             if (showSideMenu)
-                sideMenu.ProcessMouseMove(e);
-            else
-            {
-                if (editMode == EditMode.Selection)
-                {
-                    foreach (var room in levelVisual.Rooms)
-                    {
-                        if (room.isPointInScreen(e.Position))
-                            SelectedRoom = room;
-                    }
+                if (sideMenu.isPointInScreen(e.Position)) {
+                    sideMenu.ProcessMouseMove(e);
+                    return;
                 }
-                else
-                {
 
-                    selectedRoom.ProcessMouseMove(e);
+            if (editMode == EditMode.Selection)
+            {
+                foreach (var room in levelVisual.Rooms)
+                {
+                    if (room.isPointInScreen(e.Position))
+                       SelectedRoom = room;
                 }
             }
+            else
+            {
+                selectedRoom.ProcessMouseMove(e);
+            }
+            
         }
         public override void ProcessMouseButtonDown(MouseButtonEventArgs e)
         {
             if (e.Button == MouseButton.Left)
             {
                 if (showSideMenu)
-                    sideMenu.ProcessMouseButtonDown(e);
+                    if(sideMenu.isPointInScreen(e.Position))
+                        sideMenu.ProcessMouseButtonDown(e);
                 if (editMode == EditMode.Selection)
                 {
                     ZoomTo = 1.0f;
                     foreach (var room in LevelVisual.Rooms)
                     {
-                        if (room.IsSelected)
+                        if (room.IsSelected) {
                             MoveTo = room.Data.Position;
+                        _level.CurrentRoom = room._Room;
+                        }
                     }
                     editMode = EditMode.Edit;
+
                     if (SelectedRoom.EditMode == EditMode.Ready)
                         SelectedRoom.EditMode = editMode;
                 }
@@ -503,6 +578,20 @@ namespace Fledermaus.Screens
             else if (e.Button == MouseButton.Right)
             {
                ShowSideMenu = !ShowSideMenu;
+            }
+        }
+
+        public override void ProcessKeyDown(Key key) {
+            if (key == Key.Escape)
+            {
+                if(Scale != 0.2f) { 
+                    ZoomTo = 0.2f;
+
+                    MoveTo =  new Vector2(.0f,.0f);
+                    editMode = EditMode.Selection;
+                }
+                else 
+                    MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(this);
             }
         }
     }

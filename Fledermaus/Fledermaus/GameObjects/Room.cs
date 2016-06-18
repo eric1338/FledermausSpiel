@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	class Room : ILogicalRoom
+	public class Room : ILogicalRoom
 	{
 
 		public int Index { get; set; }

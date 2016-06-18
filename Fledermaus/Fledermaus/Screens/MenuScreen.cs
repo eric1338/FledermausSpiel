@@ -40,6 +40,7 @@ namespace Fledermaus.Screens
         {
             set
             {
+                
                 menuButtons[indexActiveButton].isSelected = false;
                 // Index from Last to First
                 if (value >= menuButtons.Count)
@@ -162,6 +163,9 @@ namespace Fledermaus.Screens
             }
             contenWidth = widthTotal;
             contentHeight = heightTotal;
+
+            Width = widthTotal;
+            Height = MaxHeight;
 
             if (menuButtons.Count > 0)
                 setInitPositionOfButtons();

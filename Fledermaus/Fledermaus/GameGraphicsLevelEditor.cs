@@ -112,7 +112,7 @@ namespace Fledermaus
 		private static void DrawPlayer(Player player)
 		{
 			SetColor(Colors.Player);
-            DrawSquare(_scale * player.InitialPosition, scaleBounds(player.RelativeBounds));
+            DrawSquare(_scale * player.Position, scaleBounds(player.RelativeBounds));
 
             //DrawBounds(_scale*player.InitialPosition, scaleBounds( player.RelativeBounds), 0.002f);
 		}

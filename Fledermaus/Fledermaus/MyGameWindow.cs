@@ -83,6 +83,7 @@ namespace Fledermaus
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
             if (ClientSize.Width >= ClientSize.Height)
+                if(ClientSize.Width!=0)
                 windowScale = new Vector2( ClientSize.Height/ClientSize.Width ,1.0f);
                 GL.Viewport(ClientSize);
             

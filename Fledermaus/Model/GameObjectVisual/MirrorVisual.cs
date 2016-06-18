@@ -10,13 +10,13 @@ using Fledermaus.Screens;
 
 namespace Model.GameObjectVisual
 {
-    public class PlayerVisual : GameObjectVisual
+    public class MirrorVisual : GameObjectVisual
     {
         private Color color = Color.DarkGray;
         private Color activeColor = Color.Cyan;
 
 
-        public PlayerVisual()
+        public MirrorVisual()
         {
             Width = 0.1f;
             Height = 0.1f;

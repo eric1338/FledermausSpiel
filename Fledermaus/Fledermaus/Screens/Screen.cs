@@ -250,6 +250,7 @@ namespace Fledermaus.Screens
 
             Vector2 relPos = new Vector2((point.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
                   ((point.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
+            Position = center;
             var left = Scale*( Position.X - Width / 2.0f);
             var right = Scale*(Position.X + Width / 2.0f);
             var top = Scale*(Position.Y + Height / 2);
@@ -308,7 +309,7 @@ namespace Fledermaus.Screens
             _inputManager.ProcessKeyUp(key);
         }
 
-        public void ProcessKeyDown(Key key)
+        public virtual void ProcessKeyDown(Key key)
         {
             _inputManager.ProcessKeyDown(key);
         }
