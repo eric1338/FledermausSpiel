@@ -12,7 +12,7 @@ namespace Fledermaus.Screens
 	{
 
 		private GameLogic _gameLogic = new GameLogic();
-		private GameGraphics _gameGraphics = new GameGraphics();
+		private GameGraphics _gameGraphics;
 
 		private Level _level;
 
@@ -21,7 +21,7 @@ namespace Fledermaus.Screens
 			_level = level;
 
 			_gameLogic.Level = level;
-			_gameGraphics.Level = level;
+			_gameGraphics = new GameGraphics(level);
 
 			_gameLogic.GameScreen = this;
 			

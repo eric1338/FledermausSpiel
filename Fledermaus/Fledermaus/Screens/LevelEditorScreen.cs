@@ -240,7 +240,7 @@ namespace Fledermaus.Screens
             //sideMenu.HorizontalAlignment = HorizontalAlignment.Center;
             sideMenu.MaxHeight = 2.0f;
             sideMenu.menuButtons.Add(
-                new ButtonTexture(Resources.Player,
+                new ButtonTexture(Resources.player,
                 delegate () {
                     var lrv = new LightRayVisual()
                     {
@@ -267,7 +267,7 @@ namespace Fledermaus.Screens
                 true)
             );
             sideMenu.menuButtons.Add(
-                new ButtonTexture(Resources.Player,
+                new ButtonTexture(Resources.player,
                 delegate () {
 
                 },

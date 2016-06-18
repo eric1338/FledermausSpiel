@@ -66,7 +66,6 @@
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\RectangularGameObject.cs" />
     <Compile Include="GameObjects\Room.cs" />
-    <Compile Include="GameObjects\StaticGameObject.cs" />
     <Compile Include="GameObjects\IBounded.cs" />
     <Compile Include="Data\PlayerData.cs" />
     <Compile Include="Screens\LevelEndScreen.cs" />
@@ -107,8 +106,7 @@
     <Folder Include="Levels\Custom\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\GameObjects\Player.png" />
-    <Content Include="Resources\Menu\Evil_Font.png" />
+    <None Include="Resources\Textures\player.png" />
     <Content Include="Resources\Textures\woodfloor.png" />
     <None Include="Resources\Menu\Fire.png" />
   </ItemGroup>

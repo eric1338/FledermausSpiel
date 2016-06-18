@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.GameObjects
 {
-	public class RectangularGameObject : StaticGameObject
+	public class RectangularGameObject : IBounded
 	{
-		
+
+		private List<Line> _lines = new List<Line>();
+
 		public Vector2 Point1 { get; set; }
 		public Vector2 Point2 { get; set; }
 		public Vector2 Point3 { get; set; }
@@ -40,14 +42,15 @@ namespace Fledermaus.GameObjects
 			AddLine(Point1, Point4);
 		}
 
-		public float GetWidth()
+		private void AddLine(Vector2 point1, Vector2 point2)
 		{
-			return (Point2 - Point1).Length;
+			_lines.Add(new Line(point1, point2));
 		}
 
-		public float GetHeight()
+		public IEnumerable<Line> GetLines()
 		{
-			return (Point2 - Point3).Length;
+			return _lines;
 		}
+
 	}
 }

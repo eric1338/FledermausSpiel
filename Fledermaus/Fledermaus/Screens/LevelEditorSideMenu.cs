@@ -16,14 +16,14 @@ namespace Fledermaus.Screens
             
 
             menuButtons.Add(
-                new ButtonTexture(Resources.Player,
+                new ButtonTexture(Resources.player,
                 delegate () {
                     addPlayer();
                 },
                 true)
             );
             menuButtons.Add(
-    new ButtonTexture(Resources.Player,
+    new ButtonTexture(Resources.player,
     delegate () {
         addPlayer();
     },
