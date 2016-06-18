@@ -31,6 +31,11 @@ namespace Fledermaus.Utils
 			return new SimpleBounds(lines);
 		}
 
+		public static string GetTimeString(float time)
+		{
+			return Math.Round(time, 2) + " s";
+		}
+
 		public static Vector2 GetRotatedVector(Vector2 vector, float angle)
 		{
 			return GetRotatedVector(vector, angle, false);
@@ -72,11 +77,6 @@ namespace Fledermaus.Utils
 			Vector3 v23d = new Vector3(v2.X, v2.Y, 0.0f);
 
 			return Vector3.CalculateAngle(v13d, v23d);
-		}
-
-		public static float ConvertDegreeToRadian(float degree)
-		{
-			return degree * 0.0175f;
 		}
 
 		private static Random _random = null;

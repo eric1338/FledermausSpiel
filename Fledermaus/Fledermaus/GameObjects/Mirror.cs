@@ -51,8 +51,8 @@ namespace Fledermaus.GameObjects
 			StartingRelativePosition = startingRelativePosition;
 			RelativePosition = StartingRelativePosition;
 
-			MinimumRotation = Util.ConvertDegreeToRadian(-40.0f);
-			MaximumRotation = Util.ConvertDegreeToRadian(40.0f);
+			MinimumRotation = -0.7f;
+			MaximumRotation = 0.7f;
 		}
 
 		public void SetRotationBounds(float minimumRotation, float maximumRotation)
@@ -87,46 +87,39 @@ namespace Fledermaus.GameObjects
 			return normal;
 		}
 
+		public Vector2 GetDistance1FromMirrorCenter(float distanceFactor)
+		{
+			return GetMirrorPosition() + GetMirrorNormal1() * distanceFactor;
+		}
+
+		public Vector2 GetDistance2FromMirrorCenter(float distanceFactor)
+		{
+			return GetMirrorPosition() + GetMirrorNormal2() * distanceFactor;
+		}
+
 		public Line GetMirrorLine()
-		{
-			return new Line(GetMirrorPosition1(), GetMirrorPosition2());
-		}
-
-		private Vector2 GetMirrorHalf()
-		{
-			return Util.GetRotatedVector(GetNormalizedRailVector(), Rotation) * MirrorLength;
-		}
-
-		private Vector2 GetNormalizedRailVector()
 		{
 			Vector2 railVector = GetRailVector();
 			railVector.Normalize();
 
-			return railVector;
+			Vector2 mirrorHalf = Util.GetRotatedVector(railVector, Rotation) * MirrorLength;
+
+			Vector2 mirrorPosition1 = GetMirrorPosition() + mirrorHalf;
+			Vector2 mirrorPosition2 = GetMirrorPosition() - mirrorHalf;
+
+			return new Line(mirrorPosition1, mirrorPosition2);
 		}
 
-		private Vector2 GetMirrorPosition1()
-		{
-			return GetMirrorPosition() + GetMirrorHalf();
-		}
-
-		private Vector2 GetMirrorPosition2()
-		{
-			return GetMirrorPosition() - GetMirrorHalf();
-		}
+		// Movement
 		
 		public void MoveMirrorRight(float deltaDistance)
 		{
 			RelativePosition = Math.Min(0.94f, RelativePosition + deltaDistance);
-
-			Console.WriteLine("RelPos (R): " + RelativePosition);
 		}
 
 		public void MoveMirrorLeft(float deltaDistance)
 		{
 			RelativePosition = Math.Max(0.06f, RelativePosition - deltaDistance);
-
-			Console.WriteLine("RelPos (L): " + RelativePosition);
 		}
 
 		public void MoveMirrorUp(float deltaDistance)
@@ -144,15 +137,11 @@ namespace Fledermaus.GameObjects
 		public void RotateCW(float deltaAngle)
 		{
 			Rotation = Math.Min(MaximumRotation, Rotation + deltaAngle);
-
-			Console.WriteLine("Angle: " + Rotation);
 		}
 
 		public void RotateCCW(float deltaAngle)
 		{
 			Rotation = Math.Max(MinimumRotation, Rotation - deltaAngle);
-
-			Console.WriteLine("Angle: " + Rotation);
 		}
 
 		public void Reset()

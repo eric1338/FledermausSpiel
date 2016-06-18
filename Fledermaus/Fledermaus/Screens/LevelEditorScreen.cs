@@ -29,7 +29,7 @@ namespace Fledermaus.Screens
 
         private GameLogic _gameLogic = new GameLogic();
         private GameGraphics _gameGraphics = new GameGraphics();
-        private Fledermaus.GameObjects.Level _level = new GameObjects.Level();
+        private Fledermaus.GameObjects.Level _level = new GameObjects.Level("new");
 
 
         private Level level;

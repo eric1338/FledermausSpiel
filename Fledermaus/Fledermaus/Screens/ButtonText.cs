@@ -22,8 +22,9 @@ namespace Fledermaus.Screens
 
         public String Text { get; set; }
 
+		private bool isEnabled;
 
-        public ButtonText(String buttonText, DoAction doAction, bool selected = false) : base(doAction, selected)
+        public ButtonText(String buttonText, DoAction doAction, bool selected = false, bool enabled = true) : base(doAction, selected)
         {
             this.Text = buttonText;
 
@@ -40,11 +41,14 @@ namespace Fledermaus.Screens
             //for transparency in textures
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
+			isEnabled = enabled;
+
+			if (!enabled) base.doAction = () => { };
         }
 
         public override void Draw()
         {
-            /*        if (isSelected)
+			/*        if (isSelected)
                         GL.Color3(0.0f, 1.0f, 0.0f);
                     else
                         GL.Color3(1.0f, 0.0f, 0.0f);
@@ -56,14 +60,14 @@ namespace Fledermaus.Screens
                     GL.Vertex2(-Width / 2, Position + (Height / 2));
                     GL.End();
                     */
-            // GL.Clear(ClearBufferMask.ColorBufferBit);
+			// GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            //color is multiplied with texture color white == no change
-            // GL.Color3(Color.White);
-            if (isSelected)
-                GL.Color3(Color.LightYellow);
-            else
-                GL.Color3(Color.LightSteelBlue);
+			//color is multiplied with texture color white == no change
+			// GL.Color3(Color.White);
+
+			if (!isEnabled) GL.Color3(Color.Gray);
+			else if (isSelected) GL.Color3(Color.LightYellow);
+			else GL.Color3(Color.LightSteelBlue);
 
             GL.Enable(EnableCap.Blend); // for transparency in textures
                                         //print string

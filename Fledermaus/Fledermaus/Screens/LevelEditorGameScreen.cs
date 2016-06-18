@@ -95,7 +95,7 @@ namespace Fledermaus.Screens
         {
             Draw();
 
-            GameGraphicsLevelEditor.DrawLevel(level,Center, Scale);
+           // GameGraphicsLevelEditor.DrawLevel(level,Center, Scale);
         }
         internal void Draw(LevelVisual level)
         {

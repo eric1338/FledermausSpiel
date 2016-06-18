@@ -1,4 +1,5 @@
-﻿using Fledermaus.GameObjects;
+﻿using Fledermaus.Data;
+using Fledermaus.GameObjects;
 using Fledermaus.Screens;
 using Microsoft.Win32;
 using OpenTK;
@@ -51,9 +52,9 @@ namespace Fledermaus.Screens
 
             menuButtons.Add(new ButtonText("Test Level", StartTestLevel, true));
             menuButtons.Add(new ButtonText("Level 1", StartLevel1));
-            menuButtons.Add(new ButtonText("Level 2", StartLevel2));
-            menuButtons.Add(new ButtonText("Level 3", StartLevel3   ));
-            menuButtons.Add(new ButtonText("Back", delegate () { MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(); }));
+            menuButtons.Add(new ButtonText("Level 2", StartLevel2, false, !PlayerData.Instance.IsLevelLocked("Level 2")));
+            menuButtons.Add(new ButtonText("Level 3", StartLevel3, false, !PlayerData.Instance.IsLevelLocked("Level 3")));
+			menuButtons.Add(new ButtonText("Back", delegate () { MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(); }));
         }
         private void CreateLevelEditorMenu(LevelEditorScreen les)
         {

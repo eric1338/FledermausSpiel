@@ -4,7 +4,6 @@
 
 * Level-Editor fertigstellen (M)
 * Texturen finden und einbauen (E & M)
-* Spielerposi bei Spiegelfokus anpassen (E)
 * HighScores und freigeschaltete Level in Datei speichern (E)
 * evtl Indikator für Drehreichweite einbauen (E)
 

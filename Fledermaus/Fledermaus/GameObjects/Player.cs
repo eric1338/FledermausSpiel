@@ -35,7 +35,6 @@ namespace Fledermaus.GameObjects
 		public void UnfocusCurrentMirror()
 		{
 			CurrentMirror = null;
-			Rotation = 0.0f;
 		}
 
 		public bool IsFocusedToMirror()
@@ -118,6 +117,7 @@ namespace Fledermaus.GameObjects
 		{
 			UnfocusCurrentMirror();
 			Position = _initialPosition;
+			Rotation = 0.0f;
 		}
 
 		public ILogicalPlayer CreateClone()

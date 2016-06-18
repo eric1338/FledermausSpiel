@@ -33,7 +33,7 @@ namespace Fledermaus
 
 		public static Level CreateLevel1()
 		{
-			Level level1 = new Level();
+			Level level1 = new Level("Level 1");
 
 			Room r1 = CreateL1R1();
 			r1.Index = 1;
@@ -78,7 +78,7 @@ namespace Fledermaus
 
 		public static Level CreateLevel2()
 		{
-			Level level2 = new Level();
+			Level level2 = new Level("Level 2");
 
 			Room r1 = CreateL2R1();
 			r1.Index = 1;
@@ -123,7 +123,7 @@ namespace Fledermaus
 
 		public static Level CreateLevel3()
 		{
-			Level level3 = new Level();
+			Level level3 = new Level("Level 3");
 
 			Room r1 = CreateL3R1();
 			r1.Index = 1;
@@ -235,7 +235,6 @@ namespace Fledermaus
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
 			room.AddLightRay(new LightRay(new Vector2(0.3f, 0.98f), new Vector2(-0.1f, -0.12f)));
-			//room.AddLightRay(new LightRay(new Vector2(0.5f, 0.98f), new Vector2(-0.1f, -0.9f)));
 			room.AddLightRay(new LightRay(new Vector2(-0.98f, 0.4f), new Vector2(0.2f, -0.1f)));
 			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.4f), new Vector2(-1.0f, -0.05f)));
 
@@ -248,7 +247,7 @@ namespace Fledermaus
 			Mirror m3 = new Mirror(new Vector2(-0.36f, -0.1f), new Vector2(-0.3f, -0.6f), 1.0f, 0.2f);
 			m3.SetRotationBounds(0.8f, 1.6f);
 			room.AddMirror(m3);
-			Mirror m4 = new Mirror(new Vector2(0.63f, -0.08f), new Vector2(0.58f, -0.8f), 0.6f, 0.25f);
+			Mirror m4 = new Mirror(new Vector2(0.58f, -0.8f), new Vector2(0.63f, -0.08f), 0.6f, 0.25f);
 			m4.SetRotationBounds(0.4f, 0.8f);
 			room.AddMirror(m4);
 

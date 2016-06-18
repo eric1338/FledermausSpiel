@@ -12,7 +12,8 @@ namespace Fledermaus
     {
         public static Level parseModelLevel( Model.Level modLevel) {
 
-            Level level = new Level();
+			// TODO: Name einfügen
+            Level level = new Level("TODO");
 
             foreach (Model.GameObject.Room modRoom in modLevel.Rooms) { 
                 Room room = new Room();

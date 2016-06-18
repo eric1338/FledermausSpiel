@@ -11,7 +11,6 @@ namespace Fledermaus.GameObjects
 	{
 
 		Vector2 Position { get; set; }
-		Vector2 VectorToMirror { get; set; }
 
 		float Rotation { get; set; }
 

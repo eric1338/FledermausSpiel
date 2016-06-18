@@ -13,9 +13,17 @@ namespace Fledermaus
 	class GameLogic
 	{
 
+		public GameScreen GameScreen { get; set; }
+		public InputManager InputManager { get; set; }
+
 		public bool MovementInputBlocked { get; set; }
 		public bool GamePaused { get; set; }
 
+		private const float _minMirrorAccessibilityDistance = 0.15f;
+		private const float _playerDistanceFromMirror = 0.05f;
+
+		private bool _isReseting = false;
+		private int _resetCounter = 0;
 		private bool _godMode = false;
 
 		public ILogicalLevel Level;
@@ -76,11 +84,6 @@ namespace Fledermaus
 		private SmoothSpeedValue _mirrorMovement = new SmoothSpeedValue(0.004f, 0.01f);
 		private SmoothSpeedValue _mirrorRotation = new SmoothSpeedValue(0.004f, 0.008f);
 
-		private const float _minMirrorAccessibilityDistance = 0.15f;
-
-		public InputManager InputManager { get; set; }
-
-		public GameScreen GameScreen { get; set; }
 
 		public void ProcessInput()
 		{
@@ -112,8 +115,7 @@ namespace Fledermaus
 				if (moveUp) currentMirror.MoveMirrorUp(mirrorMovementSpeed);
 				if (moveDown) currentMirror.MoveMirrorDown(mirrorMovementSpeed);
 
-				if (moveLeft || moveRight || moveUp || moveDown) Player.Position = currentMirror.GetMirrorPosition() + Player.VectorToMirror;
-				else _mirrorMovement.ResetSpeed();
+				if (!moveLeft && !moveRight && !moveUp && !moveDown) _mirrorMovement.ResetSpeed();
 
 				// Rotation
 
@@ -125,10 +127,9 @@ namespace Fledermaus
 				if (rotateCW) currentMirror.RotateCW(mirrorRotationSpeed);
 				if (rotateCCW) currentMirror.RotateCCW(mirrorRotationSpeed);
 
-				//Player.Rotation = currentMirror.Rotation;
-				SetPlayerRotation(currentMirror);
-
 				if (!rotateCW && !rotateCCW) _mirrorRotation.ResetSpeed();
+
+				AdjustPlayerPositionAndRotation(currentMirror);
 			}
 			else
 			{
@@ -151,28 +152,23 @@ namespace Fledermaus
 				TryToMovePlayer(0.0f, dy);
 			}
 		}
-
-		// WIP
-		private void SetPlayerRotation(ILogicalMirror mirror)
+		
+		private void AdjustPlayerPositionAndRotation(ILogicalMirror mirror)
 		{
-			//Console.WriteLine("RP: " + Util.CalculateAngle(mirror.RailPosition1, mirror.RailPosition2) * 57.1f);
-			//Console.WriteLine("An: " + mirror.Rotation * 57.1f);
+			Vector2 newPlayerPosition1 = mirror.GetDistance1FromMirrorCenter(_playerDistanceFromMirror);
+			Vector2 newPlayerPosition2 = mirror.GetDistance2FromMirrorCenter(_playerDistanceFromMirror);
 
-			//float railAngle = Util.CalculateAngle(mirror.RailPosition1, mirror.RailPosition2);
+			bool isCloserToPosition1 = (Player.Position - newPlayerPosition1).Length < (Player.Position - newPlayerPosition2).Length;
 
-			Vector2 pp = new Vector2(mirror.RailPosition1.X + 1f, mirror.RailPosition1.Y) - mirror.RailPosition1;
-			float railAngle = Util.CalculateAngle(mirror.RailPosition2 - mirror.RailPosition1, pp);
+			Vector2 normal = isCloserToPosition1 ? mirror.GetMirrorNormal1() : mirror.GetMirrorNormal2();
 
-			//Console.WriteLine("RA: " + railAngle * 57.1f);
+			float angle = Util.CalculateAngle(new Vector2(0f, -1f), normal);
+			
+			if (normal.X > 0) angle *= -1;
 
-			float rotation = railAngle + mirror.Rotation;
+			Player.Rotation = angle;
 
-			if (Player.Position.Y > mirror.GetMirrorPosition().Y) rotation += 3.14f;
-
-			//Console.WriteLine("To: " + rotation * 57.1f);
-			//Console.WriteLine(" ");
-
-			//Player.Rotation = 0.0f;
+			Player.Position = isCloserToPosition1 ? newPlayerPosition1 : newPlayerPosition2;
 		}
 
 		private void TryToMovePlayer(float dx, float dy)
@@ -223,7 +219,7 @@ namespace Fledermaus
 		{
 			if (Player.IsFocusedToMirror())
 			{
-				Player.UnfocusCurrentMirror();
+				UnfocusPlayerFromMirror();
 			}
 			else
 			{
@@ -232,11 +228,33 @@ namespace Fledermaus
 					if (mirror.IsAccessible)
 					{
 						Player.FocusMirror(mirror);
-						SetPlayerRotation(mirror);
-						Player.VectorToMirror = Player.Position - mirror.GetMirrorPosition();
+						AdjustPlayerPositionAndRotation(mirror);
 					}
 				}
 			}
+		}
+
+		private void UnfocusPlayerFromMirror()
+		{
+			ILogicalMirror mirror = Player.CurrentMirror;
+
+			Player.Rotation = 0.0f;
+
+			float distanceFactor = _playerDistanceFromMirror;
+
+			while (Util.HasIntersection(Player, mirror))
+			{
+				distanceFactor += 0.01f;
+
+				Vector2 possiblePlayerPosition1 = mirror.GetDistance1FromMirrorCenter(distanceFactor);
+				Vector2 possiblePlayerPosition2 = mirror.GetDistance2FromMirrorCenter(distanceFactor);
+
+				bool isCloserToPosition1 = (Player.Position - possiblePlayerPosition1).Length < (Player.Position - possiblePlayerPosition2).Length;
+
+				Player.Position = isCloserToPosition1 ? possiblePlayerPosition1 : possiblePlayerPosition2;
+			}
+
+			Player.UnfocusCurrentMirror();
 		}
 
 		private void TogglePauseGame()
@@ -261,6 +279,8 @@ namespace Fledermaus
 
 		public void DoLogic()
 		{
+			if (_isReseting) CheckReset();
+
 			if (GamePaused) return;
 
 			ResetLighRays();
@@ -358,8 +378,6 @@ namespace Fledermaus
 						GameScreen.FinishLevel();
 						PauseGame();
 
-                        GameGraphics.test = true;
-
 						return;
 					}
 
@@ -374,14 +392,35 @@ namespace Fledermaus
 
 			if (Util.HasIntersection(Player, CurrentRoom.GetLightBounds()))
 			{
-				Console.WriteLine("verloren :(");
+				StartReset();
+			}
+		}
+
+		private void StartReset()
+		{
+			PauseGame();
+			MovementInputBlocked = true;
+			_isReseting = true;
+		}
+
+		private void CheckReset()
+		{
+			_resetCounter++;
+
+			if (_resetCounter > 60)
+			{
+				_resetCounter = 0;
 				CurrentRoom.Reset();
+
+				_isReseting = false;
+				MovementInputBlocked = false;
+				UnpauseGame();
 			}
 		}
 
         private void CheckExit()
         {
-			if (CurrentRoom.IsExitOpen && Util.HasIntersection(Player, CurrentRoom.GetExitBounds()))
+			if (Util.HasIntersection(Player, CurrentRoom.GetExitBounds()))
 			{
 				Console.WriteLine("gewonnen :)");
 				CurrentRoom.Reset();

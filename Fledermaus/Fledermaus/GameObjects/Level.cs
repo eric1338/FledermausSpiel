@@ -10,14 +10,18 @@ namespace Fledermaus.GameObjects
 	class Level : ILogicalLevel
 	{
 
+		public string Name;
+
 		public List<Room> Rooms { get; set; }
 		public Room CurrentRoom;
 
 		private Stopwatch _stopwatch = new Stopwatch();
 		public List<float> Times = new List<float>();
 
-		public Level()
+		public Level(string name)
 		{
+			Name = name;
+
 			Rooms = new List<Room>();
 			_stopwatch.Start();
 		}
@@ -49,7 +53,7 @@ namespace Fledermaus.GameObjects
 		private void AddNewRoomTime()
 		{
 			_stopwatch.Stop();
-			Times.Add((float)_stopwatch.Elapsed.TotalSeconds);
+			Times.Add((float) _stopwatch.Elapsed.TotalSeconds);
 			_stopwatch.Reset();
 		}
 
@@ -72,11 +76,6 @@ namespace Fledermaus.GameObjects
 			return CurrentRoom;
 		}
 
-		public void StartTimer()
-		{
-			_stopwatch.Start();
-		}
-
 		public void PauseTimer()
 		{
 			_stopwatch.Stop();
@@ -85,11 +84,6 @@ namespace Fledermaus.GameObjects
 		public void UnpauseTimer()
 		{
 			_stopwatch.Start();
-		}
-
-		public void StopTimer()
-		{
-			_stopwatch.Stop();
 		}
 
 		public void FinishLevel()
