@@ -30,16 +30,28 @@ namespace Fledermaus
 			Data.PlayerData.Instance.CreateLevelHighscores("Level 3", 5);
 
 			windowState = WindowState.Normal;
-            
-            //windowState = WindowState.Normal;
+
+			int width;
+			int height;
 
             if (windowState == WindowState.Fullscreen)
-                gameWindow = new MyGameWindow(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
+			{
+				width = SystemInformation.VirtualScreen.Width;
+				height = SystemInformation.VirtualScreen.Height;
+			}
             else
-                gameWindow = new MyGameWindow(800, 700);
+			{
+				width = 1280;
+				height = 800;
+			}
 
-            //win.CurrentScreen = new GameScreen(win);
-            gameWindow.CurrentScreen = new MainMenuScreen();
+			gameWindow = new MyGameWindow(width, height);
+
+			BasicGraphics.WindowWidth = width;
+			BasicGraphics.WindowHeight = height;
+
+			//win.CurrentScreen = new GameScreen(win);
+			gameWindow.CurrentScreen = new MainMenuScreen();
 
             if (windowState == WindowState.Fullscreen) gameWindow.WindowState = WindowState.Fullscreen;
 

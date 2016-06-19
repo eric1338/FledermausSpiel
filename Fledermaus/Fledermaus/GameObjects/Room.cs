@@ -16,6 +16,8 @@ namespace Fledermaus
 		public int Row { get; set; }
 		public int Column { get; set; }
 
+		public int NextRoomIndex { get; set; }
+
 		public RectangularGameObject RoomBounds { get; set; }
 
 		public Player Player { get; set; }
@@ -25,8 +27,6 @@ namespace Fledermaus
 		public List<Mirror> Mirrors { get; set; }
 		public List<Obstacle> Obstacles { get; set; }
 
-		public List<Tuple<IBounded, int>> RoomTransitionTriggers { get; set; }
-
 		public bool IsExitOpen { get; set; }
 
 		public Room()
@@ -34,8 +34,6 @@ namespace Fledermaus
 			LightRays = new List<LightRay>();
 			Mirrors = new List<Mirror>();
 			Obstacles = new List<Obstacle>();
-
-			RoomTransitionTriggers = new List<Tuple<IBounded, int>>();
 		}
 
 		public void AddLightRay(LightRay lightRay)
@@ -53,14 +51,10 @@ namespace Fledermaus
 			Obstacles.Add(obstacle);
 		}
 
-		public void AddRoomTransitionTrigger(IBounded triggerArea, int roomIndex)
-		{
-			RoomTransitionTriggers.Add(new Tuple<IBounded, int>(triggerArea, roomIndex));
-		}
-
 		public void Reset()
 		{
 			Player.Reset();
+
 			foreach (Mirror mirror in Mirrors) mirror.Reset();
 		}
 
@@ -79,19 +73,11 @@ namespace Fledermaus
 			return LightRays;
 		}
 
-		public IEnumerable<Tuple<IBounded, int>> GetRoomTransitionTriggers()
-		{
-			return RoomTransitionTriggers;
-		}
-
 		public IBounded GetReflectingBounds()
 		{
 			List<Line> reflectingLines = new List<Line>();
 
-			foreach (ILogicalMirror mirror in GetLogicalMirrors())
-			{
-				reflectingLines.Add(mirror.GetMirrorLine());
-			}
+			foreach (ILogicalMirror mirror in GetLogicalMirrors()) reflectingLines.Add(mirror.GetMirrorLine());
 
 			return Util.CreateBoundsFromList(reflectingLines);
 		}
@@ -99,7 +85,6 @@ namespace Fledermaus
 		public IBounded GetNonReflectingBounds()
 		{
 			List<Line> nonReflectingLines = new List<Line>();
-
 			nonReflectingLines.AddRange(RoomBounds.GetLines());
 
 			foreach (Obstacle obstacle in Obstacles) nonReflectingLines.AddRange(obstacle.GetLines());

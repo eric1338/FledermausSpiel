@@ -11,24 +11,12 @@ namespace Fledermaus
 	class Levels
 	{
 
-		public static Level CreateTestLevel()
-		{
-			Level level = CreateLevel2();
-
-			return level;
-		}
-
-		private static Room GetStdRoom()
+		private static Room CreateDefaultRoom()
 		{
 			Room room = new Room();
 			room.RoomBounds = new RectangularGameObject(new Vector2(-1f, 1f), new Vector2(1f, -1f));
 
 			return room;
-		}
-
-		private static void SetStdValues(Room room)
-		{
-			room.RoomBounds = new RectangularGameObject(new Vector2(-1f, 1f), new Vector2(1f, -1f));
 		}
 
 		public static Level CreateLevel1()
@@ -39,31 +27,31 @@ namespace Fledermaus
 			r1.Index = 1;
 			r1.Row = 2;
 			r1.Column = 3;
-			r1.AddRoomTransitionTrigger(r1.Exit, 2);
+			r1.NextRoomIndex = 2;
 
 			Room r2 = CreateL1R2();
 			r2.Index = 2;
 			r2.Row = 1;
 			r2.Column = 3;
-			r2.AddRoomTransitionTrigger(r2.Exit, 3);
+			r2.NextRoomIndex = 3;
 
 			Room r3 = CreateL1R3();
 			r3.Index = 3;
 			r3.Row = 1;
 			r3.Column = 2;
-			r3.AddRoomTransitionTrigger(r3.Exit, 4);
+			r3.NextRoomIndex = 4;
 
 			Room r4 = CreateL1R4();
 			r4.Index = 4;
 			r4.Row = 2;
 			r4.Column = 2;
-			r4.AddRoomTransitionTrigger(r4.Exit, 5);
+			r4.NextRoomIndex = 5;
 
 			Room r5 = CreateL1R5();
 			r5.Index = 5;
 			r5.Row = 2;
 			r5.Column = 1;
-			r5.AddRoomTransitionTrigger(r5.Exit, -1);
+			r5.NextRoomIndex = -1;
 
 			level1.AddRoom(r1);
 			level1.AddRoom(r2);
@@ -84,31 +72,31 @@ namespace Fledermaus
 			r1.Index = 1;
 			r1.Row = 2;
 			r1.Column = 1;
-			r1.AddRoomTransitionTrigger(r1.Exit, 2);
+			r1.NextRoomIndex = 2;
 
 			Room r2 = CreateL2R2();
 			r2.Index = 2;
 			r2.Row = 1;
 			r2.Column = 1;
-			r2.AddRoomTransitionTrigger(r2.Exit, 3);
+			r2.NextRoomIndex = 3;
 
 			Room r3 = CreateL2R3();
 			r3.Index = 3;
 			r3.Row = 1;
 			r3.Column = 2;
-			r3.AddRoomTransitionTrigger(r3.Exit, 4);
+			r3.NextRoomIndex = 4;
 
 			Room r4 = CreateL2R4();
 			r4.Index = 4;
 			r4.Row = 2;
 			r4.Column = 2;
-			r4.AddRoomTransitionTrigger(r4.Exit, 5);
+			r4.NextRoomIndex = 5;
 
 			Room r5 = CreateL2R5();
 			r5.Index = 5;
 			r5.Row = 3;
 			r5.Column = 2;
-			r5.AddRoomTransitionTrigger(r5.Exit, -1);
+			r5.NextRoomIndex = -1;
 
 			level2.AddRoom(r1);
 			level2.AddRoom(r2);
@@ -129,31 +117,31 @@ namespace Fledermaus
 			r1.Index = 1;
 			r1.Row = 2;
 			r1.Column = 2;
-			r1.AddRoomTransitionTrigger(r1.Exit, 2);
+			r1.NextRoomIndex = 2;
 
 			Room r2 = CreateL3R2();
 			r2.Index = 2;
 			r2.Row = 2;
 			r2.Column = 1;
-			r2.AddRoomTransitionTrigger(r2.Exit, 3);
+			r2.NextRoomIndex = 3;
 
 			Room r3 = CreateL3R3();
 			r3.Index = 3;
 			r3.Row = 1;
 			r3.Column = 1;
-			r3.AddRoomTransitionTrigger(r3.Exit, 4);
+			r3.NextRoomIndex = 4;
 
 			Room r4 = CreateL3R4();
 			r4.Index = 4;
 			r4.Row = 1;
 			r4.Column = 2;
-			r4.AddRoomTransitionTrigger(r4.Exit, 5);
+			r4.NextRoomIndex = 5;
 
 			Room r5 = CreateL3R5();
 			r5.Index = 5;
 			r5.Row = 1;
 			r5.Column = 3;
-			r5.AddRoomTransitionTrigger(r5.Exit, -1);
+			r5.NextRoomIndex = -1;
 
 			level3.AddRoom(r1);
 			level3.AddRoom(r2);
@@ -170,7 +158,7 @@ namespace Fledermaus
 
 		private static Room CreateL1R1()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(-0.9f, -0.9f));
 
@@ -180,7 +168,7 @@ namespace Fledermaus
 			m1.SetRotationBounds(0.0f, 0.9f);
 			room.AddMirror(m1);
 
-			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.6f, -0.6f), new Vector2(0.75f, -0.75f)));
+			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.55f, -0.55f), new Vector2(0.75f, -0.75f)));
 
 			room.Exit = new RectangularGameObject(new Vector2(0.65f, 1.03f), new Vector2(0.90f, 0.97f));
 
@@ -189,7 +177,7 @@ namespace Fledermaus
 
 		private static Room CreateL1R2()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, -0.9f));
 
@@ -208,7 +196,7 @@ namespace Fledermaus
 
 		private static Room CreateL1R3()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
@@ -221,7 +209,7 @@ namespace Fledermaus
 			m2.SetRotationBounds(0.0f, 0.7f);
 			room.AddMirror(m2);
 
-			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.2f, -0.4f), new Vector2(0.4f, -0.8f)));
+			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.2f, -0.5f), new Vector2(0.4f, -0.7f)));
 
 			room.Exit = new RectangularGameObject(new Vector2(0.65f, -0.97f), new Vector2(0.9f, -1.03f));
 
@@ -230,7 +218,7 @@ namespace Fledermaus
 
 		private static Room CreateL1R4()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
@@ -251,7 +239,7 @@ namespace Fledermaus
 			m4.SetRotationBounds(0.4f, 0.8f);
 			room.AddMirror(m4);
 
-			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.42f, 0.72f), new Vector2(-0.28f, 0.58f)));
+			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.45f, 0.75f), new Vector2(-0.25f, 0.55f)));
 
 			room.Exit = new RectangularGameObject(new Vector2(-1.03f, -0.65f), new Vector2(-0.97f, -0.9f));
 
@@ -260,7 +248,7 @@ namespace Fledermaus
 
 		private static Room CreateL1R5()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, -0.9f));
 
@@ -279,8 +267,8 @@ namespace Fledermaus
 			m4.SetRotationBounds(0.5f, 1.0f);
 			room.AddMirror(m4);
 
-			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.05f, -0.28f), new Vector2(0.2f, -0.6f)));
-			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.45f, 0.8f), new Vector2(-0.2f, 0.55f)));
+			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.05f, -0.35f), new Vector2(0.15f, -0.55f)));
+			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.4f, 0.8f), new Vector2(-0.2f, 0.6f)));
 
 			room.Exit = new RectangularGameObject(new Vector2(0.65f, 1.03f), new Vector2(0.9f, 0.97f));
 
@@ -291,7 +279,7 @@ namespace Fledermaus
 
 		private static Room CreateL2R1()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, -0.9f));
 
@@ -315,7 +303,7 @@ namespace Fledermaus
 
 		private static Room CreateL2R2()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(-0.9f, -0.9f));
 
@@ -331,7 +319,7 @@ namespace Fledermaus
 			Mirror m2 = new Mirror(new Vector2(-0.65f, -0.08f), new Vector2(-0.6f, -0.44f), 0.3f, 0.8f);
 			m2.SetRotationBounds(0.12f, 0.4f);
 			room.AddMirror(m2);
-			Mirror m3 = new Mirror(new Vector2(-0.78f, 0.12f), new Vector2(-0.34f, 0.2f), 0.3f, 0.2f);
+			Mirror m3 = new Mirror(new Vector2(-0.72f, 0.14f), new Vector2(-0.34f, 0.2f), 0.3f, 0.3f);
 			m3.SetRotationBounds(-0.15f, 0.4f);
 			room.AddMirror(m3);
 			Mirror m4 = new Mirror(new Vector2(-0.05f, 0.48f), new Vector2(0.12f, 0.43f), 0.25f, 0.6f);
@@ -351,7 +339,7 @@ namespace Fledermaus
 
 		private static Room CreateL2R3()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(-0.9f, 0.9f));
 
@@ -376,7 +364,7 @@ namespace Fledermaus
 
 		private static Room CreateL2R4()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
@@ -409,7 +397,7 @@ namespace Fledermaus
 
 		private static Room CreateL2R5()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(-0.9f, 0.9f));
 
@@ -437,7 +425,7 @@ namespace Fledermaus
 
 		private static Room CreateL3R1()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, -0.9f));
 
@@ -468,13 +456,13 @@ namespace Fledermaus
 
 		private static Room CreateL3R2()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
 			room.AddLightRay(new LightRay(new Vector2(0.05f, 0.98f), new Vector2(-0.1f, -1f)));
 			room.AddLightRay(new LightRay(new Vector2(0.4f, -0.5f), new Vector2(-0.1f, 0.2f)));
-			room.AddLightRay(new LightRay(new Vector2(-0.01f, -0.25f), new Vector2(-0.14f, -0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(0.0f, -0.25f), new Vector2(-0.14f, -0.1f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.15f, 0.18f), new Vector2(0.1f, 0.1f), -0.33f, 0.6f);
 			m1.SetRotationBounds(-0.7f, -0.3f);
@@ -496,7 +484,7 @@ namespace Fledermaus
 
 		private static Room CreateL3R3()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(-0.9f, -0.9f));
 
@@ -520,7 +508,7 @@ namespace Fledermaus
 
 		private static Room CreateL3R4()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(-0.9f, 0.9f));
 
@@ -547,7 +535,7 @@ namespace Fledermaus
 
 		private static Room CreateL3R5()
 		{
-			Room room = GetStdRoom();
+			Room room = CreateDefaultRoom();
 
 			room.Player = new Player(new Vector2(-0.9f, -0.9f));
 

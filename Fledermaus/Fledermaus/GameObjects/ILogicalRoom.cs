@@ -11,11 +11,11 @@ namespace Fledermaus
 	interface ILogicalRoom
 	{
 
+		int NextRoomIndex { get; }
+
 		ILogicalPlayer GetLogicalPlayer();
 		IEnumerable<ILogicalLightRay> GetLogicalLightRays();
 		IEnumerable<ILogicalMirror> GetLogicalMirrors();
-
-		IEnumerable<Tuple<IBounded, int>> GetRoomTransitionTriggers();
 
 		IBounded GetReflectingBounds();
 		IBounded GetNonReflectingBounds();

@@ -51,6 +51,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicGraphics.cs" />
     <Compile Include="Data\LevelHighscores.cs" />
     <Compile Include="GameGraphics.cs" />
     <Compile Include="GameLogic.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="GameObjects\IBounded.cs" />
     <Compile Include="Data\PlayerData.cs" />
     <Compile Include="Screens\LevelEndScreen.cs" />
+    <Compile Include="Screens\TutorialScreen.cs" />
     <Compile Include="Textures.cs" />
     <Compile Include="Utils\LevelParser.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -107,6 +109,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Textures\player.png" />
+    <None Include="Resources\font.png" />
+    <None Include="Resources\Textures\title.png" />
+    <None Include="Resources\Textures\playerhit.png" />
+    <None Include="Resources\Textures\obstacle1.png" />
+    <None Include="Resources\Textures\obstacle2.png" />
+    <None Include="Resources\Textures\obstacle3.png" />
+    <None Include="Resources\Textures\obstacle4.png" />
     <Content Include="Resources\Textures\woodfloor.png" />
     <None Include="Resources\Menu\Fire.png" />
   </ItemGroup>

@@ -35,12 +35,18 @@ namespace Fledermaus
 		private float _defaultScale = 0.9f;
 
 		private Texture _playerTexture;
+		private Texture _playerHitTexture;
 		private Texture _floorTexture;
 		private Texture _exitTexture;
-		private Texture _obstacleTexture;
+		private Texture _obstacleTexture1;
+		private Texture _obstacleTexture2;
+		private Texture _obstacleTexture3;
+		private Texture _obstacleTexture4;
 
 		private Room _currentRoom = null;
 		private Room _previousCurrentRoom = null;
+
+		private int _blinkCounter = 0;
 
 		public GameGraphics() : this(null)
 		{
@@ -52,9 +58,13 @@ namespace Fledermaus
 			Textures.Instance.LoadTextures();
 
 			_playerTexture = Textures.Instance.PlayerTexture;
+			_playerHitTexture = Textures.Instance.PlayerHitTexture;
 			_floorTexture = Textures.Instance.FloorTexture;
 			_exitTexture = Textures.Instance.ExitTexture;
-			_obstacleTexture = Textures.Instance.ObstacleTexture;
+			_obstacleTexture1 = Textures.Instance.ObstacleTexture1;
+			_obstacleTexture2 = Textures.Instance.ObstacleTexture2;
+			_obstacleTexture3 = Textures.Instance.ObstacleTexture3;
+			_obstacleTexture4 = Textures.Instance.ObstacleTexture4;
 
 			Level = level;
 			if (level != null) _currentRoom = Level.CurrentRoom;
@@ -151,24 +161,24 @@ namespace Fledermaus
 			foreach (Room room in Level.Rooms)
 			{
 				CalculateAndSetDrawSettings(room, room == Level.CurrentRoom);
-				DrawRoom(room, room == Level.CurrentRoom);
+				DrawRoom(room, room == Level.CurrentRoom, Level.IsPlayerHit);
 			}
 
 			_currentRoom = Level.CurrentRoom;
 		}
 
-		public void DrawRoom(Room room, bool drawPlayer)
+		public void DrawRoom(Room room, bool drawPlayer, bool isPlayerHit = false)
 		{
 			DrawRoomBounds(room.RoomBounds);
 			DrawFloor(room.RoomBounds);
 
 			DrawMirrors(room.Mirrors);
 
-			if (drawPlayer) DrawPlayer(room.Player);
+			if (drawPlayer) DrawPlayer(room.Player, isPlayerHit);
 
 			DrawExit(room.Exit);
 			DrawLightRays(room.LightRays);
-			DrawObstacles(room.Obstacles);
+			DrawObstacles(room.Obstacles, room.Index);
 		}
 
 		private void DrawFloor(RectangularGameObject room)
@@ -224,14 +234,29 @@ namespace Fledermaus
 			DrawBounds(arrowLines, 0.004f);
 		}
 
-		private void DrawPlayer(Player player)
+		private void DrawPlayer(Player player, bool isHit = false)
 		{
+			Texture playerTexture;
+
+			if (isHit)
+			{
+				bool useHitTexture = Math.Floor(_blinkCounter / 10f) % 2 == 0;
+				playerTexture = useHitTexture ? _playerHitTexture : _playerTexture;
+
+				_blinkCounter++;
+			}
+			else
+			{
+				playerTexture = _playerTexture;
+				_blinkCounter = 0;
+			}
+
 			Vector2 bL = player.GetRelativePoint(-1, -1);
 			Vector2 bR = player.GetRelativePoint(1, -1);
 			Vector2 tR = player.GetRelativePoint(1, 1);
 			Vector2 tL = player.GetRelativePoint(-1, 1);
 
-			DrawTexture(_playerTexture, bL, bR, tR, tL);
+			DrawTexture(playerTexture, bL, bR, tR, tL);
 
 			//SetColor(Colors.LightRay);
 			//DrawBounds(player, 0.002f);
@@ -251,15 +276,31 @@ namespace Fledermaus
 			DrawLine(mirror.GetMirrorLine(), 0.006f);
 		}
 
-		private void DrawObstacles(List<Obstacle> obstacles)
+		private void DrawObstacles(List<Obstacle> obstacles, int roomIndex = 0)
 		{
-			foreach (Obstacle o in obstacles) DrawObstacle(o);
+			for (int i = 0; i < obstacles.Count; i++)
+			{
+				DrawObstacle(obstacles[i], (i + roomIndex) % 4);
+			}
 		}
 
-		private void DrawObstacle(Obstacle obstacle)
+		private Texture GetObstacleTexture(int index)
 		{
-			SetColor(Colors.Obstacle);
-			DrawBounds(obstacle, 0.003f);
+			if (index == 0) return _obstacleTexture1;
+			if (index == 1) return _obstacleTexture2;
+			if (index == 2) return _obstacleTexture3;
+
+			return _obstacleTexture4;
+		}
+
+		private void DrawObstacle(Obstacle obstacle, int textureIndex = 0)
+		{
+			Texture texture = GetObstacleTexture(textureIndex);
+
+			DrawRectangularTexture(texture, obstacle.TopLeft, obstacle.BottomRight);
+
+			//GL.Color3(0.4f, 0.4f, 0.4f);
+			//DrawBounds(obstacle, 0.002f);
 		}
 
 		private void DrawExit(RectangularGameObject exit)
@@ -275,7 +316,7 @@ namespace Fledermaus
 			Vector2 topLeft = GetTransformedVector(rectangularGameObject.TopLeft);
 			Vector2 bottomRight = GetTransformedVector(rectangularGameObject.BottomRight);
 
-			DrawSquare(topLeft, bottomRight);
+			BasicGraphics.DrawSquare(topLeft, bottomRight);
 		}
 
 		private void DrawBounds(IBounded bounds, float thickness)
@@ -285,35 +326,7 @@ namespace Fledermaus
 
 		private void DrawLine(Line line, float thickness)
 		{
-			DrawLine(GetTransformedVector(line.Point1), GetTransformedVector(line.Point2), thickness * _scale);
-		}
-
-		private void DrawLine(Vector2 point1, Vector2 point2, float thickness)
-		{
-			Vector2 normal = point2 - point1;
-			normal.Normalize();
-
-			normal *= thickness;
-
-			Vector2 cwRotation = Util.GetOrthogonalVectorCW(normal);
-			Vector2 ccwRotation = Util.GetOrthogonalVectorCCW(normal);
-
-			Vector2 point11 = point1 + cwRotation;
-			Vector2 point12 = point1 + ccwRotation;
-			Vector2 point21 = point2 + cwRotation;
-			Vector2 point22 = point2 + ccwRotation;
-
-			GL.Begin(PrimitiveType.Triangles);
-			GL.Vertex2(point11);
-			GL.Vertex2(point12);
-			GL.Vertex2(point22);
-			GL.End();
-
-			GL.Begin(PrimitiveType.Triangles);
-			GL.Vertex2(point11);
-			GL.Vertex2(point21);
-			GL.Vertex2(point22);
-			GL.End();
+			BasicGraphics.DrawLine(GetTransformedVector(line.Point1), GetTransformedVector(line.Point2), thickness * _scale);
 		}
 
 		private void DrawRectangularTexture(Texture texture, Vector2 topLeft, Vector2 bottomRight)
@@ -331,37 +344,7 @@ namespace Fledermaus
 			Vector2 tR = GetTransformedVector(topRight);
 			Vector2 tL = GetTransformedVector(topLeft);
 
-			DrawTexture2(texture, bL, bR, tR, tL);
-		}
-
-		private void DrawTexture2(Texture texture, Vector2 bottomLeft, Vector2 bottomRight, Vector2 topRight, Vector2 topLeft)
-		{
-			texture.BeginUse();
-
-			GL.Color3(_alpha, _alpha, _alpha);
-
-			GL.Begin(PrimitiveType.Quads);
-			GL.TexCoord2(0.0f, 0.0f);
-			GL.Vertex2(bottomLeft);
-			GL.TexCoord2(1.0f, 0.0f);
-			GL.Vertex2(bottomRight);
-			GL.TexCoord2(1.0f, 1.0f);
-			GL.Vertex2(topRight);
-			GL.TexCoord2(0.0f, 1.0f);
-			GL.Vertex2(topLeft);
-			GL.End();
-
-			texture.EndUse();
-		}
-
-		private void DrawSquare(Vector2 topLeft, Vector2 bottomRight)
-		{
-			GL.Begin(PrimitiveType.Quads);
-			GL.Vertex2(topLeft.X, bottomRight.Y);
-			GL.Vertex2(topLeft.X, topLeft.Y);
-			GL.Vertex2(bottomRight.X, topLeft.Y);
-			GL.Vertex2(bottomRight.X, bottomRight.Y);
-			GL.End();
+			BasicGraphics.DrawTexture(texture, bL, bR, tR, tL, _alpha);
 		}
 
 		private Vector2 GetTransformedVector(Vector2 vector)

@@ -173,20 +173,18 @@ namespace Fledermaus
 
 		private void TryToMovePlayer(float dx, float dy)
 		{
-			Vector2 deltaVector = new Vector2(dx, dy);
 			ILogicalPlayer tempPlayer = Player.CreateClone();
 			bool movePlayer = true;
 
-			tempPlayer.Position += deltaVector;
+			Vector2 delta = new Vector2(dx, dy);
+			tempPlayer.Position += delta;
 
 			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetNonReflectingBounds())) movePlayer = false;
 			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetReflectingBounds())) movePlayer = false;
 			if (Util.HasIntersection(tempPlayer, CurrentRoom.GetLightBounds()) && !_godMode) movePlayer = false;
 
-			if (movePlayer) Player.Position += deltaVector;
+			if (movePlayer) Player.Position += delta;
 		}
-
-		// TODO: UserAction und Function evtl mappen
 
 		private void ProcessSingleUserActions()
 		{
@@ -286,10 +284,8 @@ namespace Fledermaus
 			ResetLighRays();
 			CalculateLightRays();
 
-			CheckRoomTransitionTriggers();
-
+			CheckPlayerExitCollision();
 			CheckPlayerLightCollision();
-			CheckExit();
 			DetermineMirrorAccessibility();
 		}
 
@@ -331,12 +327,10 @@ namespace Fledermaus
 
 				foreach (var mirrorIntersection in mirrorIntersections)
 				{
-
 					if (mirrorIntersection.Item1.RelativeDistance < closestReflectingIntersection.Item1.RelativeDistance)
 					{
 						closestReflectingIntersection = mirrorIntersection;
 					}
-
 				}
 
 				reflect = closestReflectingIntersection.Item1.RelativeDistance < closestNonReflectingIntersection.RelativeDistance;
@@ -365,23 +359,21 @@ namespace Fledermaus
 			}
 		}
 
-		private void CheckRoomTransitionTriggers()
+		private void CheckPlayerExitCollision()
 		{
-			foreach (Tuple<IBounded, int> roomTransitionTrigger in CurrentRoom.GetRoomTransitionTriggers())
+			if (Util.HasIntersection(Player, CurrentRoom.GetExitBounds()))
 			{
-				if (Util.HasIntersection(Player, roomTransitionTrigger.Item1))
+				int nextRoomIndex = CurrentRoom.NextRoomIndex;
+
+				if (nextRoomIndex < 0)
 				{
-					// temp
-					if (roomTransitionTrigger.Item2 < 0)
-					{
-						Level.FinishLevel();
-						GameScreen.FinishLevel();
-						PauseGame();
-
-						return;
-					}
-
-					Level.SwitchCurrentRoom(roomTransitionTrigger.Item2);
+					Level.FinishLevel();
+					GameScreen.FinishLevel();
+					PauseGame();
+				}
+				else
+				{
+					Level.SwitchCurrentRoom(nextRoomIndex);
 				}
 			}
 		}
@@ -390,10 +382,7 @@ namespace Fledermaus
 		{
 			if (_godMode) return;
 
-			if (Util.HasIntersection(Player, CurrentRoom.GetLightBounds()))
-			{
-				StartReset();
-			}
+			if (Util.HasIntersection(Player, CurrentRoom.GetLightBounds())) StartReset();
 		}
 
 		private void StartReset()
@@ -401,29 +390,24 @@ namespace Fledermaus
 			PauseGame();
 			MovementInputBlocked = true;
 			_isReseting = true;
+
+			Level.IsPlayerHit = true;
 		}
 
 		private void CheckReset()
 		{
 			_resetCounter++;
 
-			if (_resetCounter > 60)
+			if (_resetCounter > 78)
 			{
+				Level.IsPlayerHit = false;
+
 				_resetCounter = 0;
 				CurrentRoom.Reset();
 
 				_isReseting = false;
 				MovementInputBlocked = false;
 				UnpauseGame();
-			}
-		}
-
-        private void CheckExit()
-        {
-			if (Util.HasIntersection(Player, CurrentRoom.GetExitBounds()))
-			{
-				Console.WriteLine("gewonnen :)");
-				CurrentRoom.Reset();
 			}
 		}
 

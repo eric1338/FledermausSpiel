@@ -9,6 +9,8 @@ namespace Fledermaus.GameObjects
 	interface ILogicalLevel
 	{
 
+		bool IsPlayerHit { get; set; }
+
 		ILogicalRoom GetCurrentRoom();
 		void SwitchCurrentRoom(int newRoomIndex);
 

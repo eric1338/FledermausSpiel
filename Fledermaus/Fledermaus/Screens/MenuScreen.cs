@@ -102,26 +102,23 @@ namespace Fledermaus.Screens
 
         public MenuScreen() : base()
         {
-
-        //    MyApplication.GameWindow.MouseMove += Mouse_Move;
-        //    MyApplication.GameWindow.MouseDown += GameWindow_MouseDown;
-            //inputManager.Clear();
-            _inputManager.AddSingleUserActionMapping(Key.Up, UserAction.MoveUp);
-            _inputManager.AddSingleUserActionMapping(Key.Down, UserAction.MoveDown);
-            _inputManager.AddSingleUserActionMapping(Key.Enter, UserAction.Confirm);
-            _inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.OpenGameMenu);
-
-            menuButtons.CollectionChanged += MenuButtons_CollectionChanged;
+			Init();
         }
-        public MenuScreen(float width, float height, Vector2 position) : base(width, height, position) {
 
-            _inputManager.AddSingleUserActionMapping(Key.Up, UserAction.MoveUp);
-            _inputManager.AddSingleUserActionMapping(Key.Down, UserAction.MoveDown);
-            _inputManager.AddSingleUserActionMapping(Key.Enter, UserAction.Confirm);
-            _inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.OpenGameMenu);
-
-            menuButtons.CollectionChanged += MenuButtons_CollectionChanged;
+        public MenuScreen(float width, float height, Vector2 position) : base(width, height, position)
+		{
+			Init();
         }
+
+		private void Init()
+		{
+			_inputManager.AddSingleUserActionMapping(Key.Up, UserAction.MoveUp);
+			_inputManager.AddSingleUserActionMapping(Key.Down, UserAction.MoveDown);
+			_inputManager.AddSingleUserActionMapping(Key.Enter, UserAction.Confirm);
+			_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.OpenGameMenu);
+
+			menuButtons.CollectionChanged += MenuButtons_CollectionChanged;
+		}
 
         private void GameWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -185,7 +182,7 @@ namespace Fledermaus.Screens
             }
 
             var tmpTranslation = contentHeight / 2;
-            if (menuButtons.Count>0)
+            if (menuButtons.Count > 0)
             while (menuButtons.First().Position.Y + menuButtons.First().Height / 2 + tmpTranslation > 1 - Padding)
                 tmpTranslation -= menuButtons.First().Height;
 
@@ -201,6 +198,10 @@ namespace Fledermaus.Screens
 
         public override void Draw()
         {
+			BasicGraphics.DrawDefaultBackground();
+
+			BasicGraphics.DrawRectangularTexture(Textures.Instance.TitleTexture, new Vector2(-0.2f, 0.8f), new Vector2(1.4f, 0.0f));
+
             setInitPositionOfButtons();
             base.Draw();
 
@@ -225,6 +226,7 @@ namespace Fledermaus.Screens
 
             }
         }
+
         public override void ProcessMouseMove(MouseMoveEventArgs e)
         {
             Vector2 relPos = new Vector2((e.Mouse.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
@@ -238,10 +240,33 @@ namespace Fledermaus.Screens
                     }
             }
         }
+
         public override void ProcessMouseButtonDown(MouseButtonEventArgs e)
         {
             menuButtons[ActiveButton].doAction();
         }
+
+
+		protected void AddMenuButton(string text, Button.DoAction doAction, bool selected = false, bool enabled = true)
+		{
+			menuButtons.Add(new ButtonText(text, doAction, selected, enabled));
+		}
+
+		protected void DrawTitle(string title)
+		{
+			// TODO: centered
+			BasicGraphics.DrawText(title, new Vector2(-0.6f, 0.6f), 0.15f);
+		}
+
+		protected void AddMainMenuButton(string text = "back", bool iSelected = false)
+		{
+			AddMenuButton(text, GoToMainMenu, isSelected);
+		}
+
+		protected void GoToMainMenu()
+		{
+			MyApplication.GameWindow.CurrentScreen = new MainMenuScreen();
+		}
 
     }
 }

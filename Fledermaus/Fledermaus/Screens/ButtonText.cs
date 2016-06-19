@@ -8,23 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Fledermaus.Screens;
 using System.Windows;
+using OpenTK;
 
 namespace Fledermaus.Screens
 {
     class ButtonText : Button
     {
-
-        private TextureFont font;
+		
         protected readonly float boundingBoxHeight = .15f;
         protected readonly float boundingBoxWidth = .8f;
 
         // public delegate void DoAction();
 
-        public String Text { get; set; }
+        public string Text { get; set; }
 
 		private bool isEnabled;
 
-        public ButtonText(String buttonText, DoAction doAction, bool selected = false, bool enabled = true) : base(doAction, selected)
+        public ButtonText(string buttonText, DoAction doAction, bool selected = false, bool enabled = true) : base(doAction, selected)
         {
             this.Text = buttonText;
 
@@ -32,9 +32,7 @@ namespace Fledermaus.Screens
             Width = buttonText.Length * boundingBoxWidth / 20;
             Height = boundingBoxHeight;//10;
 
-
-            //load font
-            font = new TextureFont(TextureLoader.FromBitmap(Resources.Fire), 10, 32, boundingBoxWidth, 1/*boundingBoxHeightHeight*15*/, .7f);
+			
 
             //background clear color
             GL.ClearColor(Color.Black);
@@ -67,14 +65,11 @@ namespace Fledermaus.Screens
 
 			if (!isEnabled) GL.Color3(Color.Gray);
 			else if (isSelected) GL.Color3(Color.LightYellow);
-			else GL.Color3(Color.LightSteelBlue);
+			else GL.Color3(Color.Orange);
 
-            GL.Enable(EnableCap.Blend); // for transparency in textures
-                                        //print string
-
-            font.Print(Position.X - (Width / 2), Position.Y - (Height / 2), 0, 0.05f, Text);
-            GL.Disable(EnableCap.Blend); // for transparency in textures
-
+			//Vector2 position = new Vector2(Position.X - (Width / 2), Position.Y - (Height / 2));
+			Vector2 position = new Vector2(Position.X, Position.Y);
+			BasicGraphics.DrawText(Text, position, 0.08f);
         }
     }
 }
