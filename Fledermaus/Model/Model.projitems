@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\LightRayVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\ObstacleVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\MirrorVisual.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\ExitVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\PlayerVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\RoomVisual.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameObjectVisual\GameObjectVisual.cs" />

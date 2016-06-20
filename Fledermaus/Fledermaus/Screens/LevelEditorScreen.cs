@@ -137,14 +137,18 @@ namespace Fledermaus.Screens
             //          createGameScreen();
             Level = new Level();
             LevelVisual = new LevelVisual();
-            
-            _level =Levels.CreateLevel1();
+
+            _level = Levels.CreateLevel1();
             _gameLogic.Level = _level;
-            foreach (var _room in _level.Rooms) {
-                LevelVisual.Rooms.Add(new RoomVisual() {
+            foreach (var _room in _level.Rooms)
+            {
+                LevelVisual.Rooms.Add(new RoomVisual()
+                {
                     _Room = _room,
-                    PlayerVisual = new PlayerVisual() {
-                        Data = new Player() {
+                    PlayerVisual = new PlayerVisual()
+                    {
+                        Data = new Player()
+                        {
                             //InitialPosition = _room.Player.Position,
                             Position = _room.Player.Position,
                             RelativeBounds = new List<Vector2>() {  new Vector2(0.0f, 0.03f),
@@ -158,10 +162,11 @@ namespace Fledermaus.Screens
                                                                     new Vector2(-0.07f, 0.02f),
                                                                     new Vector2(-0.025f, 0.01f)
                         },
-            }
+                        }
                     },
-                    Data = new Model.GameObject.Room() {
-                        
+                    Data = new Model.GameObject.Room()
+                    {
+
                         Column = _room.Column,
                         Row = _room.Row,
                         RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.95f), Konfiguration.Round(.95f)),
@@ -169,11 +174,38 @@ namespace Fledermaus.Screens
                                                             new Vector2( Konfiguration.Round(.95f), Konfiguration.Round(-.95f)),
                                                             new Vector2( Konfiguration.Round(.95f), Konfiguration.Round(.95f))
                         },
-                    }
+                    },
+                    ExitVisual = new ExitVisual()
+                    {
+                        Data = new Exit()
+                        {
+                            Position = _room.Exit.Point1 + 0.5f * (-_room.Exit.Point1 + _room.Exit.Point3),
+                            RelativeBounds = new List<Vector2>() { -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3))+_room.Exit.Point1,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point2,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point3,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point4,
+ /*                               0.5f *(-_room.Exit.Point1+_room.Exit.Point3)-_room.Exit.Point1 ,
+                                                                    0.5f*(-_room.Exit.Point1+_room.Exit.Point3)-_room.Exit.Point2,
+                                                                     0.5f*(-_room.Exit.Point1+_room.Exit.Point3)-_room.Exit.Point3,
+                                                                   0.5f*(-_room.Exit.Point1+_room.Exit.Point3)- _room.Exit.Point4 ,*/
+                            },
+                        },
+
+                    },
                 });
-                foreach (var lightray in _room.LightRays) {
+                if (Math.Abs(LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.Data.RelativeBounds[0].X) < Math.Abs(LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.Data.RelativeBounds[0].Y))
+                {
+                    levelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.IsHorizontal = false;
+                }
+                else
+                    levelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.IsHorizontal = true;
+
+                System.Diagnostics.Debug.WriteLine(0.5f * (-_room.Exit.Point1 + _room.Exit.Point3));
+                foreach (var lightray in _room.LightRays)
+                {
                     LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].LightRayVisuals.Add(
-                        new LightRayVisual() {
+                        new LightRayVisual()
+                        {
                             Data = new LightRay()
                             {
                                 Position = lightray.Origin,
@@ -184,35 +216,45 @@ namespace Fledermaus.Screens
                                                             new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(.02f))
                                 }
                             }
-                
+
                         });
-                } 
-                foreach(var mirror in _room.Mirrors)
+                }
+                foreach (var mirror in _room.Mirrors)
                 {
-                    
-                    var mirV = new MirrorVisual() {
+
+                    var mirV = new MirrorVisual()
+                    {
                         Data = new Mirror()
                         {
 
                         },
                     };
-                }   
-                foreach(var obstacle in _room.Obstacles)
+                }
+                foreach (var obstacle in _room.Obstacles)
                 {
                     var obstV = new ObstacleVisual()
                     {
-                        
+                        Data = new Obstacle()
+                        {
+                            Position = _room.Exit.Point1 + 0.5f * (-_room.Exit.Point1 + _room.Exit.Point3),
+                            RelativeBounds = new List<Vector2>() { -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3))+_room.Exit.Point1,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point2,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point3,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point4,
+                            }
+                        }
                     };
                 }
+
+                foreach (var roomV in levelVisual.Rooms)
+                    level.Rooms.Add(roomV.Data as Model.GameObject.Room);
+
+                _gameGraphics.Level = _level;
+
+                //           createStartupLevel();
+                //            createVisualStartupLevel();
+
             }
-            foreach (var roomV in levelVisual.Rooms)
-                level.Rooms.Add(roomV.Data as Model.GameObject.Room);
-
-            _gameGraphics.Level = _level;
-
- //           createStartupLevel();
-//            createVisualStartupLevel();
-
         }
 
   /*      private void createGameScreen()

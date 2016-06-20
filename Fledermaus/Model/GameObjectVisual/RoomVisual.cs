@@ -9,6 +9,7 @@ using System.Drawing;
 using Fledermaus.Screens;
 using OpenTK.Input;
 using Fledermaus;
+using System.Linq;
 
 namespace Model.GameObjectVisual
 {
@@ -27,6 +28,7 @@ namespace Model.GameObjectVisual
 
 
         private PlayerVisual playerVisual;
+        private ExitVisual exitVisual;
         private List<LightRayVisual> lightRayVisuals;
         private List<LightRayVisual> obstacleVisuals;
 
@@ -100,6 +102,19 @@ namespace Model.GameObjectVisual
             }
         }
 
+        public ExitVisual ExitVisual
+        {
+            get
+            {
+                return exitVisual;
+            }
+
+            set
+            {
+                exitVisual = value;
+            }
+        }
+
         public RoomVisual()
         {
             //           _room = new Fledermaus.Room();
@@ -137,6 +152,16 @@ namespace Model.GameObjectVisual
                     else
                     {
                         this.PlayerVisual.IsSelected = false;
+
+                        if (exitVisual.isPointInScreen(e.Position))
+                        {
+                            exitVisual.IsSelected = true;
+                            //SelectedGameObject = PlayerVisual;
+                        }
+                        else
+                            exitVisual.IsSelected = false;
+
+                        
                     
                         foreach (var lightRay in lightRayVisuals)
                         {
@@ -178,6 +203,41 @@ namespace Model.GameObjectVisual
 
                 if(selectedGameObject.GetType().Equals(typeof(PlayerVisual)))
                     selectedGameObject.Data.Position = relPos;
+                if (selectedGameObject.GetType().Equals(typeof(ExitVisual))) {
+                    var absTop = (-relPos + new Vector2(.0f,1.0f)).Length;
+                    var absBot = (-relPos + new Vector2(.0f, -1.0f)).Length;
+                    var absRight = (-relPos + new Vector2(1.0f, .0f)).Length;
+                    var absLeft = (-relPos + new Vector2(-1.0f,.0f )).Length;
+
+                    var highest = new List<float>() { absBot, absLeft, absRight, absTop }.Min();
+                    if (highest == absTop) {
+                        selectedGameObject.Data.Position = new Vector2(relPos.X, 1.0f);//relPos;
+                        exitVisual.IsHorizontal = true;
+                    }
+                    else if (highest == absBot)
+                    {
+                        selectedGameObject.Data.Position = new Vector2(relPos.X, -1.0f);//relPos;
+                        exitVisual.IsHorizontal = true;
+                    }
+                    else if (highest == absLeft)
+                    {
+                        selectedGameObject.Data.Position = new Vector2(-1.0f,relPos.Y);//relPos;
+                        exitVisual.IsHorizontal = false;
+                    }
+                    else if (highest == absRight)
+                    {
+                        selectedGameObject.Data.Position = new Vector2(1.0f, relPos.Y);//relPos;
+                        exitVisual.IsHorizontal = false;
+                    }
+                    /*
+                    if (Math.Abs(relPos.X) >= 0.9f)
+                        exitVisual.IsHorizontal = false;
+                    else if(Math.Abs(relPos.Y) >= 0.9f)
+                        exitVisual.IsHorizontal = true;
+                    */
+
+
+                }
                 else if (selectedGameObject.GetType().Equals(typeof(LightRayVisual)))
                 {
                     if(((LightRayVisual)selectedGameObject).IsDirectionSelected)
@@ -195,7 +255,10 @@ namespace Model.GameObjectVisual
                     if (PlayerVisual != null)
                         if (PlayerVisual.IsSelected)
                             SelectedGameObject = PlayerVisual;
-                    foreach(var lr in lightRayVisuals) { 
+                    if (exitVisual != null)
+                        if (exitVisual.IsSelected)
+                            SelectedGameObject = exitVisual;
+                    foreach (var lr in lightRayVisuals) { 
                         if(lr.IsSelected)
                             SelectedGameObject = lr;
                         else if(lr.IsDirectionSelected)
@@ -231,6 +294,11 @@ namespace Model.GameObjectVisual
 
             if (playerVisual != null)
                 _room.Player.Position = playerVisual.Data.Position;
+            if (exitVisual != null) {
+                System.Diagnostics.Debug.WriteLine("Exit Position: "+ exitVisual.Data.Position);
+                _room.Exit = new Fledermaus.GameObjects.RectangularGameObject(exitVisual.Data.Position + exitVisual.Data.RelativeBounds[0], exitVisual.Data.Position + exitVisual.Data.RelativeBounds[2]);
+ 
+            }
             for (int i= 0;i < _room.LightRays.Count;i++)
             {
                 _room.LightRays[i].Origin = lightRayVisuals[i].Data.Position;
@@ -239,8 +307,7 @@ namespace Model.GameObjectVisual
             //TODO
             for (int i = 0; i < _room.Obstacles.Count; i++)
             {
-
-
+                //_room.Obstacles[i] = Fledermaus.GameObjects.Obstacle.CreateRectangular(obstacleVisuals[i].Data.Position + obstacleVisuals[i].Data.RelativeBounds[0], obstacleVisuals[i].Data.Position + obstacleVisuals[i].Data.RelativeBounds[2]);
             }
             _gameGraphics.DrawRoom(_room, true);
 
@@ -263,6 +330,8 @@ namespace Model.GameObjectVisual
 
             if(PlayerVisual!=null)
                 PlayerVisual.Draw(offset + Data.Position, scale);
+            if (exitVisual != null)
+                exitVisual.Draw(offset + Data.Position, scale);
             foreach (var ray in lightRayVisuals)
                 ray.Draw(offset + Data.Position, scale);
             foreach (var obst in obstacleVisuals)
