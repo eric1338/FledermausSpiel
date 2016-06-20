@@ -14,17 +14,6 @@ namespace Fledermaus
 	class GameGraphics
 	{
 
-		private enum Colors
-		{
-			LightRay,
-			Obstacle,
-			MirrorActive,
-			MirrorInactive,
-			MirrorRailActive,
-			MirrorRailInactive,
-			Exit
-		}
-
 		public Level Level { get; set; }
 
 		private Vector2 _center = new Vector2(0.0f, 0.0f);
@@ -68,32 +57,6 @@ namespace Fledermaus
 
 			Level = level;
 			if (level != null) _currentRoom = Level.CurrentRoom;
-		}
-
-
-		private Vector3 GetColor(Colors color)
-		{
-			switch (color)
-			{
-				case Colors.LightRay: return new Vector3(1.0f, 0.6f, 0.0f);
-				case Colors.Obstacle: return new Vector3(1.0f, 0.2f, 0.2f);
-				case Colors.MirrorActive: return new Vector3(0.4f, 0.5f, 0.94f);
-				case Colors.MirrorInactive: return new Vector3(0.4f, 0.45f, 0.5f);
-				case Colors.MirrorRailActive: return new Vector3(0.6f, 0.6f, 0.6f);
-				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
-				case Colors.Exit: return new Vector3(1.0f, 0.4f, 0.6f);
-			}
-
-			return new Vector3(0.0f, 0.0f, 0.0f);
-		}
-
-		private void SetColor(Colors color)
-		{
-			Vector3 colorVector = GetColor(color);
-
-			colorVector *= _alpha;
-
-			GL.Color3(colorVector.X, colorVector.Y, colorVector.Z);
 		}
 
 		public void SetDrawSettings(Vector2 center, float scale, float alpha)
@@ -213,7 +176,7 @@ namespace Fledermaus
 
 		private void DrawLightRay(LightRay lightRay)
 		{
-			SetColor(Colors.LightRay);
+			BasicGraphics.SetColor(BasicGraphics.Colors.LightRay);
 			DrawBounds(lightRay, 0.004f);
 
 			if (lightRay.GetLines().ToList().Count < 1) return;
@@ -269,10 +232,11 @@ namespace Fledermaus
 
 		private void DrawMirror(Mirror mirror)
 		{
-			SetColor(mirror.IsAccessible ? Colors.MirrorRailActive : Colors.MirrorRailInactive);
+
+			BasicGraphics.SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorRailActive : BasicGraphics.Colors.MirrorRailInactive);
 			DrawLine(new Line(mirror.RailPosition1, mirror.RailPosition2), 0.005f);
 
-			SetColor(mirror.IsAccessible ? Colors.MirrorActive : Colors.MirrorInactive);
+			BasicGraphics.SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorActive : BasicGraphics.Colors.MirrorInactive);
 			DrawLine(mirror.GetMirrorLine(), 0.006f);
 		}
 
@@ -305,7 +269,7 @@ namespace Fledermaus
 
 		private void DrawExit(RectangularGameObject exit)
 		{
-			SetColor(Colors.Exit);
+			BasicGraphics.SetColor(BasicGraphics.Colors.Exit);
 			DrawRectangularGameObject(exit);
 		}
 

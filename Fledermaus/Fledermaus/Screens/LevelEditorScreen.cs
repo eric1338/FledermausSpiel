@@ -590,8 +590,10 @@ namespace Fledermaus.Screens
                     MoveTo =  new Vector2(.0f,.0f);
                     editMode = EditMode.Selection;
                 }
-                else 
-                    MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(this);
+                else
+				{
+                    SwitchToScreen(new MainMenuScreen(this));
+				}
             }
         }
     }

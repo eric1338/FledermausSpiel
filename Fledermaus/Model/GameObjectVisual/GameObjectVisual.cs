@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using Fledermaus.Screens;
 using System.Linq;
+using Fledermaus;
 
 namespace Model.GameObjectVisual
 {
@@ -49,10 +50,16 @@ namespace Model.GameObjectVisual
 
             Vector2 relPos = new Vector2((point.X / (float)Fledermaus.MyApplication.GameWindow.Width) * 2.0f - 1.0f,
                   ((point.Y / (float)Fledermaus.MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
+
             var left = Scale * (Data.Position.X - Width / 2.0f);
             var right = Scale * (Data.Position.X + Width / 2.0f);
             var top = Scale * (Data.Position.Y + Height / 2);
             var bottm = Scale * (Data.Position.Y - Height / 2);
+
+			// Skalierung
+			left *= BasicGraphics.GetXScale();
+			right *= BasicGraphics.GetXScale();
+
             if (relPos.X > left && relPos.X < right)
             {
 
@@ -91,16 +98,19 @@ namespace Model.GameObjectVisual
 
             }
             var modi = 1.0f;
-            GL.Begin(PrimitiveType.Lines);
-            for(int i = 0; i < bounds.Count - 1; i++) {
-                GL.Vertex2(Scale * (position.X + modi * bounds[i].X),  Scale * (position.Y + modi *bounds[i].Y));
-                GL.Vertex2( Scale * (position.X + modi *bounds[i+1].X),  Scale * (position.Y + modi *bounds[i+1].Y));
+
+            for (int i = 0; i < bounds.Count - 1; i++)
+			{
+				Vector2 point1 = new Vector2(Scale * (position.X + modi * bounds[i].X), Scale *(position.Y + modi * bounds[i].Y));
+				Vector2 point2 = new Vector2(Scale * (position.X + modi * bounds[i + 1].X), Scale *(position.Y + modi * bounds[i + 1].Y));
+
+				BasicGraphics.DrawOpenGLLine(point1, point2);
             }
-            GL.Vertex2( Scale * (position.X + modi *bounds[bounds.Count-1].X),  Scale * (position.Y + modi *bounds[bounds.Count - 1].Y));
-            GL.Vertex2( Scale * (position.X + modi *bounds[0].X),  Scale * (position.Y + modi *bounds[0].Y));
-            /*           foreach (var bound in bounds)
-                           GL.Vertex2(Scale * (position.X + bound.X), Scale * (position.Y + bound.Y));*/
-            GL.End();
+
+			Vector2 point1a = new Vector2(Scale * (position.X + modi * bounds[bounds.Count - 1].X), Scale * (position.Y + modi * bounds[bounds.Count - 1].Y));
+			Vector2 point1b = new Vector2(Scale * (position.X + modi * bounds[0].X), Scale *(position.Y + modi * bounds[0].Y));
+
+			BasicGraphics.DrawOpenGLLine(point1a, point1b);
         }
 
 

@@ -61,9 +61,8 @@ namespace Fledermaus.Screens
 		public void OpenGameMenuScreen()
 		{
 			_gameLogic.PauseGame();
-
-			// Pfui
-			MyApplication.GameWindow.CurrentScreen = new GameMenuScreen(this);
+			
+			SwitchToScreen(new GameMenuScreen(this));
 		}
 
 		public void ResumeGame()
@@ -73,21 +72,7 @@ namespace Fledermaus.Screens
 
 		public void FinishLevel()
 		{
-
-			// Pfui
-			MyApplication.GameWindow.CurrentScreen = new LevelEndScreen(_level);
-
-			/*
-			Console.WriteLine("Level geschafft! :D");
-			
-			for (int i = 0; i < _level.Times.Count; i++)
-			{
-				Console.WriteLine("Raum " + (i + 1) + ": " + _level.Times[i] + " Sekunden");
-			}
-
-			Console.WriteLine("----");
-			Console.WriteLine("gesamt: " + _level.GetTotalTime() + " Sekunden");
-			*/
+			SwitchToScreen(new LevelEndScreen(_level));
 		}
 
 	}

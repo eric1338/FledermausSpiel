@@ -36,8 +36,8 @@ namespace Fledermaus.Screens
 
 			menuButtons.Clear();
             AddMenuButton("new game", CreateStartMenu, true);
-            AddMenuButton("highscores", delegate () { CreateLoadMenu(new MainMenuScreen()); });
-            AddMenuButton("level editor", delegate () { MyApplication.GameWindow.CurrentScreen = new LevelEditorScreen(); });
+            AddMenuButton("highscores", delegate () { SwitchToScreen(new HighscoreScreen()); });
+            AddMenuButton("level editor", delegate () { SwitchToScreen(new LevelEditorScreen()); });
             AddMenuButton("exit", MyApplication.Exit);
         }
 
@@ -54,7 +54,7 @@ namespace Fledermaus.Screens
         private void CreateLevelEditorMenu(LevelEditorScreen les)
         {
             menuButtons.Clear();
-            AddMenuButton("Resume", delegate { MyApplication.GameWindow.CurrentScreen = les; }, true);
+            AddMenuButton("Resume", delegate { SwitchToScreen(les); }, true);
             AddMenuButton("Save As", delegate { openSaveAsDialog(les.Level); });
             AddMenuButton("Load", delegate { CreateLoadMenu(new MainMenuScreen(les)); } );
             AddMenuButton("exit", GoToMainMenu);
@@ -91,7 +91,7 @@ namespace Fledermaus.Screens
 
 		private void OpenTutorialScreen()
 		{
-			MyApplication.GameWindow.CurrentScreen = new TutorialScreen();
+			SwitchToScreen(new TutorialScreen());
 		}
 
 		private void StartLevel1()
@@ -113,7 +113,7 @@ namespace Fledermaus.Screens
         {
             GameScreen gameScreen = new GameScreen(level);
 
-            MyApplication.GameWindow.CurrentScreen = gameScreen;
+			SwitchToScreen(gameScreen);
         }
 
         private void CreateLoadMenu(Screen backScreen)
@@ -131,7 +131,7 @@ namespace Fledermaus.Screens
                 AddMenuButton(file.Split('\\').Last().Split('.').First(), delegate {  }, true);
 			}
 
-            AddMenuButton("Back", delegate { MyApplication.GameWindow.CurrentScreen = backScreen; }, true);
+            AddMenuButton("Back", delegate { SwitchToScreen(backScreen); }, true);
         }
 
 

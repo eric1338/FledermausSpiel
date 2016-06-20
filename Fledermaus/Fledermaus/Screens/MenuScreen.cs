@@ -100,6 +100,9 @@ namespace Fledermaus.Screens
             }
         }
 
+		protected bool DrawBackground { get; set; } = true;
+		protected bool DrawTitleImage { get; set; } = true;
+
         public MenuScreen() : base()
         {
 			Init();
@@ -198,9 +201,12 @@ namespace Fledermaus.Screens
 
         public override void Draw()
         {
-			BasicGraphics.DrawDefaultBackground();
+			if (DrawBackground) BasicGraphics.DrawDefaultBackground();
 
-			BasicGraphics.DrawRectangularTexture(Textures.Instance.TitleTexture, new Vector2(-0.2f, 0.8f), new Vector2(1.4f, 0.0f));
+			if (DrawTitleImage)
+			{
+				BasicGraphics.DrawRectangularTexture(Textures.Instance.TitleTexture, new Vector2(-0.2f, 0.8f), new Vector2(1.4f, 0.0f));
+			}
 
             setInitPositionOfButtons();
             base.Draw();
@@ -222,7 +228,7 @@ namespace Fledermaus.Screens
                     menuButtons[ActiveButton].doAction();
                 }
                 else if (userAction == UserAction.OpenGameMenu)
-                    MyApplication.GameWindow.CurrentScreen = new MainMenuScreen();
+                    SwitchToScreen(new MainMenuScreen());
 
             }
         }
@@ -265,7 +271,7 @@ namespace Fledermaus.Screens
 
 		protected void GoToMainMenu()
 		{
-			MyApplication.GameWindow.CurrentScreen = new MainMenuScreen();
+			SwitchToScreen(new MainMenuScreen());
 		}
 
     }

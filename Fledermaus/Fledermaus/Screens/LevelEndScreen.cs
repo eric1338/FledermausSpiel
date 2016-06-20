@@ -60,7 +60,7 @@ namespace Fledermaus.Screens
 
 			// TODO: Serialisieren?
 
-			AddMainMenuButton();
+			AddMainMenuButton("continue");
 		}
 
 		/*
@@ -77,6 +77,8 @@ namespace Fledermaus.Screens
 
 		public override void Draw()
 		{
+			base.Draw();
+
 			DrawTitle("Level Complete");
 
 			float y = 0.5f;

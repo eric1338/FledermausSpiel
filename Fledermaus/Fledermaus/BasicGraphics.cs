@@ -13,6 +13,19 @@ namespace Fledermaus
 	class BasicGraphics
 	{
 
+		public enum Colors
+		{
+			LightRay,
+			MirrorActive,
+			MirrorInactive,
+			MirrorRailActive,
+			MirrorRailInactive,
+			Exit,
+
+
+			DefaultText
+		}
+
 		private static TextureFont _font;
 		private static float _characterSpacing = 0.5f;
 
@@ -24,17 +37,41 @@ namespace Fledermaus
 			_font = new TextureFont(TextureLoader.FromBitmap(Resources.font), 10, 32, 1, 1, _characterSpacing);
 		}
 
-		private static float GetXScale()
+		public static float GetXScale()
 		{
-			//return 1;
-
 			return WindowHeight / WindowWidth;
 		}
 
-		private static Vector2 GetTransformedVector(Vector2 vector)
+		public static Vector2 GetTransformedVector(Vector2 vector)
 		{
 			return new Vector2(vector.X * GetXScale(), vector.Y);
 		}
+
+		private static Vector3 GetColor(Colors color)
+		{
+			switch (color)
+			{
+				case Colors.LightRay: return new Vector3(1.0f, 0.6f, 0.0f);
+				case Colors.MirrorActive: return new Vector3(0.4f, 0.5f, 0.94f);
+				case Colors.MirrorInactive: return new Vector3(0.4f, 0.45f, 0.5f);
+				case Colors.MirrorRailActive: return new Vector3(0.6f, 0.6f, 0.6f);
+				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
+				case Colors.Exit: return new Vector3(1.0f, 0.4f, 0.6f);
+				case Colors.DefaultText: return new Vector3(1.0f, 0.8f, 0.6f);
+			}
+
+			return new Vector3(0.0f, 0.0f, 0.0f);
+		}
+
+		public static void SetColor(Colors color, float alpha = 1.0f)
+		{
+			Vector3 colorVector = GetColor(color);
+
+			//colorVector *= alpha;
+
+			GL.Color4(colorVector.X, colorVector.Y, colorVector.Z, alpha);
+		}
+
 
 		public static void DrawLine(Vector2 point1, Vector2 point2, float thickness)
 		{
@@ -48,6 +85,9 @@ namespace Fledermaus
 
 			Vector2 cwRotation = Util.GetOrthogonalVectorCW(normal);
 			Vector2 ccwRotation = Util.GetOrthogonalVectorCCW(normal);
+
+			cwRotation = GetTransformedVector(cwRotation);
+			ccwRotation = GetTransformedVector(ccwRotation);
 
 			Vector2 point11 = point1 + cwRotation;
 			Vector2 point12 = point1 + ccwRotation;
@@ -64,6 +104,14 @@ namespace Fledermaus
 			GL.Vertex2(point11);
 			GL.Vertex2(point21);
 			GL.Vertex2(point22);
+			GL.End();
+		}
+
+		public static void DrawOpenGLLine(Vector2 point1, Vector2 point2)
+		{
+			GL.Begin(PrimitiveType.Lines);
+			GL.Vertex2(GetTransformedVector(point1));
+			GL.Vertex2(GetTransformedVector(point2));
 			GL.End();
 		}
 

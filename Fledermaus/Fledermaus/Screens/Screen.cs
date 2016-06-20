@@ -325,5 +325,11 @@ namespace Fledermaus.Screens
         }
 
 
+		protected void SwitchToScreen(Screen screen)
+		{
+			MyApplication.GameWindow.CurrentScreen = screen;
+		}
+
+
     }
 }

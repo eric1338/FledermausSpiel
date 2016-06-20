@@ -69,6 +69,7 @@
     <Compile Include="GameObjects\Room.cs" />
     <Compile Include="GameObjects\IBounded.cs" />
     <Compile Include="Data\PlayerData.cs" />
+    <Compile Include="Screens\HighscoreScreen.cs" />
     <Compile Include="Screens\LevelEndScreen.cs" />
     <Compile Include="Screens\TutorialScreen.cs" />
     <Compile Include="Textures.cs" />

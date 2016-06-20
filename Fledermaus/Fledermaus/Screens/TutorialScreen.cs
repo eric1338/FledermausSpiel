@@ -14,6 +14,8 @@ namespace Fledermaus.Screens
 
 		public TutorialScreen()
 		{
+			DrawTitleImage = false;
+
 			lines.Add("your goal is to reach the exit with touching the light");
 			lines.Add("");
 			lines.Add("use wasd or the arrow keys to move around");

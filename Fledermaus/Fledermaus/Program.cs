@@ -45,17 +45,19 @@ namespace Fledermaus
 				height = 800;
 			}
 
-			gameWindow = new MyGameWindow(width, height);
+			System.Diagnostics.Debug.WriteLine(width + " / " + height);
 
-			BasicGraphics.WindowWidth = width;
-			BasicGraphics.WindowHeight = height;
+			gameWindow = new MyGameWindow(width, height);
 
 			//win.CurrentScreen = new GameScreen(win);
 			gameWindow.CurrentScreen = new MainMenuScreen();
 
             if (windowState == WindowState.Fullscreen) gameWindow.WindowState = WindowState.Fullscreen;
 
-            System.Diagnostics.Debug.WriteLine("win.width" + gameWindow.Width);
+			BasicGraphics.WindowWidth = gameWindow.Width;
+			BasicGraphics.WindowHeight = gameWindow.Height;
+
+			System.Diagnostics.Debug.WriteLine("win.width" + gameWindow.Width);
             System.Diagnostics.Debug.WriteLine("win.Height" + gameWindow.Height);
 
             gameWindow.Run(60.0);

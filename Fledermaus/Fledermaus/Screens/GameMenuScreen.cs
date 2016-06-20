@@ -33,13 +33,13 @@ namespace Fledermaus.Screens
 
 		private void ResumeGame()
 		{
-			MyApplication.GameWindow.CurrentScreen = _gameScreen;
+			SwitchToScreen(_gameScreen);
 			_gameScreen.ResumeGame();
 		}
 
 		private void ExitGame()
 		{
-			MyApplication.GameWindow.CurrentScreen = new MainMenuScreen();
+			SwitchToScreen(new MainMenuScreen());
 		}
 	}
 }
