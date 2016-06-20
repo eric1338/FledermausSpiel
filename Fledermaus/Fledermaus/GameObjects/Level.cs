@@ -18,6 +18,8 @@ namespace Fledermaus.GameObjects
 		private Stopwatch _stopwatch = new Stopwatch();
 		public List<float> Times = new List<float>();
 
+		public bool IsPlayerHit { get; set; }
+
 		public Level(string name)
 		{
 			Name = name;

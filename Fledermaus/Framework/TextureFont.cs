@@ -52,11 +52,11 @@ namespace Framework
 			return bytes;
 		}
 
-		public void Print(float xPos, float yPos, float zPos, float size, string text)
+		public void Print(float xPos, float yPos, float zPos, float size, string text, float xScale = 1f)
 		{
 			GL.PushMatrix();
 			GL.Translate(xPos, yPos, zPos);
-			GL.Scale(size, size, size);
+			GL.Scale(size * xScale, size, size);
 			var bytes = ConvertString2Ascii(text);
 			texFont.BeginUse();
 			PrintRawQuads(bytes);

@@ -11,45 +11,35 @@ namespace Fledermaus.Screens
 
 		private GameScreen _gameScreen;
 
-		public GameMenuScreen(GameScreen gameScreen) : base ()
+		public GameMenuScreen(GameScreen gameScreen)
 		{
 			_gameScreen = gameScreen;
-			
-			menuButtons.Add(new ButtonText(
-				"Resume", 
-				delegate () { ResumeGame(); }, 
-				true
-			));
-			menuButtons.Add(new ButtonText("Save Game", delegate () { }));
-//			menuButtons.Add(new ButtonText("Load Game", delegate () { MyApplication.GameWindow.CurrentScreen = new LoadMenuScreen(); }));
 
-			menuButtons.Add(new ButtonText("Main Menu", delegate () { MyApplication.GameWindow.CurrentScreen = new MainMenuScreen(); }));
-			menuButtons.Add(new ButtonText("Configuration", delegate () { }));
-			menuButtons.Add(new ButtonText("Credits", delegate () { }));
-			menuButtons.Add(new ButtonText("Exit", delegate () { MyApplication.Exit(); }));
+			AddMenuButton("resume", ResumeGame, true);
+			AddMenuButton("exit", ExitGame);
 		}
 
 		protected override void ProcessSingleUserActions()
 		{
+			base.ProcessSingleUserActions();
+
 			foreach (UserAction userAction in _inputManager.GetSingleUserActionsAsList())
 			{
-				if (userAction == UserAction.MoveUp)
-					ActiveButton--;
-				else if (userAction == UserAction.MoveDown)
-					ActiveButton++;
-				else if (userAction == UserAction.Confirm)
-					menuButtons[ActiveButton].doAction();
-				else if (userAction == UserAction.OpenGameMenu) {
+				if (userAction == UserAction.OpenGameMenu) {
 					ResumeGame();
 				}
-
 			}
 		}
 
 		private void ResumeGame()
 		{
-			MyApplication.GameWindow.CurrentScreen = _gameScreen;
+			SwitchToScreen(_gameScreen);
 			_gameScreen.ResumeGame();
+		}
+
+		private void ExitGame()
+		{
+			SwitchToScreen(new MainMenuScreen());
 		}
 	}
 }

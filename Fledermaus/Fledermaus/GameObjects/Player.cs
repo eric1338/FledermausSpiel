@@ -44,42 +44,21 @@ namespace Fledermaus.GameObjects
 
 		public IEnumerable<Line> GetLines()
 		{
-			/*
-			Vector2 v1 = GetTempVector(1, 1);
-			Vector2 v2 = GetTempVector(1, -1);
-			Vector2 v3 = GetTempVector(-1, -1);
-			Vector2 v4 = GetTempVector(-1, 1);
+			Vector2 point1 = GetRelativePoint(0.0f, 0.21f);
 
-			List<Line> lines = new List<Line>();
-			lines.Add(new Line(v1, v2));
-			lines.Add(new Line(v2, v3));
-			lines.Add(new Line(v3, v4));
-			lines.Add(new Line(v1, v4));
-			*/
+			Vector2 point2 = GetRelativePoint(-0.32f, 0.42f);
+			Vector2 point3 = GetRelativePoint(-0.24f, 0.0f);
+			Vector2 point4 = GetRelativePoint(-0.55f, 0.05f);
+			Vector2 point5 = GetRelativePoint(-0.82f, 0.22f);
+			Vector2 point6 = GetRelativePoint(-0.5f, -0.3f);
 
-			/*
-			Vector2 point1 = GetRelativePoint(0.0f, 0.02f);
-			Vector2 point2 = GetRelativePoint(0.06f, 0.04f);
-			Vector2 point3 = GetRelativePoint(0.0f, -0.04f);
-			Vector2 point4 = GetRelativePoint(-0.06f, 0.04f);
+			Vector2 point7 = GetRelativePoint(0.0f, -0.5f);
 
-			List<Line> lines = new List<Line>();
-			lines.Add(new Line(point1, point2));
-			lines.Add(new Line(point2, point3));
-			lines.Add(new Line(point3, point4));
-			lines.Add(new Line(point1, point4));
-			*/
-
-			Vector2 point1 = GetRelativePoint(0.0f, 0.03f);
-			Vector2 point2 = GetRelativePoint(0.025f, 0.01f);
-			Vector2 point3 = GetRelativePoint(0.07f, 0.02f);
-
-			Vector2 point4 = GetRelativePoint(0.02f, -0.045f);
-			Vector2 point5 = GetRelativePoint(0.0f, -0.03f);
-			Vector2 point6 = GetRelativePoint(-0.02f, -0.045f);
-
-			Vector2 point7 = GetRelativePoint(-0.07f, 0.02f);
-			Vector2 point8 = GetRelativePoint(-0.025f, 0.01f);
+			Vector2 point8 = GetRelativePoint(0.5f, -0.3f);
+			Vector2 point9 = GetRelativePoint(0.82f, 0.22f);
+			Vector2 point10 = GetRelativePoint(0.55f, 0.05f);
+			Vector2 point11 = GetRelativePoint(0.24f, 0.0f);
+			Vector2 point12 = GetRelativePoint(0.32f, 0.42f);
 
 			List<Line> lines = new List<Line>();
 			lines.Add(new Line(point1, point2));
@@ -89,28 +68,21 @@ namespace Fledermaus.GameObjects
 			lines.Add(new Line(point5, point6));
 			lines.Add(new Line(point6, point7));
 			lines.Add(new Line(point7, point8));
-			lines.Add(new Line(point8, point1));
+			lines.Add(new Line(point8, point9));
+			lines.Add(new Line(point9, point10));
+			lines.Add(new Line(point10, point11));
+			lines.Add(new Line(point11, point12));
+			lines.Add(new Line(point12, point1));
 
 			return lines;
 		}
 
-		private Vector2 GetRelativePoint(float dx, float dy)
+		public Vector2 GetRelativePoint(float dx, float dy)
 		{
-			Vector2 rel = new Vector2(dx, dy);
-			Vector2 rr = Utils.Util.GetRotatedVector(rel, Rotation);
+			Vector2 relativePoint = new Vector2(dx * 0.1f, dy * 0.1f);
+			Vector2 rotatedPoint = Utils.Util.GetRotatedVector(relativePoint, Rotation);
 
-			return new Vector2(Position.X + rr.X, Position.Y + rr.Y);
-
-			//Vector2 v = new Vector2(Position.X + dx, Position.Y + dy);
-
-			//return Utils.Util.GetRotatedVector(v, rotation);
-
-			//return new Vector2(Position.X + dx, Position.Y + dy);
-		}
-
-		private Vector2 GetTempVector(float xF, float yF)
-		{
-			return Position + new Vector2(0.05f * xF, 0.05f * yF);
+			return new Vector2(Position.X + rotatedPoint.X, Position.Y + rotatedPoint.Y);
 		}
 
 		public void Reset()

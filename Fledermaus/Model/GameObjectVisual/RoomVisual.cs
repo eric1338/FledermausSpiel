@@ -283,13 +283,13 @@ namespace Model.GameObjectVisual
 
         internal void Draw(Vector2 offset, float scale)
         {
-            Scale = scale ;
+            Scale = scale;
 
             Data.Position = (2 * new Vector2(_room.Column - ColumnsToZero, -1 * (_room.Row - RowsToZero)));
 
             var _gameGraphics = new GameGraphics();
-            _gameGraphics.SetGlobalScale(1.0f);
-            _gameGraphics.SetDrawSettings(offset + Data.Position, Scale/**0.9f*/, 1.0f);
+			
+            _gameGraphics.SetDrawSettings(offset * Scale + Data.Position * Scale, Scale/**0.9f*/, 1.0f);
 
 
             if (playerVisual != null)

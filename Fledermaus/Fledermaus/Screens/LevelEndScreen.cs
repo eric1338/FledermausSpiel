@@ -2,6 +2,7 @@
 using Fledermaus.GameObjects;
 using Fledermaus.Utils;
 using Framework;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus.Screens
 {
-	class LevelEndScreen : Screen
+	class LevelEndScreen : MenuScreen
 	{
 
 		private class TimeString
@@ -36,7 +37,7 @@ namespace Fledermaus.Screens
 		{
 			// Test
 
-			_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.Confirm);
+			//_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.Confirm);
 
 			if (level.Name == "Level 1") PlayerData.Instance.UnlockLevel("Level 2");
 			if (level.Name == "Level 2") PlayerData.Instance.UnlockLevel("Level 3");
@@ -58,8 +59,11 @@ namespace Fledermaus.Screens
 			_totalTimeString = new TimeString("Total", totalTime, isNewTotalRecord);
 
 			// TODO: Serialisieren?
+
+			AddMainMenuButton("continue");
 		}
 
+		/*
 		public override void DoLogic()
 		{
 			var test = _inputManager.GetSingleUserActionsAsList();
@@ -69,34 +73,31 @@ namespace Fledermaus.Screens
 				MyApplication.GameWindow.CurrentScreen = new MainMenuScreen();
 			}
 		}
+		*/
 
 		public override void Draw()
 		{
-			// TEST
+			base.Draw();
 
-			float y = 0.7f;
+			DrawTitle("Level Complete");
+
+			float y = 0.5f;
 
 			foreach (TimeString timeString in _roomTimeStrings)
 			{
 				DrawTimeString(timeString, y);
-				y -= 0.15f;
+				y -= 0.12f;
 			}
 
-			DrawTimeString(_totalTimeString, -0.3f);
+			DrawTimeString(_totalTimeString, -0.5f);
 		}
 
 		private void DrawTimeString(TimeString timeString, float y)
 		{
-			TextureFont font = new TextureFont(TextureLoader.FromBitmap(Resources.Fire), 10, 32, 0.8f, 1, .7f);
-
 			string text = timeString.Context + ": " + Util.GetTimeString(timeString.Time);
+			Vector3 color = timeString.IsNewRecord ? new Vector3(1f, 0.5f, 0f) : new Vector3(1f, 0.8f, 0.4f);
 
-			if (timeString.IsNewRecord) GL.Color3(0.3f, 1f, 0f);
-			else GL.Color3(1f, 1f, 1f);
-
-			GL.Enable(EnableCap.Blend);
-			font.Print(-0.5f, y, 0, 0.05f, text);
-			GL.Disable(EnableCap.Blend); // for transparency in textures
+			BasicGraphics.DrawText(text, new Vector2(-0.5f, y), 0.08f, color);
 		}
 
 	}

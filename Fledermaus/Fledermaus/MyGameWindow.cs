@@ -82,12 +82,15 @@ namespace Fledermaus
 		private void MyGameWindow_RenderFrame(object sender, FrameEventArgs e)
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
+			GL.Enable(EnableCap.Blend);
+
             if (ClientSize.Width >= ClientSize.Height)
-                if(ClientSize.Width!=0)
-                windowScale = new Vector2( ClientSize.Height/ClientSize.Width ,1.0f);
-                GL.Viewport(ClientSize);
-            
-              
+			{
+				if (ClientSize.Width != 0) windowScale = new Vector2(ClientSize.Height / ClientSize.Width, 1.0f);
+
+				GL.Viewport(ClientSize);
+			}
+
 			CurrentScreen?.Draw();
 
 			SwapBuffers();

@@ -13,23 +13,13 @@ namespace Fledermaus.Screens
         {
             this.owner = owner;
             owner.setInputManager(this._inputManager);
-            
 
-            menuButtons.Add(
-                new ButtonTexture(Resources.Player,
-                delegate () {
-                    addPlayer();
-                },
-                true)
-            );
-            menuButtons.Add(
-    new ButtonTexture(Resources.Player,
-    delegate () {
-        addPlayer();
-    },
-    false)
-);
+			DrawBackground = false;
+			DrawTitleImage = false;
 
+            menuButtons.Add(new ButtonTexture(Resources.player, delegate () { addPlayer(); }, true));
+
+            menuButtons.Add(new ButtonTexture(Resources.player, delegate () { addPlayer(); }, false));
         }
         private void addPlayer()
         {

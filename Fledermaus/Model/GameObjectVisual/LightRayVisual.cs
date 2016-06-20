@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 using Model.GameObject;
+using Fledermaus;
 
 namespace Model.GameObjectVisual
 {
@@ -40,7 +41,12 @@ namespace Model.GameObjectVisual
             var right = Scale * (Data.Position.X + ((LightRay)Data).RayDirection.X + Width / 2.0f);
             var top = Scale * (Data.Position.Y + ((LightRay)Data).RayDirection.Y + Height / 2);
             var bottm = Scale * (Data.Position.Y + ((LightRay)Data).RayDirection.Y - Height / 2);
-            if (relPos.X > left && relPos.X < right)
+
+			// Skalierung
+			left *= BasicGraphics.GetXScale();
+			right *= BasicGraphics.GetXScale();
+
+			if (relPos.X > left && relPos.X < right)
             {
 
                 if (relPos.Y < top && relPos.Y > bottm)
