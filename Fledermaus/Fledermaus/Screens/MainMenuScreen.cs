@@ -39,6 +39,8 @@ namespace Fledermaus.Screens
             AddMenuButton("highscores", delegate () { SwitchToScreen(new HighscoreScreen()); });
             AddMenuButton("level editor", delegate () { SwitchToScreen(new LevelEditorScreen()); });
             AddMenuButton("exit", MyApplication.Exit);
+
+
         }
 
         private void CreateStartMenu()
@@ -48,6 +50,7 @@ namespace Fledermaus.Screens
             AddMenuButton("Level 1", StartLevel1);
             AddMenuButton("Level 2", StartLevel2, false, !PlayerData.Instance.IsLevelLocked("Level 2"));
             AddMenuButton("Level 3", StartLevel3, false, !PlayerData.Instance.IsLevelLocked("Level 3"));
+            AddMenuButton("Custom", delegate () { CreateLoadMenu(new MainMenuScreen()); });
 			AddMenuButton("back", GoToMainMenu);
         }
 

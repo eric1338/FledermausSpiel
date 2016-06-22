@@ -355,7 +355,8 @@ namespace Fledermaus
 			}
 			else
 			{
-				lightRay.FinishRays(closestNonReflectingIntersection.Point);
+                if(closestNonReflectingIntersection!=null)
+				    lightRay.FinishRays(closestNonReflectingIntersection.Point);
 			}
 		}
 
