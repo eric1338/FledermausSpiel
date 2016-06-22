@@ -53,6 +53,7 @@ namespace Fledermaus.Screens
 
         private void CreateLevelEditorMenu(LevelEditorScreen les)
         {
+            Center = new Vector2(-.7f, center.Y);
             menuButtons.Clear();
             AddMenuButton("Resume", delegate { SwitchToScreen(les); }, true);
             AddMenuButton("Save As", delegate { openSaveAsDialog(les.Level); });
@@ -118,6 +119,8 @@ namespace Fledermaus.Screens
 
         private void CreateLoadMenu(Screen backScreen)
         {
+            Center = new Vector2(-.7f, center.Y);
+
             menuButtons.Clear();
             indexActiveButton = 0;
 
@@ -128,7 +131,7 @@ namespace Fledermaus.Screens
 
             foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Levels\Custom\"))
 			{
-                AddMenuButton(file.Split('\\').Last().Split('.').First(), delegate {  }, true);
+                AddMenuButton(" "+file.Split('\\').Last().Split('.').First(), delegate {  }, true);
 			}
 
             AddMenuButton("Back", delegate { SwitchToScreen(backScreen); }, true);

@@ -103,8 +103,13 @@ namespace Fledermaus.Screens
 		protected bool DrawBackground { get; set; } = true;
 		protected bool DrawTitleImage { get; set; } = true;
 
-        public MenuScreen() : base()
+        public MenuScreen(bool showBackground=true) : base()
         {
+            if (!showBackground)
+            {
+                DrawBackground = false;
+                DrawTitleImage = false;
+            }
 			Init();
         }
 
@@ -129,21 +134,6 @@ namespace Fledermaus.Screens
         }
 
 
-
- /*       private void Mouse_Move(object sender, MouseMoveEventArgs e)
-        {
-            Vector2 relPos = new Vector2((e.Mouse.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f,
-                                          ((e.Mouse.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f)) * -1;
-            if(relPos.X>Center.X-MaxWidth/2 && relPos.X < Center.X + MaxWidth / 2)
-            {
-                foreach (var button in menuButtons)
-                    if (relPos.Y < button.Position.Y + button.Height / 2 && relPos.Y > button.Position.Y - button.Height / 2) {
-                        ActiveButton = menuButtons.IndexOf(button);
-                        System.Diagnostics.Debug.WriteLine("MouseOver Button mit index: " + ActiveButton);
-                    }
-            }
-        }
-*/
 
       private void MenuButtons_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

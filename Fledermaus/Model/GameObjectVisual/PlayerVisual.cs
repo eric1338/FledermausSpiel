@@ -36,7 +36,7 @@ namespace Model.GameObjectVisual
         {
             var tmp = new List<Vector2>();
             foreach (var bound in Data.RelativeBounds)
-                tmp.Add(scale * bound * 1.1f);
+                tmp.Add(scale * bound);
             if (IsSelected)
             {
                 GL.Color3(Color.Cyan);

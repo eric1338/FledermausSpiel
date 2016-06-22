@@ -30,7 +30,7 @@ namespace Model.GameObjectVisual
         private PlayerVisual playerVisual;
         private ExitVisual exitVisual;
         private List<LightRayVisual> lightRayVisuals;
-        private List<LightRayVisual> obstacleVisuals;
+        private List<ObstacleVisual> obstacleVisuals;
 
 
         public PlayerVisual PlayerVisual
@@ -115,6 +115,19 @@ namespace Model.GameObjectVisual
             }
         }
 
+        public List<ObstacleVisual> ObstacleVisuals
+        {
+            get
+            {
+                return obstacleVisuals;
+            }
+
+            set
+            {
+                obstacleVisuals = value;
+            }
+        }
+
         public RoomVisual()
         {
             //           _room = new Fledermaus.Room();
@@ -122,10 +135,10 @@ namespace Model.GameObjectVisual
                 playerVisual.Data.Position = _room.Player.Position;
 
             lightRayVisuals = new List<LightRayVisual>();
-            obstacleVisuals = new List<LightRayVisual>();
+            ObstacleVisuals = new List<ObstacleVisual>();
             editMode = EditMode.Ready;
-            Width = 1.9f;
-            Height = 1.9f;
+            Width = 2.0f;
+            Height = 2.0f;
         }
 
         public override void Draw()
@@ -181,11 +194,15 @@ namespace Model.GameObjectVisual
                                 //lightRay.IsDirectionSelected = false;
                             }
                         }
-                        foreach (var obstacle in obstacleVisuals)
+                        foreach (var obstacle in ObstacleVisuals)
                         {
-                            if (obstacle.isPointInScreen(e.Position))
+                            if (obstacle.isPointInScreen(e.Position)|| obstacle.isPointinBound(e.Position))
                             {
                                 obstacle.IsSelected = true;
+                                if (obstacle.isPointinBound(e.Position))
+                                    obstacle.IsBoundSelected = true;
+                                else
+                                    obstacle.IsBoundSelected = false;
                             }
 
                             else
@@ -198,10 +215,16 @@ namespace Model.GameObjectVisual
             }
             else if (EditMode == EditMode.Position)
             {
-                Vector2 relPos = new Vector2((e.Position.X / (float)Fledermaus.MyApplication.GameWindow.Width) * 2.0f - 1.0f,
-                ((e.Position.Y / (float)Fledermaus.MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
+                Vector2 relPos = new Vector2(((e.Position.X / BasicGraphics.WindowWidth) * 2.0f - 1.0f)/BasicGraphics.GetXScale(),
+                                 ((e.Position.Y / BasicGraphics.WindowHeight) * 2.0f - 1.0f) * -1);
 
-                if(selectedGameObject.GetType().Equals(typeof(PlayerVisual)))
+                if (relPos.X > 1.0f)
+                    relPos = new Vector2(1.0f, relPos.Y);
+                else if(relPos.X<-1.0f)
+                    relPos = new Vector2(-1.0f, relPos.Y);
+
+
+                if (selectedGameObject.GetType().Equals(typeof(PlayerVisual)))
                     selectedGameObject.Data.Position = relPos;
                 if (selectedGameObject.GetType().Equals(typeof(ExitVisual))) {
                     var absTop = (-relPos + new Vector2(.0f,1.0f)).Length;
@@ -245,6 +268,17 @@ namespace Model.GameObjectVisual
                     else
                         selectedGameObject.Data.Position = relPos;
                 }
+                else if (selectedGameObject.GetType().Equals(typeof(ObstacleVisual)))
+                {
+                    if (((ObstacleVisual)selectedGameObject).IsBoundSelected)
+                    {
+                        var scale = (relPos - selectedGameObject.Data.Position).Length / selectedGameObject.Data.RelativeBounds[0].Length;
+                        for (int i = 0; i < selectedGameObject.Data.RelativeBounds.Count; i++)
+                            selectedGameObject.Data.RelativeBounds[i] *= scale;
+                    }
+                    else
+                        selectedGameObject.Data.Position = relPos;
+                }
             }
         }
         public override void ProcessMouseButtonDown(MouseButtonEventArgs e)
@@ -264,7 +298,7 @@ namespace Model.GameObjectVisual
                         else if(lr.IsDirectionSelected)
                             SelectedGameObject = lr;
                     }
-                    foreach (var obst in obstacleVisuals)
+                    foreach (var obst in ObstacleVisuals)
                     {
                         if (obst.IsSelected)
                             SelectedGameObject = obst;
@@ -304,10 +338,10 @@ namespace Model.GameObjectVisual
                 _room.LightRays[i].Origin = lightRayVisuals[i].Data.Position;
                 _room.LightRays[i].FirstDirection = ((LightRay)lightRayVisuals[i].Data).RayDirection;
             }
-            //TODO
+
             for (int i = 0; i < _room.Obstacles.Count; i++)
             {
-                //_room.Obstacles[i] = Fledermaus.GameObjects.Obstacle.CreateRectangular(obstacleVisuals[i].Data.Position + obstacleVisuals[i].Data.RelativeBounds[0], obstacleVisuals[i].Data.Position + obstacleVisuals[i].Data.RelativeBounds[2]);
+                _room.Obstacles[i] = Fledermaus.GameObjects.Obstacle.CreateRectangular(ObstacleVisuals[i].Data.Position + ObstacleVisuals[i].Data.RelativeBounds[0], ObstacleVisuals[i].Data.Position + ObstacleVisuals[i].Data.RelativeBounds[2]);
             }
             _gameGraphics.DrawRoom(_room, true);
 
@@ -334,7 +368,7 @@ namespace Model.GameObjectVisual
                 exitVisual.Draw(offset + Data.Position, scale);
             foreach (var ray in lightRayVisuals)
                 ray.Draw(offset + Data.Position, scale);
-            foreach (var obst in obstacleVisuals)
+            foreach (var obst in ObstacleVisuals)
                 obst.Draw(offset + Data.Position, scale);
 
         }

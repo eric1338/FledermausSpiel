@@ -51,6 +51,9 @@ namespace Model.GameObjectVisual
             Vector2 relPos = new Vector2((point.X / (float)Fledermaus.MyApplication.GameWindow.Width) * 2.0f - 1.0f,
                   ((point.Y / (float)Fledermaus.MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
 
+            Width =-1*Data.RelativeBounds.Min(x => x.X) + Data.RelativeBounds.Max(x => x.X);
+            Height = -1*Data.RelativeBounds.Min(x => x.Y) + Data.RelativeBounds.Max(x => x.Y);
+
             var left = Scale * (Data.Position.X - Width / 2.0f);
             var right = Scale * (Data.Position.X + Width / 2.0f);
             var top = Scale * (Data.Position.Y + Height / 2);

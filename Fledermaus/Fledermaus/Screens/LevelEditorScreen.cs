@@ -140,6 +140,7 @@ namespace Fledermaus.Screens
 
             _level = Levels.CreateLevel1();
             _gameLogic.Level = _level;
+
             foreach (var _room in _level.Rooms)
             {
                 LevelVisual.Rooms.Add(new RoomVisual()
@@ -169,10 +170,10 @@ namespace Fledermaus.Screens
 
                         Column = _room.Column,
                         Row = _room.Row,
-                        RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.95f), Konfiguration.Round(.95f)),
-                                                            new Vector2( Konfiguration.Round(-.95f), Konfiguration.Round(-.95f)),
-                                                            new Vector2( Konfiguration.Round(.95f), Konfiguration.Round(-.95f)),
-                                                            new Vector2( Konfiguration.Round(.95f), Konfiguration.Round(.95f))
+                        RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.995f), Konfiguration.Round(.995f)),
+                                                            new Vector2( Konfiguration.Round(-.995f), Konfiguration.Round(-.995f)),
+                                                            new Vector2( Konfiguration.Round(.995f), Konfiguration.Round(-.995f)),
+                                                            new Vector2( Konfiguration.Round(.995f), Konfiguration.Round(.995f))
                         },
                     },
                     ExitVisual = new ExitVisual()
@@ -232,18 +233,18 @@ namespace Fledermaus.Screens
                 }
                 foreach (var obstacle in _room.Obstacles)
                 {
-                    var obstV = new ObstacleVisual()
+                    levelVisual.Rooms[LevelVisual.Rooms.Count - 1].ObstacleVisuals.Add(new ObstacleVisual()
                     {
                         Data = new Obstacle()
                         {
-                            Position = _room.Exit.Point1 + 0.5f * (-_room.Exit.Point1 + _room.Exit.Point3),
-                            RelativeBounds = new List<Vector2>() { -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3))+_room.Exit.Point1,
-                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point2,
-                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point3,
-                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point4,
+                            Position = obstacle.Point1 + 0.5f * (-obstacle.Point1 + obstacle.Point3),
+                            RelativeBounds = new List<Vector2>() { -(obstacle.Point1+0.5f*(-obstacle.Point1+obstacle.Point3)) + obstacle.Point1,
+                                                                   -(obstacle.Point1+0.5f*(-obstacle.Point1+obstacle.Point3)) + obstacle.Point2,
+                                                                   -(obstacle.Point1+0.5f*(-obstacle.Point1+obstacle.Point3)) + obstacle.Point3,
+                                                                   -(obstacle.Point1+0.5f*(-obstacle.Point1+obstacle.Point3)) + obstacle.Point4,
                             }
                         }
-                    };
+                    });
                 }
 
                 foreach (var roomV in levelVisual.Rooms)
@@ -275,7 +276,7 @@ namespace Fledermaus.Screens
         private void createSideMenu()
         {
 
-            sideMenu = new MenuScreen();
+            sideMenu = new MenuScreen(false);
             sideMenu.ShowBorder = true;
             sideMenu.Padding = .03f;
             sideMenu.BorderWidth = 0.01f;
@@ -309,9 +310,24 @@ namespace Fledermaus.Screens
                 true)
             );
             sideMenu.menuButtons.Add(
-                new ButtonTexture(Resources.player,
+                new ButtonTexture(Resources.obstacle1,
                 delegate () {
+                    var obst = new ObstacleVisual()
+                    {
+                        Data = new Model.GameObject.Obstacle()
+                        {
+                            RelativeBounds = new List<Vector2>()
+                        {
+                            new Vector2( Konfiguration.Round(-.2f), Konfiguration.Round(.2f)),
+                            new Vector2( Konfiguration.Round(-.2f), Konfiguration.Round(-.2f)),
+                            new Vector2( Konfiguration.Round(.2f), Konfiguration.Round(-.2f)),
+                            new Vector2( Konfiguration.Round(.2f), Konfiguration.Round(.2f))
+                        }
+                        },
 
+                    };
+                    selectedRoom.ObstacleVisuals.Add(obst);
+                    _level.CurrentRoom.AddObstacle(new GameObjects.Obstacle(obst.Data.Position+obst.Data.RelativeBounds[0], obst.Data.Position + obst.Data.RelativeBounds[2]));
                 },
                 false)
             );
@@ -503,8 +519,6 @@ namespace Fledermaus.Screens
                     if (Scale  >= ZoomTo) {
                         Scale = ZoomTo;
                         ZoomTo = .0f;
-                        
-
                     }
                 }
                 else { 
@@ -559,9 +573,10 @@ namespace Fledermaus.Screens
                 }
             }
 
-            foreach (var room in levelVisual.Rooms)
-                room.Draw(-Offset, Scale);
-
+      //      foreach (var room in levelVisual.Rooms)
+       //         room.Draw(-Offset, Scale);
+            for (int i = levelVisual.Rooms.Count - 1; i >= 0; i--)
+                levelVisual.Rooms[i].Draw(-Offset, Scale);
 
             if (ShowSideMenu)
                 sideMenu.Draw();

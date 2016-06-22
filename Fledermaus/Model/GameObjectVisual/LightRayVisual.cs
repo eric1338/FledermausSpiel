@@ -75,32 +75,19 @@ namespace Model.GameObjectVisual
 
             var tmp = new List<Vector2>();
             foreach (var bound in Data.RelativeBounds)
-                tmp.Add(scale * bound * 1.1f);
+                tmp.Add(scale * bound );
 
             if (IsSelected)
-            {
                 GL.Color3(Color.Cyan);
-                DrawSquare(scale * (offset + Data.Position), tmp);
-
-            }
-            else {
+            else 
                 GL.Color3(Color.Beige);
+            DrawSquare(scale * (offset + Data.Position), tmp);
 
-                DrawSquare(scale * (offset + Data.Position), tmp);
-
-
-            }
             if (IsDirectionSelected)
-            {
                 GL.Color3(Color.Cyan);
-                DrawSquare(scale * (offset + ((LightRay)Data).Position + ((LightRay)Data).RayDirection), tmp);
-            }
             else
-            {
                 GL.Color3(Color.MediumOrchid);
-                DrawSquare(scale * (offset + ((LightRay)Data).Position+((LightRay)Data).RayDirection), tmp);
-            }
-
+            DrawSquare(scale * (offset + ((LightRay)Data).Position+((LightRay)Data).RayDirection), tmp);
             //Fledermaus.GameGraphicsLevelEditor.DrawLightRay(new Fledermaus.GameObjects.LightRay(new Vector2(-0.2f, -0.8f), new Vector2(-0.3f, 0.1f)));
             
         }
