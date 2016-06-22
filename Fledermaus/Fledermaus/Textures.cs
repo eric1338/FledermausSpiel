@@ -31,7 +31,7 @@ namespace Fledermaus
 			PlayerTexture = TextureLoader.FromBitmap(Resources.player);
 			PlayerHitTexture = TextureLoader.FromBitmap(Resources.playerhit);
 			FloorTexture = TextureLoader.FromBitmap(Resources.woodfloor);
-			//ExitTexture = TextureLoader.FromBitmap();
+			ExitTexture = TextureLoader.FromBitmap(Resources.exit);
 			ObstacleTexture1 = TextureLoader.FromBitmap(Resources.obstacle1);
 			ObstacleTexture2 = TextureLoader.FromBitmap(Resources.obstacle2);
 			ObstacleTexture3 = TextureLoader.FromBitmap(Resources.obstacle3);

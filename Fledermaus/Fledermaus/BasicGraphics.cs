@@ -20,10 +20,15 @@ namespace Fledermaus
 			MirrorInactive,
 			MirrorRailActive,
 			MirrorRailInactive,
+			InnerMirrorRail,
 			Exit,
-
-
-			DefaultText
+			DefaultText,
+			HeaderText,
+			SpecialText,
+			ButtonText,
+			SelectedText,
+			DisabledText,
+			SelectedDisabledText
 		}
 
 		private static TextureFont _font;
@@ -52,12 +57,19 @@ namespace Fledermaus
 			switch (color)
 			{
 				case Colors.LightRay: return new Vector3(1.0f, 0.6f, 0.0f);
-				case Colors.MirrorActive: return new Vector3(0.4f, 0.5f, 0.94f);
-				case Colors.MirrorInactive: return new Vector3(0.4f, 0.45f, 0.5f);
+				case Colors.MirrorActive: return new Vector3(0.0f, 0.5f, 1.0f);
+				case Colors.MirrorInactive: return new Vector3(0.2f, 0.4f, 0.6f);
 				case Colors.MirrorRailActive: return new Vector3(0.6f, 0.6f, 0.6f);
 				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
+				case Colors.InnerMirrorRail: return new Vector3(0.1f, 0.1f, 0.1f);
 				case Colors.Exit: return new Vector3(1.0f, 0.4f, 0.6f);
-				case Colors.DefaultText: return new Vector3(1.0f, 0.8f, 0.6f);
+				case Colors.DefaultText: return new Vector3(1.0f, 0.7f, 0.6f);
+				case Colors.HeaderText: return new Vector3(1.0f, 0.8f, 0.7f);
+				case Colors.SpecialText: return new Vector3(1.0f, 0.6f, 0.4f);
+				case Colors.ButtonText: return new Vector3(1.0f, 0.4f, 0.2f);
+				case Colors.SelectedText: return new Vector3(1.0f, 0.9f, 0.8f);
+				case Colors.DisabledText: return new Vector3(0.5f, 0.5f, 0.5f);
+				case Colors.SelectedDisabledText: return new Vector3(0.8f, 0.8f, 0.8f);
 			}
 
 			return new Vector3(0.0f, 0.0f, 0.0f);
@@ -65,11 +77,7 @@ namespace Fledermaus
 
 		public static void SetColor(Colors color, float alpha = 1.0f)
 		{
-			Vector3 colorVector = GetColor(color);
-
-			//colorVector *= alpha;
-
-			GL.Color4(colorVector.X, colorVector.Y, colorVector.Z, alpha);
+			GL.Color3(GetColor(color) * alpha);
 		}
 
 
@@ -93,6 +101,13 @@ namespace Fledermaus
 			Vector2 point12 = point1 + ccwRotation;
 			Vector2 point21 = point2 + cwRotation;
 			Vector2 point22 = point2 + ccwRotation;
+
+			//GL.Begin(PrimitiveType.Quads);
+			//GL.Vertex2(point11);
+			//GL.Vertex2(point12);
+			//GL.Vertex2(point21);
+			//GL.Vertex2(point22);
+			//GL.End();
 
 			GL.Begin(PrimitiveType.Triangles);
 			GL.Vertex2(point11);
@@ -203,12 +218,15 @@ namespace Fledermaus
 			_font.Print(position.X, position.Y, 0.0f, size, text, GetXScale());
 		}
 
-		public static void DrawCenteredText(string text, float y, float size)
+		public static void DrawCenteredText(string text, Vector2 center, float size)
 		{
 			float width = _font.Width(text, size, _characterSpacing);
-			float x = 0.0f - (width / 2f);
+			float x = center.X - (width / 2f);
 
-			DrawText(text, new Vector2(x, y), size);
+			//x *= GetXScale();
+			//Console.WriteLine(x + "  / " + width);
+
+			DrawText(text, new Vector2(x, center.Y), size);
 		}
 
 	}

@@ -162,15 +162,15 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(-0.9f, -0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(-0.3f, 0.98f), new Vector2(0.1f, -0.4f)));
+			room.AddLightRay(new LightRay(new Vector2(-0.3f, 1.0f), new Vector2(0.1f, -0.4f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.4f, -0.2f), new Vector2(0.0f, -0.3f));
 			m1.SetRotationBounds(0.0f, 0.9f);
 			room.AddMirror(m1);
 
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.55f, -0.55f), new Vector2(0.75f, -0.75f)));
-
-			room.Exit = new RectangularGameObject(new Vector2(0.65f, 1.03f), new Vector2(0.90f, 0.97f));
+			
+			room.Exit = new RectangularGameObject(new Vector2(0.69f, 1.0f), new Vector2(0.9f, 0.91f));
 
 			return room;
 		}
@@ -181,7 +181,7 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(0.9f, -0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, -0.2f), new Vector2(0.32f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, -0.2f), new Vector2(0.32f, 0.1f)));
 
 			Mirror m1 = new Mirror(new Vector2(0.0f, -0.25f), new Vector2(0.1f, 0.4f), 0.5f, 0.2f);
 			m1.SetRotationBounds(0.45f, 0.55f);
@@ -189,7 +189,7 @@ namespace Fledermaus
 			Mirror m2 = new Mirror(new Vector2(0.3f, 0.6f), new Vector2(0.55f, 0.25f), 0.68f, 0.5f);
 			room.AddMirror(m2);
 
-			room.Exit = new RectangularGameObject(new Vector2(-1.03f, 0.9f), new Vector2(-0.97f, 0.65f));
+			room.Exit = new RectangularGameObject(new Vector2(-1.0f, 0.9f), new Vector2(-0.91f, 0.69f));
 
 			return room;
 		}
@@ -200,7 +200,7 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(0.98f, 0.45f), new Vector2(-0.8f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, 0.45f), new Vector2(-0.8f, 0.1f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.5f, 0.3f), new Vector2(-0.3f, 0.8f), 0.5f, 0.9f);
 			m1.SetRotationBounds(0.4f, 0.8f);
@@ -211,7 +211,7 @@ namespace Fledermaus
 
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.2f, -0.5f), new Vector2(0.4f, -0.7f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(0.65f, -0.97f), new Vector2(0.9f, -1.03f));
+			room.Exit = new RectangularGameObject(new Vector2(0.69f, -0.91f), new Vector2(0.9f, -1.0f));
 
 			return room;
 		}
@@ -222,9 +222,9 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(0.3f, 0.98f), new Vector2(-0.1f, -0.12f)));
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, 0.4f), new Vector2(0.2f, -0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.4f), new Vector2(-1.0f, -0.05f)));
+			room.AddLightRay(new LightRay(new Vector2(0.3f, 1.0f), new Vector2(-0.1f, -0.12f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, 0.4f), new Vector2(0.2f, -0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.4f), new Vector2(-1.0f, -0.05f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.11f, 0.6f), new Vector2(0.4f, 0.82f), -0.3f, 0.8f);
 			m1.SetRotationBounds(-0.32f, 0.0f);
@@ -241,7 +241,7 @@ namespace Fledermaus
 
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.45f, 0.75f), new Vector2(-0.25f, 0.55f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(-1.03f, -0.65f), new Vector2(-0.97f, -0.9f));
+			room.Exit = new RectangularGameObject(new Vector2(-1.0f, -0.69f), new Vector2(-0.91f, -0.9f));
 
 			return room;
 		}
@@ -252,9 +252,9 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(0.9f, -0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, 0.2f), new Vector2(0.5f, 0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, 0.0f), new Vector2(0.65f, -0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(0.2f, 0.98f), new Vector2(0.1f, -0.20f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, 0.2f), new Vector2(0.5f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, 0.0f), new Vector2(0.65f, -0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(0.2f, 1.0f), new Vector2(0.1f, -0.20f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.8f, -0.3f), new Vector2(-0.62f, 0.55f), 0.5f, 0.1f);
 			room.AddMirror(m1);
@@ -270,7 +270,7 @@ namespace Fledermaus
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.05f, -0.35f), new Vector2(0.15f, -0.55f)));
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.4f, 0.8f), new Vector2(-0.2f, 0.6f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(0.65f, 1.03f), new Vector2(0.9f, 0.97f));
+			room.Exit = new RectangularGameObject(new Vector2(0.69f, 1.0f), new Vector2(0.9f, 0.91f));
 
 			return room;
 		}
@@ -283,7 +283,7 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(0.9f, -0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(-0.1f, -0.98f), new Vector2(0.1f, 0.15f)));
+			room.AddLightRay(new LightRay(new Vector2(-0.1f, -1.0f), new Vector2(0.1f, 0.15f)));
 
 			Mirror m1 = new Mirror(new Vector2(0.3f, -0.2f), new Vector2(0.44f, -0.7f), 0.6f, 0.8f);
 			m1.SetRotationBounds(0.5f, 0.8f);
@@ -296,7 +296,7 @@ namespace Fledermaus
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.42f, -0.05f), new Vector2(-0.22f, -0.25f)));
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.56f, -0.63f), new Vector2(-0.36f, -0.83f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(-0.9f, 1.03f), new Vector2(-0.65f, 0.97f));
+			room.Exit = new RectangularGameObject(new Vector2(-0.9f, 1.0f), new Vector2(-0.69f, 0.91f));
 
 			return room;
 		}
@@ -307,11 +307,11 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(-0.9f, -0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(0.8f, -0.98f), new Vector2(-0.1f, 0.114f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.54f), new Vector2(-0.4f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(0.8f, -1.0f), new Vector2(-0.1f, 0.114f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.54f), new Vector2(-0.4f, 0.1f)));
 			room.AddLightRay(new LightRay(new Vector2(-0.7f, 0.6f), new Vector2(0.1f, -0.183f)));
-			room.AddLightRay(new LightRay(new Vector2(-0.24f, 0.98f), new Vector2(0.1f, -0.2f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.8f), new Vector2(-0.1f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(-0.24f, 1.0f), new Vector2(0.1f, -0.2f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.8f), new Vector2(-0.1f, 0.1f)));
 
 			Mirror m1 = new Mirror(new Vector2(0.4f, -0.78f), new Vector2(0.72f, -0.84f), 1.05f, 0.8f);
 			m1.SetRotationBounds(1.0f, 1.1f);
@@ -332,7 +332,7 @@ namespace Fledermaus
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.8f, 0.8f), new Vector2(-0.6f, 0.6f)));
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.1f, -0.6f), new Vector2(0.1f, -0.8f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(0.97f, 0.65f), new Vector2(1.03f, 0.9f));
+			room.Exit = new RectangularGameObject(new Vector2(0.91f, 0.69f), new Vector2(1.0f, 0.9f));
 
 			return room;
 		}
@@ -343,8 +343,8 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(-0.9f, 0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, 0.2f), new Vector2(0.29f, 0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.58f), new Vector2(-0.2f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, 0.2f), new Vector2(0.29f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.58f), new Vector2(-0.2f, 0.1f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.82f, 0.38f), new Vector2(-0.18f, 0.42f), -0.15f, 0.3f);
 			m1.SetRotationBounds(-0.2f, 0.5f);
@@ -357,7 +357,7 @@ namespace Fledermaus
 			Mirror m4 = new Mirror(new Vector2(-0.64f, -0.1f), new Vector2(-0.58f, -0.54f));
 			room.AddMirror(m4);
 
-			room.Exit = new RectangularGameObject(new Vector2(0.65f, -0.97f), new Vector2(0.9f, -1.03f));
+			room.Exit = new RectangularGameObject(new Vector2(0.69f, -0.91f), new Vector2(0.9f, -1.0f));
 
 			return room;
 		}
@@ -371,7 +371,7 @@ namespace Fledermaus
 			room.AddLightRay(new LightRay(new Vector2(-0.6f, 0.6f), new Vector2(0.05f, -1.0f)));
 			room.AddLightRay(new LightRay(new Vector2(0.3f, 0.5f), new Vector2(-0.3f, -0.1f)));
 			room.AddLightRay(new LightRay(new Vector2(0.4f, -0.1f), new Vector2(-0.6f, -0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.9f), new Vector2(-0.4f, 0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.9f), new Vector2(-0.4f, 0.1f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.1f, 0.6f), new Vector2(0.08f, 0.14f), 0.85f, 0.15f);
 			m1.SetRotationBounds(0.5f, 1.0f);
@@ -390,7 +390,7 @@ namespace Fledermaus
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.3f, 0.6f), new Vector2(0.5f, 0.4f)));
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.4f, 0.0f), new Vector2(0.6f, -0.2f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(-0.65f, -0.97f), new Vector2(-0.9f, -1.03f));
+			room.Exit = new RectangularGameObject(new Vector2(-0.9f, -0.91f), new Vector2(-0.69f, -1.0f));
 
 			return room;
 		}
@@ -401,8 +401,8 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(-0.9f, 0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, 0.6f), new Vector2(1.0f, 0.025f)));
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, -0.84f), new Vector2(1.0f, 0.06f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, 0.6f), new Vector2(1.0f, 0.025f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, -0.84f), new Vector2(1.0f, 0.06f)));
 
 			Mirror m1 = new Mirror(new Vector2(0.64f, 0.85f), new Vector2(0.7f, 0.44f), -0.8f, 0.2f);
 			m1.SetRotationBounds(-0.9f, -0.3f);
@@ -415,8 +415,8 @@ namespace Fledermaus
 			room.AddMirror(m3);
 			Mirror m4 = new Mirror(new Vector2(-0.83f, 0.08f), new Vector2(-0.77f, -0.86f), -0.4f, 0.1f);
 			room.AddMirror(m4);
-
-			room.Exit = new RectangularGameObject(new Vector2(0.97f, -0.65f), new Vector2(1.03f, -0.9f));
+			
+			room.Exit = new RectangularGameObject(new Vector2(0.69f, -0.91f), new Vector2(0.9f, -1.0f));
 
 			return room;
 		}
@@ -449,7 +449,7 @@ namespace Fledermaus
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.4f, 0.6f), new Vector2(-0.2f, 0.4f)));
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.1f, 0.72f), new Vector2(0.3f, 0.52f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(-1.03f, 0.9f), new Vector2(-0.97f, 0.65f));
+			room.Exit = new RectangularGameObject(new Vector2(-1.0f, 0.9f), new Vector2(-0.91f, 0.69f));
 
 			return room;
 		}
@@ -460,7 +460,7 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(0.9f, 0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(0.05f, 0.98f), new Vector2(-0.1f, -1f)));
+			room.AddLightRay(new LightRay(new Vector2(0.05f, 1.0f), new Vector2(-0.1f, -1f)));
 			room.AddLightRay(new LightRay(new Vector2(0.4f, -0.5f), new Vector2(-0.1f, 0.2f)));
 			room.AddLightRay(new LightRay(new Vector2(0.0f, -0.25f), new Vector2(-0.14f, -0.1f)));
 
@@ -477,7 +477,7 @@ namespace Fledermaus
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.3f, -0.5f), new Vector2(0.5f, -0.7f)));
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.0f, -0.15f), new Vector2(0.2f, -0.35f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(-0.9f, 1.03f), new Vector2(-0.65f, 0.97f));
+			room.Exit = new RectangularGameObject(new Vector2(-0.9f, 1.0f), new Vector2(-0.69f, 0.91f));
 
 			return room;
 		}
@@ -490,8 +490,8 @@ namespace Fledermaus
 
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.75f, 0.25f), new Vector2(-0.55f, 0.05f)));
 
-			room.AddLightRay(new LightRay(new Vector2(0.05f, 0.98f), new Vector2(0.05f, -1.0f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.15f), new Vector2(-0.5f, -0.05f)));
+			room.AddLightRay(new LightRay(new Vector2(0.05f, 1.0f), new Vector2(0.05f, -1.0f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.15f), new Vector2(-0.5f, -0.05f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.25f, -0.2f), new Vector2(0.1f, -0.68f), -0.79f, 0.5f);
 			room.AddMirror(m1);
@@ -501,7 +501,7 @@ namespace Fledermaus
 			Mirror m3 = new Mirror(new Vector2(0.7f, -0.2f), new Vector2(0.8f, -0.85f));
 			room.AddMirror(m3);
 
-			room.Exit = new RectangularGameObject(new Vector2(0.97f, 0.9f), new Vector2(1.03f, 0.65f));
+			room.Exit = new RectangularGameObject(new Vector2(0.91f, 0.9f), new Vector2(1.0f, 0.69f));
 
 			return room;
 		}
@@ -512,10 +512,10 @@ namespace Fledermaus
 
 			room.Player = new Player(new Vector2(-0.9f, 0.9f));
 
-			room.AddLightRay(new LightRay(new Vector2(0.2f, 0.98f), new Vector2(-0.1f, -0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(0.2f, 1.0f), new Vector2(-0.1f, -0.1f)));
 			room.AddLightRay(new LightRay(new Vector2(0.5f, 0.4f), new Vector2(-0.1f, -0.14f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, 0.05f), new Vector2(-0.1f, -0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, -0.55f), new Vector2(-1.0f, -0.03f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, 0.05f), new Vector2(-0.1f, -0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.55f), new Vector2(-1.0f, -0.03f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.6f, 0.74f), new Vector2(-0.2f, 0.21f), 0.5f, 0.2f);
 			room.AddMirror(m1);
@@ -528,7 +528,7 @@ namespace Fledermaus
 
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(0.6f, 0.6f), new Vector2(0.4f, 0.4f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(0.97f, -0.65f), new Vector2(1.03f, -0.9f));
+			room.Exit = new RectangularGameObject(new Vector2(0.91f, -0.69f), new Vector2(1.0f, -0.9f));
 
 			return room;
 		}
@@ -541,9 +541,9 @@ namespace Fledermaus
 
 			room.AddLightRay(new LightRay(new Vector2(-0.2f, -0.8f), new Vector2(-0.3f, 0.1f)));
 			room.AddLightRay(new LightRay(new Vector2(0.8f, -0.63f), new Vector2(-0.18f, 0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(-0.98f, -0.28f), new Vector2(0.7f, -0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(0.98f, 0.42f), new Vector2(-0.22f, -0.1f)));
-			room.AddLightRay(new LightRay(new Vector2(-0.42f, 0.98f), new Vector2(0.1f, -0.7f)));
+			room.AddLightRay(new LightRay(new Vector2(-1.0f, -0.28f), new Vector2(0.7f, -0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(1.0f, 0.42f), new Vector2(-0.22f, -0.1f)));
+			room.AddLightRay(new LightRay(new Vector2(-0.42f, 1.0f), new Vector2(0.1f, -0.7f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.6f, -0.92f), new Vector2(-0.42f, -0.62f), 0.3f, 0.2f);
 			room.AddMirror(m1);
@@ -573,7 +573,7 @@ namespace Fledermaus
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.7f, 0.1f), new Vector2(-0.5f, -0.1f)));
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.8f, 0.8f), new Vector2(-0.6f, 0.6f)));
 
-			room.Exit = new RectangularGameObject(new Vector2(0.65f, 1.03f), new Vector2(0.9f, 0.97f));
+			room.Exit = new RectangularGameObject(new Vector2(0.69f, 1.0f), new Vector2(0.9f, 0.91f));
 
 			return room;
 		}

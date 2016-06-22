@@ -160,10 +160,6 @@ namespace Fledermaus.Utils
 
 			float dot = Vector2.Dot(p1d, p2d);
 
-			//if (dot == -1 || dot == 1) return null;
-
-			// TODO: Parallelität testen
-
 			float x1 = p1o.X;
 			float y1 = p1o.Y;
 			float x2 = p1d.X;
@@ -172,8 +168,6 @@ namespace Fledermaus.Utils
 			float y3 = p2o.Y;
 			float x4 = p2d.X;
 			float y4 = p2d.Y;
-
-			// TODO: alles iwie überarbeiten :/
 
 			if (x2 * y4 - x4 * y2 == 0)
 			{

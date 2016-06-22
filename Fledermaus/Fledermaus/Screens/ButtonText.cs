@@ -63,11 +63,17 @@ namespace Fledermaus.Screens
 			//color is multiplied with texture color white == no change
 			// GL.Color3(Color.White);
 
-			if (!isEnabled) GL.Color3(Color.Gray);
-			else if (isSelected) GL.Color3(Color.LightYellow);
-			else GL.Color3(Color.Orange);
+			BasicGraphics.Colors color;
+
+			if (!isEnabled && isSelected) color = BasicGraphics.Colors.SelectedDisabledText;
+			else if (!isEnabled && !isSelected) color = BasicGraphics.Colors.DisabledText;
+			else if (isEnabled && isSelected) color = BasicGraphics.Colors.SelectedText;
+			else color = BasicGraphics.Colors.DefaultText;
+
+			BasicGraphics.SetColor(color);
 
 			//Vector2 position = new Vector2(Position.X - (Width / 2), Position.Y - (Height / 2));
+
 			Vector2 position = new Vector2(Position.X, Position.Y);
 			BasicGraphics.DrawText(Text, position, 0.08f);
         }

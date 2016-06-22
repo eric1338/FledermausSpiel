@@ -9,14 +9,18 @@ namespace Fledermaus.Data
 	class LevelHighscores
 	{
 
-		float[] _singleTimes;
-		float _totalTime = -1f;
+		public int NumberOfRooms { get; set; }
+
+		private float[] _singleTimes;
+		private float _totalTime = -1f;
 
 		public LevelHighscores(int numberOfRooms)
 		{
+			NumberOfRooms = numberOfRooms;
+
 			_singleTimes = new float[numberOfRooms];
 
-			for (int i = 0; i < 5; i++) _singleTimes[i] = -1f;
+			for (int i = 0; i < NumberOfRooms; i++) _singleTimes[i] = -1f;
 		}
 
 		public bool CheckSingleTime(int roomNumber, float newTime)
@@ -44,6 +48,11 @@ namespace Fledermaus.Data
 		public float GetTime(int roomNumber)
 		{
 			return _singleTimes[roomNumber];
+		}
+
+		public float GetTotalTime()
+		{
+			return _totalTime;
 		}
 
 	}

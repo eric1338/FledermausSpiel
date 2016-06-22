@@ -250,8 +250,8 @@ namespace Fledermaus.Screens
 
 		protected void DrawTitle(string title)
 		{
-			// TODO: centered
-			BasicGraphics.DrawText(title, new Vector2(-0.6f, 0.6f), 0.15f);
+			BasicGraphics.SetColor(BasicGraphics.Colors.HeaderText);
+			BasicGraphics.DrawText(title, new Vector2(-0.76f, 0.6f), 0.15f);
 		}
 
 		protected void AddMainMenuButton(string text = "back", bool iSelected = false)

@@ -71,6 +71,7 @@
     <Compile Include="Data\PlayerData.cs" />
     <Compile Include="Screens\HighscoreScreen.cs" />
     <Compile Include="Screens\LevelEndScreen.cs" />
+    <Compile Include="Screens\LevelResultScreen.cs" />
     <Compile Include="Screens\TutorialScreen.cs" />
     <Compile Include="Textures.cs" />
     <Compile Include="Utils\LevelParser.cs" />
@@ -117,8 +118,8 @@
     <None Include="Resources\Textures\obstacle2.png" />
     <None Include="Resources\Textures\obstacle3.png" />
     <None Include="Resources\Textures\obstacle4.png" />
+    <None Include="Resources\Textures\exit.png" />
     <Content Include="Resources\Textures\woodfloor.png" />
-    <None Include="Resources\Menu\Fire.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

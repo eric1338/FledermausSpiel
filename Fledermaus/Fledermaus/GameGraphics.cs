@@ -59,6 +59,11 @@ namespace Fledermaus
 			if (level != null) _currentRoom = Level.CurrentRoom;
 		}
 
+		private void SetColor(BasicGraphics.Colors color)
+		{
+			BasicGraphics.SetColor(color, _alpha);
+		}
+
 		public void SetDrawSettings(Vector2 center, float scale, float alpha)
 		{
 			_center = center;
@@ -176,7 +181,7 @@ namespace Fledermaus
 
 		private void DrawLightRay(LightRay lightRay)
 		{
-			BasicGraphics.SetColor(BasicGraphics.Colors.LightRay);
+			SetColor(BasicGraphics.Colors.LightRay);
 			DrawBounds(lightRay, 0.004f);
 
 			if (lightRay.GetLines().ToList().Count < 1) return;
@@ -221,7 +226,7 @@ namespace Fledermaus
 
 			DrawTexture(playerTexture, bL, bR, tR, tL);
 
-			//SetColor(Colors.LightRay);
+			//SetColor(BasicGraphics.Colors.LightRay);
 			//DrawBounds(player, 0.002f);
 		}
 
@@ -233,11 +238,20 @@ namespace Fledermaus
 		private void DrawMirror(Mirror mirror)
 		{
 
-			BasicGraphics.SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorRailActive : BasicGraphics.Colors.MirrorRailInactive);
-			DrawLine(new Line(mirror.RailPosition1, mirror.RailPosition2), 0.005f);
+			SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorRailActive : BasicGraphics.Colors.MirrorRailInactive);
+			DrawLine(new Line(mirror.RailPosition1, mirror.RailPosition2), 0.01f);
 
-			BasicGraphics.SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorActive : BasicGraphics.Colors.MirrorInactive);
-			DrawLine(mirror.GetMirrorLine(), 0.006f);
+			Vector2 railVector = mirror.RailPosition2 - mirror.RailPosition1;
+			railVector.Normalize();
+
+			Vector2 point1 = mirror.RailPosition1 + railVector * 0.02f;
+			Vector2 point2 = mirror.RailPosition2 + railVector * -0.02f;
+
+			SetColor(BasicGraphics.Colors.InnerMirrorRail);
+			DrawLine(new Line(point1, point2), 0.005f);
+
+			SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorActive : BasicGraphics.Colors.MirrorInactive);
+			DrawLine(mirror.GetMirrorLine(), 0.008f);
 		}
 
 		private void DrawObstacles(List<Obstacle> obstacles, int roomIndex = 0)
@@ -262,15 +276,24 @@ namespace Fledermaus
 			Texture texture = GetObstacleTexture(textureIndex);
 
 			DrawRectangularTexture(texture, obstacle.TopLeft, obstacle.BottomRight);
-
-			//GL.Color3(0.4f, 0.4f, 0.4f);
-			//DrawBounds(obstacle, 0.002f);
 		}
 
 		private void DrawExit(RectangularGameObject exit)
 		{
-			BasicGraphics.SetColor(BasicGraphics.Colors.Exit);
-			DrawRectangularGameObject(exit);
+			Vector2 topLeft = exit.TopLeft;
+			Vector2 bottomRight = exit.BottomRight;
+			Vector2 bottomLeft = new Vector2(topLeft.X, bottomRight.Y);
+			Vector2 topRight = new Vector2(bottomRight.X, topLeft.Y);
+
+			Vector2 exitVector = bottomRight - topLeft;
+
+			bool isUpright = Math.Abs(exitVector.X) < Math.Abs(exitVector.Y);
+
+			Vector2 textureTopLeft = isUpright ? bottomLeft : topLeft;
+			Vector2 textureBottomRight = isUpright ? topRight : bottomRight;
+
+			if (isUpright) DrawTexture(_exitTexture, bottomRight, topRight, topLeft, bottomLeft);
+			else DrawRectangularTexture(_exitTexture, textureTopLeft, textureBottomRight);
 		}
 
 		// --- //

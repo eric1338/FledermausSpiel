@@ -13,8 +13,6 @@ namespace Fledermaus.GameObjects
 		public Vector2 Position { get; set; }
 		public float Rotation { get; set; }
 
-		// TODO: PlayerSize / Hitboxen
-
 		private Vector2 _initialPosition;
 
 		public Vector2 VectorToMirror { get; set; }

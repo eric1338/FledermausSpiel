@@ -11,23 +11,27 @@ namespace Fledermaus.Data
 
 		public static PlayerData Instance = new PlayerData();
 
-		private List<string> _lockedLevels = new List<string>();
+		private bool IsLevel2Unlocked = false;
+		private bool IsLevel3Unlocked = false;
+
 		private Dictionary<string, LevelHighscores> _allLevelHighscores = new Dictionary<string, LevelHighscores>();
 
 		private PlayerData()
 		{
-			_lockedLevels.Add("Level 2");
-			_lockedLevels.Add("Level 3");
 		}
 
 		public void UnlockLevel(string levelName)
 		{
-			_lockedLevels.Remove(levelName);
+			if (levelName == "Level 2") IsLevel2Unlocked = true;
+			if (levelName == "Level 3") IsLevel3Unlocked = true;
 		}
 
 		public bool IsLevelLocked(string levelName)
 		{
-			return _lockedLevels.Contains(levelName);
+			if (levelName == "Level 2") return !IsLevel2Unlocked;
+			if (levelName == "Level 3") return !IsLevel3Unlocked;
+
+			return false;
 		}
 
 		public void CreateLevelHighscores(string levelName, int numberOfRooms)

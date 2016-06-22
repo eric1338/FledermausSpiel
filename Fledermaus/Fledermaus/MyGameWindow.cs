@@ -35,10 +35,8 @@ namespace Fledermaus
             }
         }
 
-        public MyGameWindow(int width,int height) : base(width,height/*800, 700*/)
+        public MyGameWindow(int width, int height) : base(width, height)
 		{
-
-            //Width
 			RenderFrame += MyGameWindow_RenderFrame;
 			UpdateFrame += MyGameWindow_UpdateFrame;
 			KeyUp += MyGameWindow_KeyUp;
@@ -46,6 +44,12 @@ namespace Fledermaus
             MouseDown += MyGameWindow_MouseDown;
             MouseMove += MyGameWindow_MouseMove;
             MouseWheel += MyGameWindow_MouseWheel;
+
+			GL.Enable(EnableCap.Blend);
+			GL.Enable(EnableCap.PolygonSmooth);
+			GL.Enable(EnableCap.Multisample);
+			
+			GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
 		}
 
         private void MyGameWindow_MouseWheel(object sender, OpenTK.Input.MouseWheelEventArgs e)
@@ -82,9 +86,8 @@ namespace Fledermaus
 		private void MyGameWindow_RenderFrame(object sender, FrameEventArgs e)
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
-			GL.Enable(EnableCap.Blend);
 
-            if (ClientSize.Width >= ClientSize.Height)
+			if (ClientSize.Width >= ClientSize.Height)
 			{
 				if (ClientSize.Width != 0) windowScale = new Vector2(ClientSize.Height / ClientSize.Width, 1.0f);
 
@@ -92,7 +95,7 @@ namespace Fledermaus
 			}
 
 			CurrentScreen?.Draw();
-
+			
 			SwapBuffers();
 		}
 	}

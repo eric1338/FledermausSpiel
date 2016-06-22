@@ -22,11 +22,11 @@ namespace Fledermaus.Screens
 			lines.Add("");
 			lines.Add("press f to focus and unfocus on a mirror");
 			lines.Add("");
-			lines.Add("once you are focused on a mirror, use wasd or the arrow keys");
+			lines.Add("once you are focused on a mirror use wasd or the arrow keys");
 			lines.Add("to move the mirror on the rail and q and e to rotate it");
 			lines.Add("");
 			lines.Add("use the mirrors to clear a path to the exit by reflecting");
-			lines.Add("the light rays (right)");
+			lines.Add("the light rays the right direction");
 
 			AddMainMenuButton();
 		}
@@ -42,6 +42,8 @@ namespace Fledermaus.Screens
 
 			foreach (string line in lines)
 			{
+				BasicGraphics.SetColor(BasicGraphics.Colors.DefaultText);
+
 				BasicGraphics.DrawText(line, new Vector2(x, y), 0.08f);
 
 				y -= (line.Length < 1 ? 0.05f : 0.1f);

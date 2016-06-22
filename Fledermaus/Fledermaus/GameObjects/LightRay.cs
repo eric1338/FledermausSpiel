@@ -41,7 +41,7 @@ namespace Fledermaus.GameObjects
 			Vector2 newDirection = direction;
 			newDirection.Normalize();
 
-			return Line.CreateParameterized(origin, newDirection, 50); // TODO: evtl anderer Faktor
+			return Line.CreateParameterized(origin, newDirection, 50);
 		}
 
 		public void FinishRays(Vector2 lastPoint)
