@@ -97,6 +97,14 @@ namespace Fledermaus.GameObjects
 			return GetMirrorPosition() + GetMirrorNormal2() * distanceFactor;
 		}
 
+		public Vector2 GetMirrorHalf(float rotation)
+		{
+			Vector2 railVector = GetRailVector();
+			railVector.Normalize();
+
+			return Util.GetRotatedVector(railVector, rotation);
+		}
+
 		public Line GetMirrorLine()
 		{
 			Vector2 railVector = GetRailVector();
