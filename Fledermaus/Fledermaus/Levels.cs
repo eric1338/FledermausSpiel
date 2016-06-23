@@ -313,7 +313,7 @@ namespace Fledermaus
 			room.AddLightRay(new LightRay(new Vector2(-0.24f, 1.0f), new Vector2(0.1f, -0.2f)));
 			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.8f), new Vector2(-0.1f, 0.1f)));
 
-			Mirror m1 = new Mirror(new Vector2(0.4f, -0.78f), new Vector2(0.72f, -0.84f), 1.05f, 0.8f);
+			Mirror m1 = new Mirror(new Vector2(0.4f, -0.78f), new Vector2(0.64f, -0.82f), 1.05f, 0.9f);
 			m1.SetRotationBounds(1.0f, 1.1f);
 			room.AddMirror(m1);
 			Mirror m2 = new Mirror(new Vector2(-0.65f, -0.08f), new Vector2(-0.6f, -0.44f), 0.3f, 0.8f);
@@ -326,7 +326,7 @@ namespace Fledermaus
 			m4.SetRotationBounds(-0.15f, 0.4f);
 			room.AddMirror(m4);
 			Mirror m5 = new Mirror(new Vector2(0.34f, -0.06f), new Vector2(0.43f, -0.2f), 0.25f, 0.8f);
-			m5.SetRotationBounds(0.35f, 0.6f);
+			m5.SetRotationBounds(0.2f, 0.6f);
 			room.AddMirror(m5);
 
 			room.AddObstacle(Obstacle.CreateRectangular(new Vector2(-0.8f, 0.8f), new Vector2(-0.6f, 0.6f)));
@@ -494,6 +494,7 @@ namespace Fledermaus
 			room.AddLightRay(new LightRay(new Vector2(1.0f, -0.15f), new Vector2(-0.5f, -0.05f)));
 
 			Mirror m1 = new Mirror(new Vector2(-0.25f, -0.2f), new Vector2(0.1f, -0.68f), -0.79f, 0.5f);
+			m1.SetRotationBounds(-0.8f, 0.7f);
 			room.AddMirror(m1);
 			Mirror m2 = new Mirror(new Vector2(-0.2f, 0.86f), new Vector2(0.1f, 0.6f), 0.73f, 0.9f);
 			m2.SetRotationBounds(0.1f, 0.7f);

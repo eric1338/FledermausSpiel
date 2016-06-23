@@ -26,6 +26,8 @@ namespace Fledermaus
 		private int _resetCounter = 0;
 		private bool _godMode = false;
 
+		public bool LevelEditorMode { get; set; }
+
 		public ILogicalLevel Level;
 
 		private ILogicalRoom CurrentRoom
@@ -84,6 +86,11 @@ namespace Fledermaus
 		private SmoothSpeedValue _mirrorMovement = new SmoothSpeedValue(0.004f, 0.01f);
 		private SmoothSpeedValue _mirrorRotation = new SmoothSpeedValue(0.004f, 0.008f);
 
+
+		public GameLogic(bool levelEditorMode = false)
+		{
+			LevelEditorMode = levelEditorMode;
+		}
 
 		public void ProcessInput()
 		{
@@ -284,9 +291,12 @@ namespace Fledermaus
 			ResetLighRays();
 			CalculateLightRays();
 
-			CheckPlayerExitCollision();
-			CheckPlayerLightCollision();
-			DetermineMirrorAccessibility();
+			if (!LevelEditorMode)
+			{
+				CheckPlayerExitCollision();
+				CheckPlayerLightCollision();
+				DetermineMirrorAccessibility();
+			}
 		}
 
 		private void ResetLighRays()
@@ -355,8 +365,10 @@ namespace Fledermaus
 			}
 			else
 			{
-                if(closestNonReflectingIntersection!=null)
+                if (closestNonReflectingIntersection != null)
+				{
 				    lightRay.FinishRays(closestNonReflectingIntersection.Point);
+				}
 			}
 		}
 

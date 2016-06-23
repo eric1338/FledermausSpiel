@@ -135,14 +135,14 @@ namespace Fledermaus
 			_currentRoom = Level.CurrentRoom;
 		}
 
-		public void DrawRoom(Room room, bool drawPlayer, bool isPlayerHit = false)
+		public void DrawRoom(Room room, bool isCurrentRoom, bool isPlayerHit = false)
 		{
 			DrawRoomBounds(room.RoomBounds);
 			DrawFloor(room.RoomBounds);
 
-			DrawMirrors(room.Mirrors);
+			DrawMirrors(room.Mirrors, room.Player.Position, isCurrentRoom);
 
-			if (drawPlayer) DrawPlayer(room.Player, isPlayerHit);
+			if (isCurrentRoom) DrawPlayer(room.Player, isPlayerHit);
 
 			DrawExit(room.Exit);
 			DrawLightRays(room.LightRays);
@@ -232,12 +232,21 @@ namespace Fledermaus
 
 		private void DrawMirrors(List<Mirror> mirrors)
 		{
-			foreach (Mirror m in mirrors) DrawMirror(m);
+			DrawMirrors(mirrors, Vector2.Zero, false);
+		}
+
+		private void DrawMirrors(List<Mirror> mirrors, Vector2 playerPosition, bool isCurrentRoom)
+		{
+			foreach (Mirror mirror in mirrors) DrawMirror(mirror, playerPosition, isCurrentRoom);
 		}
 
 		private void DrawMirror(Mirror mirror)
 		{
+			DrawMirror(mirror, Vector2.Zero, false);
+		}
 
+		private void DrawMirror(Mirror mirror, Vector2 playerPosition, bool isCurrentRoom)
+		{
 			SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorRailActive : BasicGraphics.Colors.MirrorRailInactive);
 			DrawLine(new Line(mirror.RailPosition1, mirror.RailPosition2), 0.01f);
 
@@ -252,6 +261,41 @@ namespace Fledermaus
 
 			SetColor(mirror.IsAccessible ? BasicGraphics.Colors.MirrorActive : BasicGraphics.Colors.MirrorInactive);
 			DrawLine(mirror.GetMirrorLine(), 0.008f);
+
+			// HUD
+
+			if (!isCurrentRoom) return;
+
+			Vector2 mirrorPosition = mirror.GetMirrorPosition();
+
+			float alpha = (0.36f - (playerPosition - mirrorPosition).Length) * 2.8f;
+			alpha = Math.Min(0.75f, alpha);
+
+			if (alpha <= 0) return;
+
+			float rotation = mirror.MinimumRotation;
+			float rotationIncrease = (mirror.MaximumRotation - mirror.MinimumRotation) / 20.0f;
+
+			GL.Color4(1.0f, 1.0f, 1.0f, alpha);
+
+			Vector2 lastHudVector1 = new Vector2(-10, 1);
+			Vector2 lastHudVector2 = new Vector2(-10, 1);
+
+			while (rotation <= mirror.MaximumRotation)
+			{
+				Vector2 mirrorHalf = (mirror.GetMirrorHalf(rotation) * 0.14f);
+
+				Vector2 hudVector1 = mirrorPosition - mirrorHalf;
+				Vector2 hudVector2 = mirrorPosition + mirrorHalf;
+
+				if (lastHudVector1.X > -2) DrawLine(new Line(hudVector1, lastHudVector1), 0.003f);
+				if (lastHudVector2.X > -2) DrawLine(new Line(hudVector2, lastHudVector2), 0.003f);
+
+				lastHudVector1 = hudVector1;
+				lastHudVector2 = hudVector2;
+
+				rotation += rotationIncrease;
+			}
 		}
 
 		private void DrawObstacles(List<Obstacle> obstacles, int roomIndex = 0)
