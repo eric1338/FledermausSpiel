@@ -170,10 +170,10 @@ namespace Fledermaus.Screens
 
                         Column = _room.Column,
                         Row = _room.Row,
-                        RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.995f), Konfiguration.Round(.995f)),
-                                                            new Vector2( Konfiguration.Round(-.995f), Konfiguration.Round(-.995f)),
-                                                            new Vector2( Konfiguration.Round(.995f), Konfiguration.Round(-.995f)),
-                                                            new Vector2( Konfiguration.Round(.995f), Konfiguration.Round(.995f))
+                        RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-1.0f), Konfiguration.Round(1.0f)),
+                                                            new Vector2( Konfiguration.Round(-1.0f), Konfiguration.Round(-1.0f)),
+                                                            new Vector2( Konfiguration.Round(1.0f), Konfiguration.Round(-1.0f)),
+                                                            new Vector2( Konfiguration.Round(1.0f), Konfiguration.Round(1.0f))
                         },
                     },
                     ExitVisual = new ExitVisual()
@@ -434,10 +434,10 @@ namespace Fledermaus.Screens
                 Position = new Vector2(Konfiguration.Round(0.89f), Konfiguration.Round(0.89f)),
                 RayDirection = new Vector2(Konfiguration.Round(-0.16f), Konfiguration.Round(-0.28f)),
             });
-            room.SolarPanel = new SolarPanel()
+           /* room.SolarPanel = new SolarPanel()
             {
                 Position = new Vector2(Konfiguration.Round(-0.45f), Konfiguration.Round(-0.4f))
-            };
+            };*/
 
             var room2 = new Model.GameObject.Room()
             {

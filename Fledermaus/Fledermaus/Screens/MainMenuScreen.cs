@@ -59,7 +59,8 @@ namespace Fledermaus.Screens
             Center = new Vector2(-.7f, center.Y);
             menuButtons.Clear();
             AddMenuButton("Resume", delegate { SwitchToScreen(les); }, true);
-            AddMenuButton("Save As", delegate { openSaveAsDialog(les.Level); });
+            AddMenuButton("Save As", delegate {
+                openSaveAsDialog(Model.Serializer.getLevelVisualAsLevel(les.LevelVisual)); });
             AddMenuButton("Load", delegate { CreateLoadMenu(new MainMenuScreen(les)); } );
             AddMenuButton("exit", GoToMainMenu);
         }
@@ -82,6 +83,7 @@ namespace Fledermaus.Screens
             // If the file name is not an empty string open it for saving.
             if (saveFileDialog1.FileName != "")
             {
+                level.Name = saveFileDialog1.FileName.Split('.').First();
                 // Saves the Image via a FileStream created by the OpenFile method.
                 Model.Serializer.saveLevel(level,path,saveFileDialog1.SafeFileName);
               /*  System.IO.FileStream fs =
@@ -134,7 +136,12 @@ namespace Fledermaus.Screens
 
             foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Levels\Custom\"))
 			{
-                AddMenuButton(" "+file.Split('\\').Last().Split('.').First(), delegate {  }, true);
+                var filename = file.Split('\\').Last();
+                AddMenuButton(" "+filename.Split('.').First(), delegate {
+
+                    var level = Model.Serializer.getLevelByFile(Directory.GetCurrentDirectory() + @"\Levels\Custom\", filename);
+                    var _level = Model.Serializer.getLevelAs_Level(level);
+                    MyApplication.GameWindow.CurrentScreen = new GameScreen(_level); }, true);
 			}
 
             AddMenuButton("Back", delegate { SwitchToScreen(backScreen); }, true);

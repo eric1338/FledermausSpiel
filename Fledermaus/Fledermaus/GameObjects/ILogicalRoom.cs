@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fledermaus
 {
-	interface ILogicalRoom
+	public interface ILogicalRoom
 	{
 
 		int NextRoomIndex { get; }

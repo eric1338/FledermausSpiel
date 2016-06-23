@@ -42,13 +42,22 @@ namespace Model.GameObjectVisual
         public void toggleHorizontal() {
             
             //   if (isHorizontal)
-            var mat3 = Matrix3.CreateRotationZ(-90);
+            var mat3 = Matrix3.CreateRotationZ(90);
             System.Diagnostics.Debug.WriteLine(mat3);
-            var mat2 = new Matrix2(.0f,-1.0f,1.0f,.0f);
-   /*         else
-                mat3 = Matrix3.CreateRotationZ(-90.0f);*/
+            Matrix2 mat2;
+            if(isHorizontal== true)
+                mat2 = new Matrix2(.0f, 1.0f,
+                                   -1.0f, .0f);
+            // mat2= new Matrix2(  .0f , -1.0f,
+            //1.0f,   .0f  );
+            else
+                mat2 = new Matrix2(-.0f, -1.0f, 1.0f, .0f);
+            /*         else
+                         mat3 = Matrix3.CreateRotationZ(-90.0f);*/
 
             var mat = new Matrix2(mat3.M11, mat3.M12, mat3.M21, mat3.M22);
+
+
             for (int i =0;i<Data.RelativeBounds.Count;i++) {
                 var result = new Vector2();
                 result.X = mat2.M11 * Data.RelativeBounds[i].X + mat2.M12 * Data.RelativeBounds[i].Y;
@@ -57,6 +66,13 @@ namespace Model.GameObjectVisual
 
                 
             }
+
+            var store = new List<Vector2>(Data.RelativeBounds);
+            store[0] = Data.RelativeBounds[1];
+            store[1] = Data.RelativeBounds[0];
+            store[2] = Data.RelativeBounds[3];
+            store[3] = Data.RelativeBounds[2];
+            Data.RelativeBounds = store;
             isHorizontal = !isHorizontal;
         }
 

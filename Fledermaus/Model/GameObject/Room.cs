@@ -6,18 +6,19 @@ namespace Model.GameObject
 {
     public class Room : GameObject
     {
-
-        private Player player;
         private int column;
         private int row;
+        private int index;
 
-        private SolarPanel solarPanel;
+        private Player player;
+        private Exit exit;
+        //private SolarPanel solarPanel;
 
         private List<LightRay> lightRays;
         private List<Mirror> mirrors;
-        private List<Enemy> enemies;
+       // private List<Enemy> enemies;
         private List<Obstacle> obstacles;
-        private List<Exit> exits;
+
 
         public Player Player
         {
@@ -45,7 +46,7 @@ namespace Model.GameObject
             }
         }
 
-        public SolarPanel SolarPanel
+  /*      public SolarPanel SolarPanel
         {
             get
             {
@@ -56,18 +57,18 @@ namespace Model.GameObject
             {
                 solarPanel = value;
             }
-        }
+        }*/
 
-        public List<Exit> Exits
+        public Exit Exit
         {
             get
             {
-                return exits;
+                return exit;
             }
 
             set
             {
-                exits = value;
+                exit = value;
             }
         }
 
@@ -83,7 +84,7 @@ namespace Model.GameObject
                 mirrors = value;
             }
         }
-        public List<Enemy> Enemies
+ /*       public List<Enemy> Enemies
         {
             get
             {
@@ -94,7 +95,7 @@ namespace Model.GameObject
             {
                 enemies = value;
             }
-        }
+        }*/
 
         public List<Obstacle> Obstacles
         {
@@ -135,6 +136,19 @@ namespace Model.GameObject
             }
         }
 
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+
+            set
+            {
+                index = value;
+            }
+        }
+
         public Room()
         {
             
@@ -142,9 +156,9 @@ namespace Model.GameObject
 
             lightRays = new List<LightRay>();
             mirrors = new List<Mirror>();
-            enemies = new List<Enemy>();
+            //enemies = new List<Enemy>();
             obstacles = new List<Obstacle>();
-            exits = new List<Exit>();
+            exit = new Exit();
     }
     }
 }

@@ -31,6 +31,7 @@ namespace Model.GameObjectVisual
         private ExitVisual exitVisual;
         private List<LightRayVisual> lightRayVisuals;
         private List<ObstacleVisual> obstacleVisuals;
+        private List<MirrorVisual> mirrorVisuals;
 
 
         public PlayerVisual PlayerVisual
@@ -128,6 +129,19 @@ namespace Model.GameObjectVisual
             }
         }
 
+        public List<MirrorVisual> MirrorVisuals
+        {
+            get
+            {
+                return mirrorVisuals;
+            }
+
+            set
+            {
+                mirrorVisuals = value;
+            }
+        }
+
         public RoomVisual()
         {
             //           _room = new Fledermaus.Room();
@@ -136,6 +150,7 @@ namespace Model.GameObjectVisual
 
             lightRayVisuals = new List<LightRayVisual>();
             ObstacleVisuals = new List<ObstacleVisual>();
+            MirrorVisuals = new List<MirrorVisual>();
             editMode = EditMode.Ready;
             Width = 2.0f;
             Height = 2.0f;
@@ -226,6 +241,7 @@ namespace Model.GameObjectVisual
 
                 if (selectedGameObject.GetType().Equals(typeof(PlayerVisual)))
                     selectedGameObject.Data.Position = relPos;
+
                 if (selectedGameObject.GetType().Equals(typeof(ExitVisual))) {
                     var absTop = (-relPos + new Vector2(.0f,1.0f)).Length;
                     var absBot = (-relPos + new Vector2(.0f, -1.0f)).Length;
@@ -233,32 +249,26 @@ namespace Model.GameObjectVisual
                     var absLeft = (-relPos + new Vector2(-1.0f,.0f )).Length;
 
                     var highest = new List<float>() { absBot, absLeft, absRight, absTop }.Min();
+
                     if (highest == absTop) {
-                        selectedGameObject.Data.Position = new Vector2(relPos.X, 1.0f);//relPos;
+                        selectedGameObject.Data.Position = new Vector2(relPos.X, 1.0f-selectedGameObject.Data.RelativeBounds[0].Y);//relPos;
                         exitVisual.IsHorizontal = true;
                     }
                     else if (highest == absBot)
                     {
-                        selectedGameObject.Data.Position = new Vector2(relPos.X, -1.0f);//relPos;
+                        selectedGameObject.Data.Position = new Vector2(relPos.X, -1.0f + selectedGameObject.Data.RelativeBounds[0].Y);//relPos;
                         exitVisual.IsHorizontal = true;
                     }
                     else if (highest == absLeft)
                     {
-                        selectedGameObject.Data.Position = new Vector2(-1.0f,relPos.Y);//relPos;
+                        selectedGameObject.Data.Position = new Vector2(-1.0f + selectedGameObject.Data.RelativeBounds[0].X, relPos.Y);//relPos;
                         exitVisual.IsHorizontal = false;
                     }
                     else if (highest == absRight)
                     {
-                        selectedGameObject.Data.Position = new Vector2(1.0f, relPos.Y);//relPos;
+                        selectedGameObject.Data.Position = new Vector2(1.0f - selectedGameObject.Data.RelativeBounds[0].X, relPos.Y);//relPos;
                         exitVisual.IsHorizontal = false;
                     }
-                    /*
-                    if (Math.Abs(relPos.X) >= 0.9f)
-                        exitVisual.IsHorizontal = false;
-                    else if(Math.Abs(relPos.Y) >= 0.9f)
-                        exitVisual.IsHorizontal = true;
-                    */
-
 
                 }
                 else if (selectedGameObject.GetType().Equals(typeof(LightRayVisual)))
