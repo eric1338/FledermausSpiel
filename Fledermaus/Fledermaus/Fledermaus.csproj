@@ -119,6 +119,8 @@
     <None Include="Resources\Textures\obstacle3.png" />
     <None Include="Resources\Textures\obstacle4.png" />
     <None Include="Resources\Textures\exit.png" />
+    <Content Include="Resources\Textures\LightRay.png" />
+    <Content Include="Resources\Textures\Mirror.png" />
     <Content Include="Resources\Textures\woodfloor.png" />
   </ItemGroup>
   <ItemGroup>

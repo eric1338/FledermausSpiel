@@ -37,14 +37,19 @@ namespace Fledermaus
 
 		private int _blinkCounter = 0;
 
-		public GameGraphics() : this(null)
-		{
+        public bool LevelEditorMode { get; set; }
 
-		}
-
-		public GameGraphics(Level level)
+        public GameGraphics( bool levelEditorMode = false) : this(null)
 		{
-			Textures.Instance.LoadTextures();
+            LevelEditorMode = levelEditorMode;
+        }
+
+		public GameGraphics(Level level, bool levelEditorMode = false)
+        {
+
+            LevelEditorMode = levelEditorMode;
+
+            Textures.Instance.LoadTextures();
 
 			_playerTexture = Textures.Instance.PlayerTexture;
 			_playerHitTexture = Textures.Instance.PlayerHitTexture;
@@ -267,11 +272,15 @@ namespace Fledermaus
 			if (!isCurrentRoom) return;
 
 			Vector2 mirrorPosition = mirror.GetMirrorPosition();
+            float alpha = 0.0f;
+            if (!LevelEditorMode) {
+                 alpha = (0.36f - (playerPosition - mirrorPosition).Length) * 2.8f;
+                alpha = Math.Min(0.75f, alpha);
+            }
+            else
+                alpha = 1.0f;
 
-			float alpha = (0.36f - (playerPosition - mirrorPosition).Length) * 2.8f;
-			alpha = Math.Min(0.75f, alpha);
-
-			if (alpha <= 0) return;
+            if (alpha <= 0) return;
 
 			float rotation = mirror.MinimumRotation;
 			float rotationIncrease = (mirror.MaximumRotation - mirror.MinimumRotation) / 20.0f;

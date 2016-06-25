@@ -83,7 +83,7 @@ namespace Fledermaus.Screens
             // If the file name is not an empty string open it for saving.
             if (saveFileDialog1.FileName != "")
             {
-                level.Name = saveFileDialog1.FileName.Split('.').First();
+                level.Name = saveFileDialog1.SafeFileName.Split('.').First();
                 // Saves the Image via a FileStream created by the OpenFile method.
                 Model.Serializer.saveLevel(level,path,saveFileDialog1.SafeFileName);
               /*  System.IO.FileStream fs =

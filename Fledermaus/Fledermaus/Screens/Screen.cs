@@ -249,8 +249,8 @@ namespace Fledermaus.Screens
             var ret = false;
             //        Vector2 relPos = new Vector2(((point.X / (float)Fledermaus.MyApplication.GameWindow.Width) * 2.0f - 1.0f) / BasicGraphics.GetXScale(),
             //                        ((point.Y / (float)Fledermaus.MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
-            Vector2 relPos = new Vector2(((point.X / BasicGraphics.WindowWidth) * 2.0f - 1.0f)/* / BasicGraphics.GetXScale()*/,
-                        ((point.Y / BasicGraphics.WindowHeight) * 2.0f - 1.0f) * -1);
+            Vector2 relPos = new Vector2(((point.X / (float)MyApplication.GameWindow.Width) * 2.0f - 1.0f)/* / BasicGraphics.GetXScale()*/,
+                        ((point.Y / (float)MyApplication.GameWindow.Height) * 2.0f - 1.0f) * -1);
 
             Position = center;
             var left = Scale*( Position.X - Width / 2.0f);

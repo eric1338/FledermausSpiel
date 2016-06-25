@@ -89,6 +89,7 @@ namespace Fledermaus
 
 		public GameLogic(bool levelEditorMode = false)
 		{
+
 			LevelEditorMode = levelEditorMode;
 		}
 
@@ -291,9 +292,9 @@ namespace Fledermaus
 			ResetLighRays();
 			CalculateLightRays();
 
-			if (!LevelEditorMode)
-			{
-				CheckPlayerExitCollision();
+            if (!LevelEditorMode)
+            {
+                CheckPlayerExitCollision();
 				CheckPlayerLightCollision();
 				DetermineMirrorAccessibility();
 			}

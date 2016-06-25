@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using OpenTK.Input;
 using Model.GameObjectVisual;
 using OpenTK.Graphics.OpenGL;
+using System.Linq;
 
 namespace Fledermaus.Screens
 {
@@ -27,8 +28,8 @@ namespace Fledermaus.Screens
         private const int RowsToZero = 2;
         private const int ColumnsToZero = 3;
 
-        private GameLogic _gameLogic = new GameLogic();
-        private GameGraphics _gameGraphics = new GameGraphics();
+        private GameLogic _gameLogic = new GameLogic(true);
+        private GameGraphics _gameGraphics = new GameGraphics(true);
         private Fledermaus.GameObjects.Level _level = new GameObjects.Level("new");
 
 
@@ -137,7 +138,177 @@ namespace Fledermaus.Screens
             //          createGameScreen();
             Level = new Level();
             LevelVisual = new LevelVisual();
+            // useLevel1();
+            // createVisualStartupLevel();
 
+            createStartup();
+        }
+
+        private void createStartup()
+        {
+            _level = Levels.CreateLevel1();
+            _gameLogic.Level = _level;
+
+            foreach (var _room in _level.Rooms)
+            {
+                _room.Obstacles.Clear();
+                _room.Mirrors.Clear();
+                _room.LightRays.Clear();
+                LevelVisual.Rooms.Add(new RoomVisual()
+                {
+                    _Room = _room,
+                    PlayerVisual = new PlayerVisual()
+                    {
+                        Data = new Player()
+                        {
+                            //InitialPosition = _room.Player.Position,
+                            Position = _room.Player.Position,
+                            RelativeBounds = new List<Vector2>() {  new Vector2(0.0f, 0.03f),
+                                                                    new Vector2(0.025f, 0.01f),
+                                                                    new Vector2(0.07f, 0.02f),
+
+                                                                    new Vector2(0.02f, -0.045f),
+                                                                    new Vector2(0.0f, -0.03f),
+                                                                    new Vector2(-0.02f, -0.045f),
+
+                                                                    new Vector2(-0.07f, 0.02f),
+                                                                    new Vector2(-0.025f, 0.01f)
+                        },
+                        }
+                    },
+                    Data = new Model.GameObject.Room()
+                    {
+
+                        Column = _room.Column,
+                        Row = _room.Row,
+                        RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-1.0f), Konfiguration.Round(1.0f)),
+                                                            new Vector2( Konfiguration.Round(-1.0f), Konfiguration.Round(-1.0f)),
+                                                            new Vector2( Konfiguration.Round(1.0f), Konfiguration.Round(-1.0f)),
+                                                            new Vector2( Konfiguration.Round(1.0f), Konfiguration.Round(1.0f))
+                        },
+                    },
+                    ExitVisual = new ExitVisual()
+                    {
+                        Data = new Exit()
+                        {
+                            Position = _room.Exit.Point1 + 0.5f * (-_room.Exit.Point1 + _room.Exit.Point3),
+                            RelativeBounds = new List<Vector2>() { -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3))+_room.Exit.Point1,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point2,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point3,
+                                                                   -(_room.Exit.Point1+0.5f*(-_room.Exit.Point1+_room.Exit.Point3)) + _room.Exit.Point4,
+ /*                               0.5f *(-_room.Exit.Point1+_room.Exit.Point3)-_room.Exit.Point1 ,
+                                                                    0.5f*(-_room.Exit.Point1+_room.Exit.Point3)-_room.Exit.Point2,
+                                                                     0.5f*(-_room.Exit.Point1+_room.Exit.Point3)-_room.Exit.Point3,
+                                                                   0.5f*(-_room.Exit.Point1+_room.Exit.Point3)- _room.Exit.Point4 ,*/
+                            },
+                        },
+
+                    },
+                });
+                if (Math.Abs(LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.Data.RelativeBounds[0].X) < Math.Abs(LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.Data.RelativeBounds[0].Y))
+                {
+                    levelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.IsHorizontal = false;
+                }
+                else
+                    levelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.IsHorizontal = true;
+
+                //        System.Diagnostics.Debug.WriteLine(0.5f * (-_room.Exit.Point1 + _room.Exit.Point3));
+
+               /*     LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].LightRayVisuals.Add(
+                        new LightRayVisual()
+                        {
+                            Data = new LightRay()
+                            {
+                                Position = _room.LightRays.First().Origin,
+                                RayDirection = _room.LightRays.First().FirstDirection,
+                                RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(.02f)),
+                                                            new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(-.02f)),
+                                                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(-.02f)),
+                                                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(.02f))
+                                }
+                            }
+
+                        });
+                   */
+
+
+
+
+                foreach (var roomV in levelVisual.Rooms)
+                    level.Rooms.Add(roomV.Data as Model.GameObject.Room);
+
+                _gameGraphics.Level = _level;
+
+                //           createStartupLevel();
+                //            createVisualStartupLevel();
+
+            }
+            /*            for (int i = 0; i < RowsToZero + (RowsToZero - 1); i++) {
+                            for(int j = 0;j<ColumnsToZero + (ColumnsToZero - 1); j++)
+                            {
+                                levelVisual.Rooms.Add(new RoomVisual()
+                                {
+
+                                    Data = new Model.GameObject.Room()
+                                    {
+                                        Row = i + 1,
+                                        Column = j + 1,
+                                        RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-1.0f), Konfiguration.Round(1.0f)),
+                                                                    new Vector2( Konfiguration.Round(1.0f), Konfiguration.Round(1.0f)),
+                                                                    new Vector2( Konfiguration.Round(1.0f), Konfiguration.Round(-1.0f)),
+                                                                    new Vector2( Konfiguration.Round(-1.0f), Konfiguration.Round(-1.0f)) },
+
+                                    },
+                                    PlayerVisual = new PlayerVisual()
+                                    {
+
+                                        Data = new Player() {
+                                            Position = Vector2.Zero,
+
+                                            RelativeBounds = new List<Vector2>() {  new Vector2(0.0f, 0.03f),
+                                                                                    new Vector2(0.025f, 0.01f),
+                                                                                    new Vector2(0.07f, 0.02f),
+
+                                                                                    new Vector2(0.02f, -0.045f),
+                                                                                    new Vector2(0.0f, -0.03f),
+                                                                                    new Vector2(-0.02f, -0.045f),
+
+                                                                                    new Vector2(-0.07f, 0.02f),
+                                                                                    new Vector2(-0.025f, 0.01f)
+                                            },
+                                        },
+                                    },
+                                    ExitVisual = new ExitVisual()
+                                    {
+
+                                        Data = new Exit()
+                                        {
+                                            Position = new Vector2(1.0f, .0f),
+                                            RelativeBounds = new List<Vector2>() {
+                                                    new Vector2(-0.105f, 0.045f),
+                                                    new Vector2(0.105f, 0.045f),
+                                                    new Vector2(0.105f, -0.045f),
+                                                    new Vector2(-0.105f, -0.045f),
+                                            },
+                                        },
+                                        IsHorizontal = true,
+                                    }
+                                });
+                                var _level2 = Serializer.getLevelAs_Level(Serializer.getLevelVisualAsLevel(LevelVisual));
+                                levelVisual.Rooms.Last()._Room = _level2.Rooms.Last();
+                                //_level.CurrentRoom = _level.Rooms.First();
+
+                            }
+                        }
+                        var _level = Serializer.getLevelAs_Level(Serializer.getLevelVisualAsLevel(LevelVisual));
+                        _level.CurrentRoom = _level.Rooms.First();
+                        _gameGraphics.Level = _level;
+                        _gameLogic.Level = _level;
+                        */
+        }
+
+        private void useLevel1()
+        {
             _level = Levels.CreateLevel1();
             _gameLogic.Level = _level;
 
@@ -201,7 +372,7 @@ namespace Fledermaus.Screens
                 else
                     levelVisual.Rooms[LevelVisual.Rooms.Count - 1].ExitVisual.IsHorizontal = true;
 
-                System.Diagnostics.Debug.WriteLine(0.5f * (-_room.Exit.Point1 + _room.Exit.Point3));
+                //        System.Diagnostics.Debug.WriteLine(0.5f * (-_room.Exit.Point1 + _room.Exit.Point3));
                 foreach (var lightray in _room.LightRays)
                 {
                     LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].LightRayVisuals.Add(
@@ -220,16 +391,26 @@ namespace Fledermaus.Screens
 
                         });
                 }
-                foreach (var mirror in _room.Mirrors)
+                foreach (var _mirror in _room.Mirrors)
                 {
 
-                    var mirV = new MirrorVisual()
+                    LevelVisual.Rooms[LevelVisual.Rooms.Count - 1].MirrorVisuals.Add(new MirrorVisual()
                     {
                         Data = new Mirror()
                         {
-
+                            Position = _mirror.RailPosition1 + 0.5f * (-_mirror.RailPosition1 + _mirror.RailPosition2),
+                            RailStart = _mirror.RailPosition1 - (_mirror.RailPosition1 + 0.5f * (-_mirror.RailPosition1 + _mirror.RailPosition2)),
+                            RailEnd = _mirror.RailPosition2 - (_mirror.RailPosition1 + 0.5f * (-_mirror.RailPosition1 + _mirror.RailPosition2)),
+                            InitAngle = _mirror.StartingAngle,
+                            MinRotation = _mirror.MinimumRotation,
+                            MaxRotation = _mirror.MaximumRotation,
+                            StartingRelativePosition = _mirror.StartingRelativePosition,
+                            RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(.02f)),
+                                                            new Vector2( Konfiguration.Round(-.02f), Konfiguration.Round(-.02f)),
+                                                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(-.02f)),
+                                                            new Vector2( Konfiguration.Round(.02f), Konfiguration.Round(.02f)) },
                         },
-                    };
+                    });
                 }
                 foreach (var obstacle in _room.Obstacles)
                 {
@@ -258,20 +439,6 @@ namespace Fledermaus.Screens
             }
         }
 
-  /*      private void createGameScreen()
-        {
-            float scale2 = 1.0f / 2.0f * (2.0f - sideMenu.MaxWidth);
-
-            //gameScreen = new LevelEditorGameScreen(level);
-            gameScreen = new LevelEditorGameScreen(levelVisual);
-
-            gameScreen.ShowBorder = true;
-            gameScreen.HorizontalAlignment = HorizontalAlignment.Center;
-            gameScreen.MaxHeight = 2.0f * scale2;
-            gameScreen.ContentWidth = 2.0f * scale2 - 2 * Padding - 2 * BorderWidth;
-            gameScreen.Scale = scale2;// 2/100*(2.0f - sideMenu.MaxWidth-2*Padding-2*BorderWidth),
-            gameScreen.Center = new Vector2((2.0f - 2.0f * scale2) / 2, (2.0f - 2.0f * scale2) / 2);
-        }*/
 
         private void createSideMenu()
         {
@@ -283,7 +450,7 @@ namespace Fledermaus.Screens
             //sideMenu.HorizontalAlignment = HorizontalAlignment.Center;
             sideMenu.MaxHeight = 2.0f;
             sideMenu.menuButtons.Add(
-                new ButtonTexture(Resources.player,
+                new ButtonTexture(Resources.LightRay,
                 delegate () {
                     var lrv = new LightRayVisual()
                     {
@@ -331,6 +498,35 @@ namespace Fledermaus.Screens
                 },
                 false)
             );
+            sideMenu.menuButtons.Add(
+    new ButtonTexture(Resources.Mirror,
+    delegate () {
+        var mirrorV = new MirrorVisual()
+        {
+            Data = new Model.GameObject.Mirror()
+            {
+                Position = Vector2.Zero,
+                RailStart = new Vector2(-0.215f, 0.045f),
+                RailEnd = new Vector2(0.215f, -0.045f),
+                InitAngle = 0.4f,
+                StartingRelativePosition = 0.5f,
+                MaxRotation = 0.7f,
+                MinRotation = -0.7f,
+                RelativeBounds = new List<Vector2>(){
+                            new Vector2( Konfiguration.Round(-.2f), Konfiguration.Round(.2f)),
+                            new Vector2( Konfiguration.Round(-.2f), Konfiguration.Round(-.2f)),
+                            new Vector2( Konfiguration.Round(.2f), Konfiguration.Round(-.2f)),
+                            new Vector2( Konfiguration.Round(.2f), Konfiguration.Round(.2f))
+                }
+            },
+
+        };
+        selectedRoom.MirrorVisuals.Add(mirrorV);
+        _level.CurrentRoom.AddMirror(new GameObjects.Mirror(mirrorV.Data.Position+((Mirror)mirrorV.Data).RailStart, mirrorV.Data.Position + ((Mirror)mirrorV.Data).RailEnd, ((Mirror)mirrorV.Data).InitAngle, ((Mirror)mirrorV.Data).StartingRelativePosition));
+    },
+    false)
+);
+
             sideMenu.Center = new Vector2(-1.0f + sideMenu.MaxWidth/2, .0f);
 
             /*
@@ -354,6 +550,8 @@ namespace Fledermaus.Screens
             var roomV = new Model.GameObjectVisual.RoomVisual()
             {
                 Data = new Model.GameObject.Room() {
+                    Column = 0,
+                    Row=1,
                     Position = new Vector2(Konfiguration.Round(.0f), Konfiguration.Round(.0f)),
                     RelativeBounds = new List<Vector2>() {  new Vector2( Konfiguration.Round(-.95f), Konfiguration.Round(.95f)),
                                                         new Vector2( Konfiguration.Round(-.95f), Konfiguration.Round(-.95f)),
@@ -368,7 +566,16 @@ namespace Fledermaus.Screens
                                                        new Vector2(Konfiguration.Round(0.05f), Konfiguration.Round(0.05f)),
                                                        new Vector2(Konfiguration.Round(-0.05f), Konfiguration.Round(0.05f))},
                     },
-                    
+                    Exit = new Exit() {
+                        Position = new Vector2(1.0f,.0f),
+                        RelativeBounds = new List<Vector2>()
+                        {
+                            new Vector2(-0.105f, 0.045f),
+                            new Vector2(0.105f, 0.045f),
+                            new Vector2(0.105f, -0.045f),
+                            new Vector2(-0.105f, -0.045f),
+                        },
+                    },
 
                 },
 
@@ -377,8 +584,13 @@ namespace Fledermaus.Screens
             {
                 Data = ((Model.GameObject.Room)roomV.Data).Player,
             };
-            LevelVisual.Rooms.Add(roomV);
+            roomV.ExitVisual = new ExitVisual()
+            {
+                Data = ((Model.GameObject.Room)roomV.Data).Exit
+            };
 
+            LevelVisual.Rooms.Add(roomV);
+/*
             var roomV2 = new Model.GameObjectVisual.RoomVisual()
             {
                 Data = new Model.GameObject.Room()
@@ -400,8 +612,12 @@ namespace Fledermaus.Screens
 
                 },
             };
-            LevelVisual.Rooms.Add(roomV2);
+            LevelVisual.Rooms.Add(roomV2);*/
 
+            var _level = Serializer.getLevelAs_Level(Serializer.getLevelVisualAsLevel(LevelVisual));
+            _level.CurrentRoom = _level.Rooms.First();
+            _gameGraphics.Level = _level;
+            _gameLogic.Level = _level;
 
         }
         private void createStartupLevel()
@@ -634,6 +850,7 @@ namespace Fledermaus.Screens
             }
             else if (e.Button == MouseButton.Right)
             {
+                if(Scale!=0.2f)
                ShowSideMenu = !ShowSideMenu;
             }
         }
@@ -641,7 +858,8 @@ namespace Fledermaus.Screens
         public override void ProcessKeyDown(Key key) {
             if (key == Key.Escape)
             {
-                if(Scale != 0.2f) { 
+                if(Scale != 0.2f) {
+                    showSideMenu = false;
                     ZoomTo = 0.2f;
 
                     MoveTo =  new Vector2(.0f,.0f);
@@ -651,6 +869,35 @@ namespace Fledermaus.Screens
 				{
                     SwitchToScreen(new MainMenuScreen(this));
 				}
+            }
+            else if (key == Key.Delete)
+            {
+                if (selectedRoom.EditMode == EditMode.Position)
+                {
+                    if (selectedRoom.SelectedGameObject.GetType().Equals(typeof(MirrorVisual)))
+                    {
+                        selectedRoom.MirrorVisuals.Remove(selectedRoom.SelectedGameObject as MirrorVisual);
+                        selectedRoom._Room.Mirrors.Remove(selectedRoom._Room.Mirrors.Where(m => m.RailPosition1.Equals(selectedRoom.SelectedGameObject.Data.Position + ((Mirror)selectedRoom.SelectedGameObject.Data).RailStart)).First());
+                    }
+                    else if (selectedRoom.SelectedGameObject.GetType().Equals(typeof(ObstacleVisual)))
+                    { 
+                        selectedRoom.ObstacleVisuals.Remove(selectedRoom.SelectedGameObject as ObstacleVisual);
+                        selectedRoom._Room.Obstacles.Remove(selectedRoom._Room.Obstacles.Where(o => o.Point1.Equals(selectedRoom.SelectedGameObject.Data.Position + selectedRoom.SelectedGameObject.Data.RelativeBounds[0])).First());
+                    }
+                    else if (selectedRoom.SelectedGameObject.GetType().Equals(typeof(LightRayVisual))) {
+                        selectedRoom.LightRayVisuals.Remove(selectedRoom.SelectedGameObject as LightRayVisual);
+                        selectedRoom._Room.LightRays.Remove(selectedRoom._Room.LightRays.Where(o => o.Origin.Equals(selectedRoom.SelectedGameObject.Data.Position)).First());
+                     }
+                    else
+                    {
+                        editMode = EditMode.Edit;
+                        return;
+                    }
+                    selectedRoom.EditMode = EditMode.Edit;
+                    selectedRoom.SelectedGameObject = null;
+                    
+                }
+
             }
         }
     }
