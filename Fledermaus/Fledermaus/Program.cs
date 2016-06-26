@@ -24,6 +24,9 @@ namespace Fledermaus
         [STAThread]
         public static void Main()
         {
+
+			Data.PlayerData.WriteXML();
+
 			// TODO: anders
 			Data.PlayerData.Instance.CreateLevelHighscores("Level 1", 5);
 			Data.PlayerData.Instance.CreateLevelHighscores("Level 2", 5);

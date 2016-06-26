@@ -63,11 +63,11 @@ namespace Fledermaus
 				case Colors.MirrorRailInactive: return new Vector3(0.5f, 0.5f, 0.5f);
 				case Colors.InnerMirrorRail: return new Vector3(0.1f, 0.1f, 0.1f);
 				case Colors.Exit: return new Vector3(1.0f, 0.4f, 0.6f);
-				case Colors.DefaultText: return new Vector3(1.0f, 0.7f, 0.6f);
-				case Colors.HeaderText: return new Vector3(1.0f, 0.8f, 0.7f);
-				case Colors.SpecialText: return new Vector3(1.0f, 0.6f, 0.4f);
-				case Colors.ButtonText: return new Vector3(1.0f, 0.4f, 0.2f);
-				case Colors.SelectedText: return new Vector3(1.0f, 0.9f, 0.8f);
+				case Colors.DefaultText: return new Vector3(1.0f, 0.83f, 0.66f);
+				case Colors.HeaderText: return new Vector3(1.0f, 0.5f, 0.3f);
+				case Colors.SpecialText: return new Vector3(1.0f, 0.38f, 0.38f);
+				case Colors.ButtonText: return new Vector3(1.0f, 0.5f, 0.3f);
+				case Colors.SelectedText: return new Vector3(1.0f, 0.91f, 0.78f);
 				case Colors.DisabledText: return new Vector3(0.5f, 0.5f, 0.5f);
 				case Colors.SelectedDisabledText: return new Vector3(0.8f, 0.8f, 0.8f);
 			}

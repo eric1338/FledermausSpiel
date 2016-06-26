@@ -68,7 +68,7 @@ namespace Fledermaus.Screens
 			if (!isEnabled && isSelected) color = BasicGraphics.Colors.SelectedDisabledText;
 			else if (!isEnabled && !isSelected) color = BasicGraphics.Colors.DisabledText;
 			else if (isEnabled && isSelected) color = BasicGraphics.Colors.SelectedText;
-			else color = BasicGraphics.Colors.DefaultText;
+			else color = BasicGraphics.Colors.ButtonText;
 
 			BasicGraphics.SetColor(color);
 
