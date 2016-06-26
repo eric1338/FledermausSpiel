@@ -25,6 +25,7 @@ namespace Fledermaus.Data
 
 		public bool CheckSingleTime(int roomNumber, float newTime)
 		{
+            if(_singleTimes.Count() > 0)
 			if (_singleTimes[roomNumber] < 0 || _singleTimes[roomNumber] > newTime)
 			{
 				_singleTimes[roomNumber] = newTime;

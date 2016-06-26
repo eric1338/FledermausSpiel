@@ -41,7 +41,13 @@ namespace Fledermaus.Data
 
 		public LevelHighscores GetLevelHighscores(string levelName)
 		{
-			return _allLevelHighscores[levelName];
+            try
+            {
+                return _allLevelHighscores[levelName];
+            }
+            catch (Exception e) {
+            return new LevelHighscores(0);
+            }
 		}
 
 	}

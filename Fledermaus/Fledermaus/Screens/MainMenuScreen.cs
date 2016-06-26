@@ -39,8 +39,6 @@ namespace Fledermaus.Screens
             AddMenuButton("highscores", delegate () { SwitchToScreen(new HighscoreScreen()); });
             AddMenuButton("level editor", delegate () { SwitchToScreen(new LevelEditorScreen()); });
             AddMenuButton("exit", MyApplication.Exit);
-
-
         }
 
         private void CreateStartMenu()
