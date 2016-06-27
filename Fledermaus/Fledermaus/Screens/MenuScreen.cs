@@ -180,7 +180,9 @@ namespace Fledermaus.Screens
                 tmpTranslation -= menuButtons.First().Height;
 
             foreach (var button in menuButtons)
-                button.Position += new Vector2(.0f, tmpTranslation);
+			{
+				button.Position += new Vector2(.0f, tmpTranslation);
+			}
         }
 
 
@@ -245,7 +247,9 @@ namespace Fledermaus.Screens
 
 		protected void AddMenuButton(string text, Button.DoAction doAction, bool selected = false, bool enabled = true)
 		{
-			menuButtons.Add(new ButtonText(text, doAction, selected, enabled));
+			ButtonText menuButton = new ButtonText(text, doAction, selected, enabled);
+
+			menuButtons.Add(menuButton);
 		}
 
 		protected void DrawTitle(string title)

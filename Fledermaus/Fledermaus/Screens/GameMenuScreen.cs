@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace Fledermaus.Screens
 		public GameMenuScreen(GameScreen gameScreen)
 		{
 			_gameScreen = gameScreen;
+
+			Center = new Vector2(-0.7f, -0.5f);
 
 			AddMenuButton("resume", ResumeGame, true);
 			AddMenuButton("exit", ExitGame);

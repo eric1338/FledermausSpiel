@@ -50,6 +50,8 @@ namespace Fledermaus
 			GL.Enable(EnableCap.Multisample);
 			
 			GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
+
+			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 		}
 
         private void MyGameWindow_MouseWheel(object sender, OpenTK.Input.MouseWheelEventArgs e)

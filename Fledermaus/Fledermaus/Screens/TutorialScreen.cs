@@ -28,6 +28,8 @@ namespace Fledermaus.Screens
 			lines.Add("use the mirrors to clear a path to the exit by reflecting");
 			lines.Add("the light rays the right direction");
 
+			Center = new Vector2(-0.8f, -0.75f);
+
 			AddMainMenuButton();
 		}
 

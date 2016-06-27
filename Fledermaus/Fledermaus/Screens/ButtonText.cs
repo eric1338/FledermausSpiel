@@ -30,14 +30,7 @@ namespace Fledermaus.Screens
 
 
             Width = buttonText.Length * boundingBoxWidth / 20;
-            Height = boundingBoxHeight;//10;
-
-			
-
-            //background clear color
-            GL.ClearColor(Color.Black);
-            //for transparency in textures
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            Height = boundingBoxHeight;
 
 			isEnabled = enabled;
 

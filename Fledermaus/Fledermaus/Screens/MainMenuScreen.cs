@@ -31,7 +31,6 @@ namespace Fledermaus.Screens
 
 		private void CreateMainMenu()
 		{
-			// TODO: anders
 			Center = new Vector2(-0.7f, -0.5f);
 
 			menuButtons.Clear();

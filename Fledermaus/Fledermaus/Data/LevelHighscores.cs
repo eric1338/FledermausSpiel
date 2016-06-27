@@ -3,31 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Fledermaus.Data
 {
 	public class LevelHighscores
 	{
 
+		public string LevelName { get; set; }
 		public int NumberOfRooms { get; set; }
+		
+		public float[] SingleTimes;
+		public float TotalTime = -1f;
 
-		private float[] _singleTimes;
-		private float _totalTime = -1f;
-
-		public LevelHighscores(int numberOfRooms)
+		public LevelHighscores()
 		{
+			Init("", 0);
+		}
+
+		public LevelHighscores(string levelName, int numberOfRooms)
+		{
+			Init(levelName, numberOfRooms);
+		}
+
+		public void Init(string levelName, int numberOfRooms)
+		{
+			LevelName = levelName;
 			NumberOfRooms = numberOfRooms;
 
-			_singleTimes = new float[numberOfRooms];
+			SingleTimes = new float[numberOfRooms];
 
-			for (int i = 0; i < NumberOfRooms; i++) _singleTimes[i] = -1f;
+			for (int i = 0; i < NumberOfRooms; i++) SingleTimes[i] = -1f;
+		}
+
+		public float GetTime(int roomNumber)
+		{
+			return SingleTimes[roomNumber];
 		}
 
 		public bool CheckSingleTime(int roomNumber, float newTime)
 		{
-			if (_singleTimes[roomNumber] < 0 || _singleTimes[roomNumber] > newTime)
+			if (SingleTimes[roomNumber] < 0 || SingleTimes[roomNumber] > newTime)
 			{
-				_singleTimes[roomNumber] = newTime;
+				SingleTimes[roomNumber] = newTime;
 				return true;
 			}
 
@@ -36,23 +54,13 @@ namespace Fledermaus.Data
 
 		public bool CheckTotalTime(float newTime)
 		{
-			if (_totalTime < 0 || _totalTime > newTime)
+			if (TotalTime < 0 || TotalTime > newTime)
 			{
-				_totalTime = newTime;
+				TotalTime = newTime;
 				return true;
 			}
 
 			return false;
-		}
-
-		public float GetTime(int roomNumber)
-		{
-			return _singleTimes[roomNumber];
-		}
-
-		public float GetTotalTime()
-		{
-			return _totalTime;
 		}
 
 	}

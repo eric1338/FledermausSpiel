@@ -18,14 +18,12 @@ namespace Fledermaus.Screens
 
 		public LevelEndScreen(Level level)
 		{
-			// Test
-
-			//_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.Confirm);
+			Center = new Vector2(-0.8f, -0.85f);
 
 			if (level.Name == "Level 1") PlayerData.Instance.UnlockLevel("Level 2");
 			if (level.Name == "Level 2") PlayerData.Instance.UnlockLevel("Level 3");
 
-			LevelHighscores highscores = PlayerData.Instance.GetLevelHighscores(level.Name);
+			LevelHighscores highscores = PlayerData.Instance.GetLevelHighscores(level.Name, level.Rooms.Count);
 
 			List<TimeString> roomTimeStrings = new List<TimeString>();
 
@@ -44,7 +42,7 @@ namespace Fledermaus.Screens
 
 			TotalTimeString = new TimeString("Level", totalTime, isNewTotalRecord);
 
-			// TODO: Serialisieren?
+			PlayerData.WriteXML();
 
 			AddMainMenuButton("continue");
 		}

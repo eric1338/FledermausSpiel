@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Fledermaus.Data
 {
@@ -12,13 +13,25 @@ namespace Fledermaus.Data
 
 		public static PlayerData Instance = new PlayerData();
 
-		private bool IsLevel2Unlocked = false;
-		private bool IsLevel3Unlocked = false;
-
-		private Dictionary<string, LevelHighscores> _allLevelHighscores = new Dictionary<string, LevelHighscores>();
+		public bool IsLevel2Unlocked { get; set; }
+		public bool IsLevel3Unlocked { get; set; }
+		
+		public List<LevelHighscores> AllLevelHighscores = new List<LevelHighscores>();
 
 		private PlayerData()
 		{
+
+		}
+
+		public static void SetToDefault()
+		{
+			PlayerData defaultPlayerData = new PlayerData();
+
+			defaultPlayerData.CreateLevelHighscores("Level 1", 5);
+			defaultPlayerData.CreateLevelHighscores("Level 2", 5);
+			defaultPlayerData.CreateLevelHighscores("Level 3", 5);
+
+			Instance = defaultPlayerData;
 		}
 
 		public void UnlockLevel(string levelName)
@@ -37,22 +50,32 @@ namespace Fledermaus.Data
 
 		public void CreateLevelHighscores(string levelName, int numberOfRooms)
 		{
-			_allLevelHighscores.Add(levelName, new LevelHighscores(numberOfRooms));
+			AllLevelHighscores.Add(new LevelHighscores(levelName, numberOfRooms));
 		}
 
-		public LevelHighscores GetLevelHighscores(string levelName)
+		public List<string> GetLevelNames()
 		{
-			if (!_allLevelHighscores.ContainsKey(levelName))
+			List<string> levelNames = new List<string>();
+
+			foreach (LevelHighscores highscores in AllLevelHighscores)
 			{
-				// TODO: anpassen
-
-				LevelHighscores highscores = new LevelHighscores(5);
-				_allLevelHighscores.Add(levelName, highscores);
-
-				return highscores;
+				levelNames.Add(highscores.LevelName);
 			}
 
-			return _allLevelHighscores[levelName];
+			return levelNames;
+		}
+
+		public LevelHighscores GetLevelHighscores(string levelName, int numberOfRooms = 5)
+		{
+			foreach (LevelHighscores highscores in AllLevelHighscores)
+			{
+				if (highscores.LevelName == levelName) return highscores;
+			}
+			
+			LevelHighscores newHighscores = new LevelHighscores(levelName, numberOfRooms);
+			AllLevelHighscores.Add(newHighscores);
+
+			return newHighscores;
 		}
 
 		private static string GetPlayerDataFileDirectory()
@@ -67,31 +90,25 @@ namespace Fledermaus.Data
 
 		public static void WriteXML()
 		{
-			PlayerData overview = Instance;
+			PlayerData playerData = Instance;
 
-			System.Xml.Serialization.XmlSerializer writer =
-				new System.Xml.Serialization.XmlSerializer(typeof(PlayerData));
-
-			// catch Exception
+			XmlSerializer writer = new XmlSerializer(typeof(PlayerData));
 
 			string directory = GetPlayerDataFileDirectory();
 
 			if (!Directory.Exists(directory))
 			{
-				Console.WriteLine("didnt exist");
 				Directory.CreateDirectory(directory);
 			}
 
 			string filePath = GetPlayerDataFilePath();
 
-			Console.WriteLine("path: " + filePath);
-
-			System.IO.FileStream file;
+			FileStream file;
 
 			try
 			{
-				file = System.IO.File.Create(filePath);
-				writer.Serialize(file, overview);
+				file = File.Create(filePath);
+				writer.Serialize(file, playerData);
 				file.Close();
 			}
 			catch (Exception exception)
@@ -100,6 +117,35 @@ namespace Fledermaus.Data
 			}
 
 		}
+
+		public static void ReadXML()
+		{
+			XmlSerializer reader = new XmlSerializer(typeof(PlayerData));
+
+			string filePath = GetPlayerDataFilePath();
+
+			if (!File.Exists(filePath))
+			{
+				SetToDefault();
+				return;
+			}
+
+			FileStream file = new FileStream(filePath, FileMode.Open);
+
+			try
+			{
+				PlayerData data = (PlayerData) reader.Deserialize(file);
+				file.Close();
+
+				if (data != null) Instance = data;
+			}
+			catch (Exception exception)
+			{
+				Console.WriteLine(exception);
+			}
+
+		}
+
 
 	}
 }

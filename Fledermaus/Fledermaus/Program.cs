@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Fledermaus.Utils;
 using Fledermaus.Screens;
 using System.Windows.Forms;
+using Fledermaus.Data;
 
 namespace Fledermaus
 {
@@ -23,14 +24,14 @@ namespace Fledermaus
 
         [STAThread]
         public static void Main()
-        {
+		{
 
-			Data.PlayerData.WriteXML();
+			PlayerData.ReadXML();
 
-			// TODO: anders
-			Data.PlayerData.Instance.CreateLevelHighscores("Level 1", 5);
-			Data.PlayerData.Instance.CreateLevelHighscores("Level 2", 5);
-			Data.PlayerData.Instance.CreateLevelHighscores("Level 3", 5);
+			if (PlayerData.Instance.AllLevelHighscores.Count < 1)
+			{
+				PlayerData.SetToDefault();
+			}
 
 			windowState = WindowState.Normal;
 

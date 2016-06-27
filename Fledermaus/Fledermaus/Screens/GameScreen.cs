@@ -39,9 +39,9 @@ namespace Fledermaus.Screens
 			_inputManager.AddProlongedUserActionMapping(Key.Q, UserAction.RotateMirrorCCW);
 
 			_inputManager.AddSingleUserActionMapping(Key.F, UserAction.ToggleMirrorLock);
-			_inputManager.AddSingleUserActionMapping(Key.G, UserAction.ToggleGodMode);
+			//_inputManager.AddSingleUserActionMapping(Key.G, UserAction.ToggleGodMode);
 			_inputManager.AddSingleUserActionMapping(Key.P, UserAction.TogglePauseGame);
-			_inputManager.AddSingleUserActionMapping(Key.N, UserAction.ResetLevel);
+			//_inputManager.AddSingleUserActionMapping(Key.N, UserAction.ResetLevel);
 			_inputManager.AddSingleUserActionMapping(Key.Escape, UserAction.OpenGameMenu);
 
             _gameLogic.InputManager = _inputManager;

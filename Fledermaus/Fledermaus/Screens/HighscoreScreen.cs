@@ -11,76 +11,38 @@ namespace Fledermaus.Screens
 	class HighscoreScreen : LevelResultScreen
 	{
 
-		private class LevelSelecter
-		{
-
-			private Vector2 _position { get; set; }
-
-			private List<string> _selections = new List<string>();
-			private int _selectedIndex = 0;
-
-			private ButtonText _leftButton;
-			private ButtonText _rightButton;
-
-			public LevelSelecter(Vector2 position, List<string> selections)
-			{
-				_position = position;
-				_selections = selections;
-
-				_leftButton = new ButtonText("/", MoveLeft);
-				_rightButton = new ButtonText("/", MoveRight);
-
-				_leftButton.Position = _position + new Vector2(-0.2f, 0);
-				_rightButton.Position = _position + new Vector2(0.2f, 0);
-			}
-
-			private void MoveLeft()
-			{
-				if (_selectedIndex > 0) _selectedIndex--;
-			}
-
-			private void MoveRight()
-			{
-				if (_selectedIndex + 1 < _selections.Count) _selectedIndex++;
-			}
-
-			public string GetCurrentSelection()
-			{
-				return _selections[_selectedIndex];
-			}
-
-			public void Draw()
-			{
-				_leftButton.Draw();
-				_rightButton.Draw();
-
-				BasicGraphics.SetColor(BasicGraphics.Colors.DefaultText);
-				BasicGraphics.DrawCenteredText(GetCurrentSelection(), _position, 0.08f);
-
-				//BasicGraphics.DrawLine(_position, new Vector2(_position.X, _position.Y + 0.1f), 0.01f);
-			}
-
-		}
-
-		//private string _currentLevel = "Level 1";
-
-		private LevelSelecter _levelSelecter;
+		private List<string> _selections = new List<string>();
+		private int _selectedIndex = 0;
 
 		public HighscoreScreen()
 		{
 			DrawTitleImage = false;
+
+			List<string> levelNames = PlayerData.Instance.GetLevelNames();
+			_selections = levelNames;
+
+			Center = new Vector2(-0.1f, -0.4f);
+
+			AddMenuButton("next level", SwitchToNextLevel, true);
+			AddMenuButton("previous level", SwitchToPreviousLevel);
 			AddMainMenuButton();
-
-			List<string> levelNames = new List<string> { "Level 1", "Level 2", "Level 3" };
-
-			_levelSelecter = new LevelSelecter(new Vector2(0.4f, 0.0f), levelNames);
 
 			SetTimeStrings();
 		}
 
+		private void SwitchToPreviousLevel()
+		{
+			if (_selectedIndex > 0) _selectedIndex--;
+		}
+
+		private void SwitchToNextLevel()
+		{
+			if (_selectedIndex + 1 < _selections.Count) _selectedIndex++;
+		}
+
 		private string GetCurrentLevel()
 		{
-			return _levelSelecter.GetCurrentSelection();
+			return _selections[_selectedIndex];
 		}
 
 		private void SetTimeStrings()
@@ -94,12 +56,12 @@ namespace Fledermaus.Screens
 			}
 
 			RoomTimeStrings = newRoomTimeStrings;
-			TotalTimeString = new TimeString("Level", highscores.GetTotalTime(), false);
+			TotalTimeString = new TimeString("Level", highscores.TotalTime, false);
 		}
 
 		public override void DoLogic()
 		{
-			
+			SetTimeStrings();
 		}
 
 		public override void Draw()
@@ -110,7 +72,8 @@ namespace Fledermaus.Screens
 
 			DrawTimeStrings();
 
-			_levelSelecter.Draw();
+			BasicGraphics.SetColor(BasicGraphics.Colors.DefaultText);
+			BasicGraphics.DrawText(GetCurrentLevel(), new Vector2(-0.1f, 0.1f), 0.08f);
 		}
 
 	}
