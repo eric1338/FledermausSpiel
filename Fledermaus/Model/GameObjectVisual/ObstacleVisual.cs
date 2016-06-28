@@ -90,7 +90,7 @@ namespace Model.GameObjectVisual
             }
             DrawSquare(scale*(offset+Data.Position), tmp);
 
-            if (IsSelected)
+            if (IsBoundSelected)
             {
                 GL.Color3(Color.Cyan);
             }

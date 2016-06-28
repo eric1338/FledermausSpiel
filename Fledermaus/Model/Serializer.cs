@@ -20,7 +20,7 @@ namespace Model
             XmlSerializer x = new XmlSerializer(typeof(Level));
             TextWriter writer = new StreamWriter(filePath + fileName);
             x.Serialize(writer, level);
-
+            writer.Close();
             return true;
         }
         public static Level getLevelByFile( String filePath, String fileName)
@@ -34,7 +34,7 @@ namespace Model
             XmlSerializer x = new XmlSerializer(typeof(Level));
             TextReader reader = new StreamReader(filePath + fileName);
             level = (Level)x.Deserialize(reader);
-
+            reader.Close();
             return level;
         }
 
@@ -90,6 +90,11 @@ namespace Model
                 foreach (var obstacle in room.Obstacles)
                 {
                     _room.Obstacles.Add(new Fledermaus.GameObjects.Obstacle(obstacle.Position + obstacle.RelativeBounds[0], obstacle.Position+obstacle.RelativeBounds[2]));
+                }
+                foreach (var mirror in room.Mirrors) {
+                    _room.Mirrors.Add(new Fledermaus.GameObjects.Mirror(mirror.Position + mirror.RailStart, mirror.Position + mirror.RailEnd, mirror.InitAngle, mirror.StartingRelativePosition));
+                    _room.Mirrors[_room.Mirrors.Count - 1].MinimumRotation = mirror.MinRotation;
+                    _room.Mirrors[_room.Mirrors.Count - 1].MaximumRotation = mirror.MaxRotation;
                 }
 
                 _level.AddRoom(_room);

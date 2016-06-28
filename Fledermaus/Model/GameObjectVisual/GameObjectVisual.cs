@@ -81,6 +81,9 @@ namespace Model.GameObjectVisual
                       foreach (var bound in bounds)
                           GL.Vertex2(Scale*(position.X + bound.X), Scale*( position.Y + bound.Y));
                       GL.End();*/
+
+            if (bounds.Count == 0)
+                return;
             var x_small = 0.0f;
             var x_large = 0.0f;
 

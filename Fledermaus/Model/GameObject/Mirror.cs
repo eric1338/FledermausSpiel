@@ -7,6 +7,8 @@ namespace Model.GameObject
 {
     public class Mirror : MovingGameObject
     {
+        public static readonly float MirrorLength = 0.15f;
+
         protected float initAngle;
 
         private Vector2 railStart;
@@ -15,6 +17,8 @@ namespace Model.GameObject
         private float startingRelativePosition;
         private float minRotation;
         private float maxRotation;
+
+
 
         public float InitAngle
         {
