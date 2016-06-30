@@ -86,7 +86,6 @@
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Levels.cs" />
-    <Compile Include="Screens\LevelEditorGameScreen.cs" />
     <Compile Include="Screens\LevelEditorScreen.cs" />
     <Compile Include="Screens\ButtonText.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
