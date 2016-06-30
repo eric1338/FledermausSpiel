@@ -45,6 +45,8 @@ namespace Fledermaus
             MouseMove += MyGameWindow_MouseMove;
             MouseWheel += MyGameWindow_MouseWheel;
 
+			Title = "FledermausSpiel";
+
 			GL.Enable(EnableCap.Blend);
 			GL.Enable(EnableCap.PolygonSmooth);
 			GL.Enable(EnableCap.Multisample);
